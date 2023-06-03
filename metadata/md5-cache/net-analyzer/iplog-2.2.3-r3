@@ -1,0 +1,13 @@
+DEFINED_PHASES=compile install
+DEPEND=net-libs/libpcap
+DESCRIPTION=TCP/IP traffic logger
+EAPI=8
+HOMEPAGE=http://ojnk.sourceforge.net/
+INHERIT=flag-o-matic toolchain-funcs
+KEYWORDS=~alpha ~amd64 ~ppc sparc x86
+LICENSE=|| ( GPL-2 FDL-1.1 )
+RDEPEND=net-libs/libpcap
+SLOT=0
+SRC_URI=mirror://sourceforge/ojnk/iplog-2.2.3.tar.gz
+_eclasses_=flag-o-matic	16483e58fadb0d47b4528f0aa7e171f6	multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=8064f7d75e75c1b87b7cd558e8a351f2

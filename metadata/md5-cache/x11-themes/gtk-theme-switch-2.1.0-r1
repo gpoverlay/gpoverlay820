@@ -1,0 +1,13 @@
+DEFINED_PHASES=compile install prepare
+DEPEND=x11-libs/gtk+:2 virtual/pkgconfig
+DESCRIPTION=Utility to switch and preview GTK+ theme
+EAPI=7
+HOMEPAGE=https://packages.qa.debian.org/g/gtk-theme-switch.html
+INHERIT=toolchain-funcs
+KEYWORDS=~alpha amd64 ~hppa ~ia64 ~mips ppc ppc64 sparc x86 ~amd64-linux ~x86-linux
+LICENSE=GPL-2
+RDEPEND=x11-libs/gtk+:2
+SLOT=0
+SRC_URI=mirror://debian/pool/main/g/gtk-theme-switch/gtk-theme-switch_2.1.0.orig.tar.gz
+_eclasses_=multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=2ba067103981688ff1a8d50199e85fa8

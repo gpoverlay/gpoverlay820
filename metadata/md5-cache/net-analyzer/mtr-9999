@@ -1,0 +1,15 @@
+BDEPEND=virtual/pkgconfig sys-devel/gnuconfig >=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.5:1.16 ) >=sys-devel/autoconf-2.71-r5 >=sys-devel/libtool-2.4.7 filecaps? ( sys-libs/libcap ) >=dev-vcs/git-1.8.2.1[curl]
+DEFINED_PHASES=configure postinst prepare unpack
+DEPEND=gtk? ( dev-libs/glib:2 x11-libs/gtk+:3 ) jansson? ( dev-libs/jansson:= ) ncurses? ( sys-libs/ncurses:0= )
+DESCRIPTION=My TraceRoute, an Excellent network diagnostic tool
+EAPI=7
+HOMEPAGE=https://www.bitwizard.nl/mtr/
+INHERIT=autotools bash-completion-r1 fcaps git-r3
+IUSE=gtk +ipinfo +ipv6 jansson ncurses +filecaps
+LICENSE=GPL-2
+PROPERTIES=live
+RDEPEND=gtk? ( dev-libs/glib:2 x11-libs/gtk+:3 ) jansson? ( dev-libs/jansson:= ) ncurses? ( sys-libs/ncurses:0= ) filecaps? ( sys-libs/libcap )
+RESTRICT=test
+SLOT=0
+_eclasses_=autotools	6ae9a4347149b19a112caa1182d03bde	bash-completion-r1	f5e7a020fd9c741740756aac61bf75ff	fcaps	c0a086b957a1b183a8d136eabf02f191	git-r3	27e13c09a4c7e4c78ac812f74727e676	gnuconfig	b6b3e92f8b8c996400074b5f61a59256	libtool	9d3a9a889a6fa62ae794f817c156491b	multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=188f5a450ad3817f368b248a0375f8ab

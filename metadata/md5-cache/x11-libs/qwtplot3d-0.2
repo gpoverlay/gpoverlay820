@@ -1,0 +1,15 @@
+BDEPEND=doc? ( app-doc/doxygen )
+DEFINED_PHASES=compile configure install prepare
+DEPEND=dev-qt/qtcore:5 dev-qt/qtgui:5 dev-qt/qtopengl:5 dev-qt/qtwidgets:5 x11-libs/gl2ps
+DESCRIPTION=3D plotting library for Qt5
+EAPI=7
+HOMEPAGE=http://qwtplot3d.sourceforge.net/ https://github.com/SciDAVis/qwtplot3d/
+INHERIT=docs qmake-utils
+IUSE=doc examples doc
+KEYWORDS=~amd64 ~x86
+LICENSE=ZLIB
+RDEPEND=dev-qt/qtcore:5 dev-qt/qtgui:5 dev-qt/qtopengl:5 dev-qt/qtwidgets:5 x11-libs/gl2ps
+SLOT=0
+SRC_URI=https://github.com/SciDAVis/qwtplot3d/archive/refs/tags/v0.2.tar.gz -> qwtplot3d-0.2.tar.gz
+_eclasses_=docs	7b9e167549c44efa7994614f33ba6d7a	multilib	104e1332efb829e2f7cbf89307a474f1	qmake-utils	59420c906278d16deaaa629f9d115707	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=366eb38bd1fb6a73a8202504154bc00e

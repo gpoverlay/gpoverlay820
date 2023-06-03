@@ -1,0 +1,14 @@
+BDEPEND=app-text/xmlto >=dev-vcs/git-1.8.2.1[curl]
+DEFINED_PHASES=compile unpack
+DEPEND=>=sys-libs/libsepol-9999
+DESCRIPTION=SELinux Common Intermediate Language (CIL) Compiler
+EAPI=7
+HOMEPAGE=https://github.com/SELinuxProject/selinux/wiki
+INHERIT=toolchain-funcs git-r3
+LICENSE=GPL-2
+PROPERTIES=live
+RDEPEND=>=sys-libs/libsepol-9999
+RESTRICT=test
+SLOT=0
+_eclasses_=git-r3	27e13c09a4c7e4c78ac812f74727e676	multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=c35912e2211c14e9d9247a1d66566f61

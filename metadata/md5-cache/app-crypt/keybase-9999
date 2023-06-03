@@ -1,0 +1,14 @@
+BDEPEND=>=dev-lang/go-1.18 app-arch/unzip virtual/pkgconfig >=dev-vcs/git-1.8.2.1[curl]
+DEFINED_PHASES=compile install postinst test unpack
+DESCRIPTION=Keybase client
+EAPI=8
+HOMEPAGE=https://keybase.io/
+INHERIT=go-module systemd git-r3
+IUSE=fuse
+LICENSE=Apache-2.0 BSD BSD-2 LGPL-3 MIT MPL-2.0
+PROPERTIES=live
+RDEPEND=app-crypt/gnupg fuse? ( ~app-crypt/kbfs-9999 )
+RESTRICT=strip
+SLOT=0
+_eclasses_=git-r3	27e13c09a4c7e4c78ac812f74727e676	go-module	9c75e51a48520b2f01471c1f91762882	multilib	104e1332efb829e2f7cbf89307a474f1	multiprocessing	b4e253ab22cef7b1085e9b67c7a3b730	systemd	5f4bb0758df2e483babf68cd517078ca	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=cb27f35502d1cb641a9a46a50e1e2f04

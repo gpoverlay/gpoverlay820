@@ -1,0 +1,14 @@
+BDEPEND=virtual/pkgconfig >=dev-vcs/git-1.8.2.1[curl]
+DEFINED_PHASES=configure unpack
+DEPEND=media-libs/freetype media-libs/imlib2[X] x11-libs/libX11 x11-libs/libXft x11-libs/libXinerama x11-libs/libXrandr x11-base/xorg-proto elibc_musl? ( sys-libs/queue-standalone )
+DESCRIPTION=Window Manager From Scratch, A tiling window manager highly configurable
+EAPI=7
+HOMEPAGE=https://github.com/xorg62/wmfs
+INHERIT=git-r3 toolchain-funcs
+IUSE=+imlib2 +xinerama
+LICENSE=BSD
+PROPERTIES=live
+RDEPEND=media-libs/freetype media-libs/imlib2[X] x11-libs/libX11 x11-libs/libXft x11-libs/libXinerama x11-libs/libXrandr
+SLOT=0
+_eclasses_=git-r3	27e13c09a4c7e4c78ac812f74727e676	multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=c1d8368617b966e8e6dbe9cfc5ce128a

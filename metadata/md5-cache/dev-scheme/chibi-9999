@@ -1,0 +1,11 @@
+BDEPEND=>=dev-vcs/git-1.8.2.1[curl]
+DEFINED_PHASES=configure install unpack
+DESCRIPTION=Minimal Scheme implementation for use as an extension language
+EAPI=8
+HOMEPAGE=http://synthcode.com/scheme/chibi/
+INHERIT=toolchain-funcs git-r3
+LICENSE=BSD
+PROPERTIES=live
+SLOT=0
+_eclasses_=git-r3	27e13c09a4c7e4c78ac812f74727e676	multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=22b7478093b2ff40db73bd50ce8f4450

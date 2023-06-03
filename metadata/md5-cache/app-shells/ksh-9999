@@ -1,0 +1,11 @@
+BDEPEND=>=dev-vcs/git-1.8.2.1[curl]
+DEFINED_PHASES=compile install prepare test unpack
+DESCRIPTION=The Original ATT Korn Shell
+EAPI=8
+HOMEPAGE=http://www.kornshell.com/
+INHERIT=flag-o-matic toolchain-funcs git-r3
+LICENSE=EPL-1.0
+PROPERTIES=live
+SLOT=0
+_eclasses_=flag-o-matic	16483e58fadb0d47b4528f0aa7e171f6	git-r3	27e13c09a4c7e4c78ac812f74727e676	multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=1fff3216d80418f9c0294c6fdb94873e

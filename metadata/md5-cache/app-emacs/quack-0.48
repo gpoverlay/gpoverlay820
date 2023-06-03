@@ -1,0 +1,13 @@
+BDEPEND=>=app-editors/emacs-25.3:*
+DEFINED_PHASES=compile configure install postinst postrm prepare setup test unpack
+DESCRIPTION=Enhances Emacs support for Scheme
+EAPI=7
+HOMEPAGE=http://www.neilvandyke.org/quack/
+INHERIT=elisp
+KEYWORDS=~amd64 ~ppc ~x86
+LICENSE=GPL-2+
+RDEPEND=>=app-editors/emacs-25.3:*
+SLOT=0
+SRC_URI=https://dev.gentoo.org/~ulm/distfiles/quack-0.48.el.xz
+_eclasses_=elisp	7190c722d9e06fabcae26ef1e1dc9183	elisp-common	01bc6dc778b74a9deebe4e419a3b790e
+_md5_=6f686db065171041cf8bab133ce4c2d0

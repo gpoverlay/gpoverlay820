@@ -1,0 +1,14 @@
+DEFINED_PHASES=compile configure install postinst postrm prepare
+DEPEND=emacs? ( >=app-editors/emacs-23.1:* )
+DESCRIPTION=Scheme48 is an implementation of the Scheme Programming Language
+EAPI=8
+HOMEPAGE=https://www.s48.org/
+INHERIT=elisp-common flag-o-matic toolchain-funcs
+IUSE=doc emacs
+KEYWORDS=~amd64 ~x86 ~amd64-linux ~x86-linux
+LICENSE=BSD
+RDEPEND=emacs? ( >=app-editors/emacs-23.1:* )
+SLOT=0
+SRC_URI=https://www.s48.org/1.9.2/scheme48-1.9.2.tgz
+_eclasses_=elisp-common	01bc6dc778b74a9deebe4e419a3b790e	flag-o-matic	16483e58fadb0d47b4528f0aa7e171f6	multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=85251a10e2233507cac3c3482896efb8

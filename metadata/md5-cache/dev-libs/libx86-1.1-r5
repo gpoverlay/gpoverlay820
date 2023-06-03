@@ -1,0 +1,11 @@
+DEFINED_PHASES=compile configure install
+DESCRIPTION=A hardware-independent library for executing real-mode x86 code
+EAPI=8
+HOMEPAGE=https://www.codon.org.uk/~mjg59/libx86/
+INHERIT=flag-o-matic toolchain-funcs
+KEYWORDS=amd64 ~arm -ppc -riscv -sparc x86
+LICENSE=BSD
+SLOT=0
+SRC_URI=https://www.codon.org.uk/~mjg59/libx86/downloads/libx86-1.1.tar.gz
+_eclasses_=flag-o-matic	16483e58fadb0d47b4528f0aa7e171f6	multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=266613650cbb7dc70c7849c838dcc406

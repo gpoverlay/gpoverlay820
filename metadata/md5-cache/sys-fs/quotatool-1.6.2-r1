@@ -1,0 +1,12 @@
+DEFINED_PHASES=configure install
+DESCRIPTION=Command-line utility for filesystem quotas
+EAPI=7
+HOMEPAGE=https://quotatool.ekenberg.se/
+INHERIT=toolchain-funcs
+KEYWORDS=amd64 ~arm ~arm64 ppc x86
+LICENSE=GPL-2
+RDEPEND=sys-fs/quota
+SLOT=0
+SRC_URI=https://quotatool.ekenberg.se/quotatool-1.6.2.tar.gz
+_eclasses_=multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=9ef046854eca6c2841f027926da25222

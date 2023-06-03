@@ -1,0 +1,13 @@
+DEFINED_PHASES=configure install
+DEPEND=>=dev-libs/bglibs-2.04
+DESCRIPTION=A UCSPI implementation for Unix domain sockets
+EAPI=7
+HOMEPAGE=https://untroubled.org/ucspi-unix/
+INHERIT=toolchain-funcs
+KEYWORDS=amd64 ~loong ppc ~riscv ~sparc x86
+LICENSE=GPL-2+
+RDEPEND=!net-analyzer/mk-livestatus
+SLOT=0
+SRC_URI=https://untroubled.org/ucspi-unix/archive/ucspi-unix-1.0.tar.gz
+_eclasses_=multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=49c48ba088b5972c10e2a2db77270971

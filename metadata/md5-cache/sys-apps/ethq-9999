@@ -1,0 +1,15 @@
+BDEPEND=virtual/pkgconfig >=dev-vcs/git-1.8.2.1[curl]
+DEFINED_PHASES=compile install prepare test unpack
+DEPEND=sys-libs/ncurses:=
+DESCRIPTION=Ethernet NIC Queue stats viewer
+EAPI=7
+HOMEPAGE=https://github.com/isc-projects/ethq
+INHERIT=git-r3 toolchain-funcs
+IUSE=test
+LICENSE=MPL-2.0
+PROPERTIES=live
+RDEPEND=sys-libs/ncurses:=
+RESTRICT=!test? ( test )
+SLOT=0
+_eclasses_=git-r3	27e13c09a4c7e4c78ac812f74727e676	multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=5a1a16e23fec3272a831cd30c07e81b2

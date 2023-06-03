@@ -1,0 +1,13 @@
+DEFINED_PHASES=install prepare
+DEPEND=net-libs/libpcap
+DESCRIPTION=Active OS fingerprinting tool - this is Xprobe2
+EAPI=7
+HOMEPAGE=http://sys-security.com/blog/xprobe2
+INHERIT=toolchain-funcs
+KEYWORDS=~amd64 ~ppc ~sparc x86
+LICENSE=GPL-2
+RDEPEND=net-libs/libpcap
+SLOT=0
+SRC_URI=mirror://sourceforge/xprobe/xprobe2-0.3.tar.gz
+_eclasses_=multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=66dae62e5cfbabb5abe737cdee74cfd0

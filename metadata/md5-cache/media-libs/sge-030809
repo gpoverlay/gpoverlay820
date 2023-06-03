@@ -1,0 +1,14 @@
+DEFINED_PHASES=compile install prepare
+DEPEND=media-libs/libsdl image? ( media-libs/sdl-image ) truetype? ( >=media-libs/freetype-2 ) virtual/pkgconfig
+DESCRIPTION=Graphics extensions library for SDL
+EAPI=6
+HOMEPAGE=http://www.etek.chalmers.se/~e8cal1/sge/
+INHERIT=toolchain-funcs
+IUSE=doc examples image truetype
+KEYWORDS=amd64 ~ia64 ppc x86
+LICENSE=LGPL-2.1
+RDEPEND=media-libs/libsdl image? ( media-libs/sdl-image ) truetype? ( >=media-libs/freetype-2 )
+SLOT=0
+SRC_URI=http://www.etek.chalmers.se/~e8cal1/sge/files/sge030809.tar.gz
+_eclasses_=multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=7449c819f2ecb84750dab088fb1e46f2

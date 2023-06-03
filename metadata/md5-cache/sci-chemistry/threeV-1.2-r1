@@ -1,0 +1,12 @@
+DEFINED_PHASES=install prepare
+DESCRIPTION=3V: Voss Volume Voxelator
+EAPI=6
+HOMEPAGE=http://geometry.molmovdb.org/3v/
+INHERIT=toolchain-funcs
+KEYWORDS=~amd64 ~x86 ~amd64-linux ~x86-linux
+LICENSE=GPL-2
+PDEPEND=sci-chemistry/msms-bin
+SLOT=0
+SRC_URI=http://geometry.molmovdb.org/3v/3v-1.2.tgz
+_eclasses_=multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=5ca6079a9193f10a01a27b188fadd411

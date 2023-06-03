@@ -1,0 +1,15 @@
+BDEPEND=cgi? ( app-text/highlight )
+DEFINED_PHASES=compile install postinst prepare pretend
+DEPEND=sys-libs/zlib system-man? ( !sys-apps/man-db ) cgi? ( sys-libs/zlib[static-libs] )
+DESCRIPTION=Suite of tools compiling mdoc and man
+EAPI=7
+HOMEPAGE=https://mdocml.bsd.lv/
+INHERIT=toolchain-funcs
+IUSE=cgi system-man
+KEYWORDS=amd64 arm arm64 ~hppa ~ia64 ~loong ~ppc ppc64 ~riscv ~s390 ~sparc x86
+LICENSE=ISC
+RDEPEND=sys-libs/zlib system-man? ( !sys-apps/man-db )
+SLOT=0
+SRC_URI=https://mdocml.bsd.lv/snapshots/mandoc-1.14.6.tar.gz
+_eclasses_=multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=be5f6be37c8992614e99b3ebdeff5ad9

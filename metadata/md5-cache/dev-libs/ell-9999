@@ -1,0 +1,14 @@
+BDEPEND=sys-devel/gnuconfig >=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.5:1.16 ) >=sys-devel/autoconf-2.71-r5 >=sys-devel/libtool-2.4.7 >=dev-vcs/git-1.8.2.1[curl]
+DEFINED_PHASES=configure install prepare setup unpack
+DEPEND=test? ( sys-apps/dbus )
+DESCRIPTION=Embedded Linux Library provides core, low-level functionality for system daemons
+EAPI=8
+HOMEPAGE=https://01.org/ell
+INHERIT=flag-o-matic linux-info autotools git-r3
+IUSE=pie test
+LICENSE=LGPL-2.1
+PROPERTIES=live
+RESTRICT=!test? ( test )
+SLOT=0
+_eclasses_=autotools	6ae9a4347149b19a112caa1182d03bde	flag-o-matic	16483e58fadb0d47b4528f0aa7e171f6	git-r3	27e13c09a4c7e4c78ac812f74727e676	gnuconfig	b6b3e92f8b8c996400074b5f61a59256	libtool	9d3a9a889a6fa62ae794f817c156491b	linux-info	c4f1201b96a8a2c1f3b86cc8b2c71c91	multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=32156caf5568b5489eaa7923d211dbb9

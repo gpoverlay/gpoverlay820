@@ -1,0 +1,11 @@
+DEFINED_PHASES=compile install
+DESCRIPTION=alterMIME is a small program which is used to alter your mime-encoded mailpacks
+EAPI=7
+HOMEPAGE=https://pldaniels.com/altermime/
+INHERIT=toolchain-funcs
+KEYWORDS=amd64 ppc x86
+LICENSE=Sendmail
+SLOT=0
+SRC_URI=https://www.pldaniels.com/altermime/altermime-0.3.11.tar.gz
+_eclasses_=multilib	104e1332efb829e2f7cbf89307a474f1	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e
+_md5_=aed0cc8af3a85e368925f997722d384f
