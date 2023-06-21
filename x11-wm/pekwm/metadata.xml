@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<!-- maintainer-needed -->
+	<maintainer type="person">
+		<email>linbug+gbz@posteo.org</email>
+		<name>Andreas Schlick</name>
+	</maintainer>
+	<maintainer type="project">
+		<email>proxy-maint@gentoo.org</email>
+		<name>Proxy Maintainers</name>
+	</maintainer>
 	<longdescription>
 		Pekwm is a window manager based on aewm++, but it no longer resembles 
 		it. It is highly configurable, rather fast, and aimed towards being 
@@ -12,10 +19,6 @@
 	</longdescription>	
 	<use>
 		<flag name="contrib">Install optional extras in the documentation directory</flag>
-		<flag name="pango">Pango font support</flag>
 		<flag name="themes">Install additional themes</flag>
 	</use>
-	<upstream>
-		<remote-id type="github">pekdon/pekwm</remote-id>
-	</upstream>
 </pkgmetadata>

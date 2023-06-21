@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="7"
@@ -13,18 +13,16 @@ SRC_URI="https://github.com/gjedeer/${PN}/archive/${EGIT_COMMIT}.tar.gz -> ${P}.
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 ~arm ~arm64 x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="gpm video_cards_vesa"
 
-RDEPEND="media-libs/fontconfig
+BDEPEND="virtual/pkgconfig"
+DEPEND="media-libs/fontconfig
 	media-libs/freetype:2
 	>=sys-libs/ncurses-6.1
 	gpm? ( sys-libs/gpm )
 	video_cards_vesa? ( dev-libs/libx86 )"
-DEPEND="${RDEPEND}"
-BDEPEND="virtual/pkgconfig"
-
-PATCHES=( "${FILESDIR}"/${PN}-autoconf-2.68.patch )
+RDEPEND="${DEPEND}"
 
 FILECAPS=(
 	cap_sys_tty_config+ep usr/bin/${PN}

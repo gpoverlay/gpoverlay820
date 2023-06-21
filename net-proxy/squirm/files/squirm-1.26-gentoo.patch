@@ -1,5 +1,6 @@
---- a/Makefile
-+++ b/Makefile
+diff -Nru squirm-1.26.orig/Makefile squirm-1.26/Makefile
+--- squirm-1.26.orig/Makefile	2005-08-19 09:31:06.000000000 +0200
++++ squirm-1.26/Makefile	2009-06-20 14:58:18.000000000 +0200
 @@ -1,7 +1,7 @@
  # $Id$
  

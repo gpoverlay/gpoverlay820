@@ -1,16 +1,17 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_SETUPTOOLS=rdepend
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
 DESCRIPTION="Initial tagging script for Notmuch"
 HOMEPAGE="https://github.com/afewmail/afew"
+SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="ISC"
 SLOT="0"
@@ -26,16 +27,9 @@ RDEPEND="
 BDEPEND="
 	$(python_gen_cond_dep '
 		dev-python/sphinx[${PYTHON_USEDEP}]
-	')
-	test? (
-		$(python_gen_cond_dep '
-			dev-python/freezegun[${PYTHON_USEDEP}]
-		')
-	)"
+	')"
 
 DOCS=( "README.rst" )
-
-distutils_enable_tests pytest
 
 python_prepare_all() {
 	sed -r \

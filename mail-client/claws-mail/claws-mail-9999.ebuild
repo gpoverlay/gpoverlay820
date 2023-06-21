@@ -1,11 +1,9 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
-
-inherit autotools desktop python-any-r1 xdg
+inherit autotools desktop xdg
 
 DESCRIPTION="An email client (and news reader) based on GTK+"
 HOMEPAGE="https://www.claws-mail.org/"
@@ -15,30 +13,27 @@ if [[ "${PV}" == *9999 ]] ; then
 	EGIT_REPO_URI="https://git.claws-mail.org/readonly/claws.git"
 else
 	SRC_URI="https://www.claws-mail.org/download.php?file=releases/${P}.tar.xz"
-	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ppc ~ppc64 ~riscv ~sparc ~x86"
+	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ppc ~ppc64 ~sparc ~x86"
 fi
 
 SLOT="0"
-QA_PKGCONFIG_VERSION="${PV}.0"
 LICENSE="GPL-3"
 
-IUSE="archive bogofilter calendar clamav dbus debug doc gdata +gnutls +imap ldap +libcanberra +libnotify litehtml networkmanager nls nntp +notification +oauth pdf perl +pgp rss session sieve smime spamassassin spam-report spell startup-notification svg valgrind webkit xface"
+IUSE="+appindicator archive bogofilter calendar clamav dbus debug dillo doc gdata +gnutls gtk2 +imap ipv6 ldap +libcanberra +libnotify litehtml networkmanager nls nntp +notification pdf perl +pgp rss session sieve smime spamassassin spam-report spell startup-notification svg valgrind xface"
 REQUIRED_USE="
+	appindicator? ( notification )
 	libcanberra? ( notification )
 	libnotify? ( notification )
 	networkmanager? ( dbus )
-	oauth? ( gnutls )
 	smime? ( pgp )
 "
 
 COMMONDEPEND="
-	>=dev-libs/glib-2.50:2
 	dev-libs/nettle:=
 	net-mail/ytnef
 	sys-libs/zlib:=
 	x11-libs/cairo
 	x11-libs/gdk-pixbuf:2[jpeg]
-	x11-libs/gtk+:3
 	x11-libs/libX11
 	x11-libs/pango
 	archive? (
@@ -47,7 +42,6 @@ COMMONDEPEND="
 	)
 	bogofilter? ( mail-filter/bogofilter )
 	calendar? (
-		dev-lang/perl:=
 		>=dev-libs/libical-2.0.0:=
 		>=net-misc/curl-7.9.7
 	)
@@ -56,10 +50,14 @@ COMMONDEPEND="
 		sys-apps/dbus
 	)
 	gdata? ( >=dev-libs/libgdata-0.17.2 )
+	dillo? ( www-client/dillo )
 	gnutls? ( >=net-libs/gnutls-3.0 )
+	!gtk2? ( x11-libs/gtk+:3 )
+	gtk2? ( >=x11-libs/gtk+-2.24:2 )
 	imap? ( >=net-libs/libetpan-0.57 )
-	ldap? ( >=net-nds/openldap-2.0.7:= )
+	ldap? ( >=net-nds/openldap-2.0.7 )
 	litehtml? (
+		>=dev-libs/glib-2.36:2
 		>=dev-libs/gumbo-0.10
 		net-misc/curl
 		media-libs/fontconfig
@@ -67,34 +65,29 @@ COMMONDEPEND="
 	nls? ( >=sys-devel/gettext-0.18 )
 	nntp? ( >=net-libs/libetpan-0.57 )
 	notification? (
-		libcanberra? (  media-libs/libcanberra[gtk3] )
+		dev-libs/glib:2
+		appindicator? ( dev-libs/libindicate:3[gtk] )
+		libcanberra? (  media-libs/libcanberra[gtk] )
 		libnotify? ( x11-libs/libnotify )
 	)
-	perl? ( dev-lang/perl:= )
 	pdf? ( app-text/poppler[cairo] )
-	pgp? ( >=app-crypt/gpgme-1.0.0:= )
-	rss? (
-		dev-libs/libxml2
-		net-misc/curl
-	)
+	pgp? ( >=app-crypt/gpgme-1.0.0 )
 	session? (
 		x11-libs/libICE
 		x11-libs/libSM
 	)
-	smime? ( >=app-crypt/gpgme-1.0.0:= )
+	smime? ( >=app-crypt/gpgme-1.0.0 )
 	spam-report? ( >=net-misc/curl-7.9.7 )
 	spell? ( >=app-text/enchant-2.0.0:2= )
 	startup-notification? ( x11-libs/startup-notification )
 	svg? ( >=gnome-base/librsvg-2.40.5 )
 	valgrind? ( dev-util/valgrind )
-	webkit? ( net-libs/webkit-gtk:4.1 )
 "
 
 DEPEND="${COMMONDEPEND}
 	xface? ( >=media-libs/compface-1.4 )
 "
 BDEPEND="
-	${PYTHON_DEPS}
 	app-arch/xz-utils
 	virtual/pkgconfig
 "
@@ -104,33 +97,43 @@ RDEPEND="${COMMONDEPEND}
 	clamav? ( app-antivirus/clamav )
 	networkmanager? ( net-misc/networkmanager )
 	pdf? ( app-text/ghostscript-gpl )
+	perl? ( dev-lang/perl:= )
+	rss? (
+		dev-libs/libxml2
+		net-misc/curl
+	)
 "
 
 PATCHES=(
 	"${FILESDIR}/${PN}-3.17.5-enchant-2_default.patch"
 )
 
-src_prepare() {
-	default
-	sed -e "s/webkit2gtk-4.0/webkit2gtk-4.1/" -i configure.ac || die
+pkg_setup() {
+	if [[ "${PV}" == *9999 ]] && ! use gtk2 ; then
+		EGIT_BRANCH="gtk3"
+	fi
+}
 
+src_prepare() {
+	xdg_src_prepare
 	eautoreconf
 }
 
 src_configure() {
+	# Don't use libsoup-gnome (bug #565924)
+	export HAVE_LIBSOUP_GNOME=no
+
 	local myeconfargs=(
 		--disable-bsfilter-plugin
-		--disable-dillo-plugin
+		--disable-fancy-plugin
 		--disable-generic-umpc
 		--disable-jpilot #735118
-		--disable-python-plugin
 		--enable-acpi_notifier-plugin
 		--enable-address_keeper-plugin
 		--enable-alternate-addressbook
 		--enable-att_remover-plugin
 		--enable-attachwarner-plugin
 		--enable-fetchinfo-plugin
-		--enable-ipv6
 		--enable-mailmbox-plugin
 		--enable-newmail-plugin
 		--enable-tnef_parse-plugin
@@ -141,22 +144,22 @@ src_configure() {
 		$(use_enable clamav clamd-plugin)
 		$(use_enable dbus)
 		$(use_enable debug crash-dialog)
-		$(use_enable debug more-addressbook-debug)
-		$(use_enable debug more-ldap-debug)
+		$(use_enable dillo dillo-plugin)
 		$(use_enable doc manual)
 		$(use_enable gdata gdata-plugin)
 		$(use_enable gnutls)
+		$(use_enable ipv6)
 		$(use_enable ldap)
 		$(use_enable litehtml litehtml_viewer-plugin)
 		$(use_enable networkmanager)
 		$(use_enable nls)
 		$(use_enable notification notification-plugin)
-		$(use_enable oauth oauth2)
 		$(use_enable pdf pdf_viewer-plugin)
 		$(use_enable perl perl-plugin)
 		$(use_enable pgp pgpcore-plugin)
 		$(use_enable pgp pgpinline-plugin)
 		$(use_enable pgp pgpmime-plugin)
+		--disable-python-plugin
 		$(use_enable rss rssyl-plugin)
 		$(use_enable session libsm)
 		$(use_enable sieve managesieve-plugin)
@@ -167,7 +170,6 @@ src_configure() {
 		$(use_enable startup-notification)
 		$(use_enable svg)
 		$(use_enable valgrind valgrind)
-		$(use_enable webkit fancy-plugin)
 		$(use_enable xface compface)
 	)
 
@@ -207,11 +209,13 @@ src_install() {
 	doexe tb2claws-mail update-po uudec uuooffice
 
 	# kill useless files
-	find "${ED}"/usr/$(get_libdir)/${PN}/plugins/ \
-		\( -name "*.a" -o -name "*.la" \) -delete || die
+	rm -f "${ED}"/usr/lib*/claws-mail/plugins/*.{a,la}
 }
 
 pkg_postinst() {
-	ewarn "When upgrading from version 3.x please re-load any plugin you use"
+	ewarn "When upgrading from version 3.9.0 or below some changes have happened:"
+	ewarn "- There are no individual plugins in mail-client/claws-mail-* anymore, but they are integrated mostly controlled through USE flags"
+	ewarn "- Plugins with no special dependencies are just built and can be loaded through the interface"
+	ewarn "- The gtkhtml2 and trayicon plugins have been dropped entirely"
 	xdg_pkg_postinst
 }

@@ -10,7 +10,7 @@ if [[ ${PV} == "9999" ]] ; then
 	inherit git-r3
 else
 	SRC_URI="https://github.com/scrooloose/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~x86 ~x86-linux"
+	KEYWORDS="~amd64 ~x86 ~x86-linux ~sparc64-solaris"
 fi
 
 DESCRIPTION="vim plugin: easy commenting of code for many filetypes"
@@ -18,3 +18,8 @@ HOMEPAGE="https://github.com/scrooloose/nerdcommenter https://www.vim.org/script
 LICENSE="WTFPL-2 "
 
 VIM_PLUGIN_HELPFILES="NERD_commenter.txt"
+
+src_prepare() {
+	default
+	rm README.md Rakefile || die
+}

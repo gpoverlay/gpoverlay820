@@ -17,5 +17,8 @@ src_install() {
 	rm -r \
 		"${ED}"/usr/share/vim/vimfiles/spec \
 		"${ED}"/usr/share/vim/vimfiles/assets \
+		"${ED}"/usr/share/doc/${PF}/MIT-LICENSE.txt \
+		"${ED}"/usr/share/doc/${PF}/Rakefile \
+		"${ED}"/usr/share/doc/${PF}/Gemfile.lock \
 		|| die "rm failed"
 }

@@ -1,9 +1,8 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-
-inherit qmake-utils toolchain-funcs
+inherit flag-o-matic qmake-utils toolchain-funcs
 
 COMMIT="5023138d7c35c4667c938b853e5ea89737334e92"
 DESCRIPTION="A better i7 (and now i3, i5) reporting tool for Linux"
@@ -23,7 +22,7 @@ RDEPEND="
 	)
 "
 DEPEND="${RDEPEND}"
-BDEPEND="virtual/pkgconfig"
+BDEPEND=""
 
 PATCHES=(
 	"${FILESDIR}"/i7z-0.27.2-ncurses.patch

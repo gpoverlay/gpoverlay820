@@ -1,10 +1,9 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
-LUA_COMPAT=( lua5-{1,3,4} luajit )
-inherit cmake lua-single readme.gentoo-r1 xdg
+inherit cmake flag-o-matic xdg-utils readme.gentoo-r1
 
 DESCRIPTION="Open source reimplementation of TES III: Morrowind"
 HOMEPAGE="https://openmw.org/ https://gitlab.com/OpenMW/openmw"
@@ -18,36 +17,26 @@ else
 	S="${WORKDIR}/${PN}-${P}"
 fi
 
-MY_TEMPLATE_COMMIT="8966dab24692555eec720c854fb0f73d108070cd"
-SRC_URI+="
-	test? ( https://gitlab.com/OpenMW/example-suite/-/raw/${MY_TEMPLATE_COMMIT}/data/template.omwgame -> openmw-template-${MY_TEMPLATE_COMMIT}.omwgame )
-"
-
 LICENSE="GPL-3 MIT BitstreamVera ZLIB"
 SLOT="0"
 IUSE="doc devtools +osg-fork test +qt5"
-REQUIRED_USE="${LUA_REQUIRED_USE}"
 RESTRICT="!test? ( test )"
 
 # FIXME: Unbundle dev-games/openscenegraph-qt in extern/osgQt directory,
 # used when BUILD_OPENCS flag is enabled. See bug #676266.
 
-RDEPEND="${LUA_DEPS}
-	app-arch/lz4:=
-	>=dev-games/mygui-3.4.1
-	dev-cpp/yaml-cpp:=
-	dev-db/sqlite:3
-	dev-games/recastnavigation:=
-	dev-libs/boost:=[zlib]
-	dev-libs/icu:=
+RDEPEND="
+	dev-games/mygui
+	dev-games/recastnavigation
+	dev-libs/boost:=[threads]
 	dev-libs/tinyxml[stl]
 	media-libs/libsdl2[joystick,opengl,video]
 	media-libs/openal
 	media-video/ffmpeg:=
 	>=sci-physics/bullet-2.86:=[double-precision]
 	virtual/opengl
-	osg-fork? ( >=dev-games/openscenegraph-openmw-3.6:=[collada(-),jpeg,png,sdl,svg,truetype,zlib] )
-	!osg-fork? ( >=dev-games/openscenegraph-3.5.5:=[collada(-),jpeg,png,sdl,svg,truetype,zlib] )
+	osg-fork? ( dev-games/openscenegraph-openmw:=[ffmpeg,jpeg,png,sdl,svg,truetype,zlib] )
+	!osg-fork? ( >=dev-games/openscenegraph-3.5.5:=[ffmpeg,jpeg,png,sdl,svg,truetype,zlib] )
 	qt5? (
 		app-arch/unshield
 		dev-qt/qtcore:5
@@ -58,14 +47,12 @@ RDEPEND="${LUA_DEPS}
 	)
 "
 
-DEPEND="${RDEPEND}
-	dev-cpp/sol2
-"
+DEPEND="${RDEPEND}"
 
 BDEPEND="
 	virtual/pkgconfig
 	doc? (
-		app-doc/doxygen[dot]
+		app-doc/doxygen[doc]
 		dev-python/sphinx
 	)
 	test? (
@@ -73,17 +60,27 @@ BDEPEND="
 	)
 "
 
+PATCHES=(
+	"${FILESDIR}"/openmw-0.47.0-mygui-license.patch
+	"${FILESDIR}"/openmw-0.46.0-recastnavigation.patch
+)
+
 src_prepare() {
 	cmake_src_prepare
 
 	# Use the system tinyxml headers
 	rm -v extern/oics/tiny{str,xml}* || die
-	rm -rv extern/sol3 || die
+
+	# Unbundle recastnavigation
+	rm -vr extern/recastnavigation || die
+	sed -i "s#GENTOO_RECAST_LIBDIR#${EPREFIX}/usr/$(get_libdir)#" CMakeLists.txt || die
 }
 
 src_configure() {
-	use devtools && ! use qt5 &&
+	use devtools && ! use qt5 && \
 		elog "'qt5' USE flag is disabled, 'openmw-cs' will not be installed"
+
+	append-cxxflags "-I${EPREFIX}/usr/include/recastnavigation"
 
 	local mycmakeargs=(
 		-DBUILD_BSATOOL=$(usex devtools)
@@ -96,28 +93,11 @@ src_configure() {
 		-DBUILD_UNITTESTS=$(usex test)
 		-DGLOBAL_DATA_PATH="${EPREFIX}/usr/share"
 		-DICONDIR="${EPREFIX}/usr/share/icons/hicolor/256x256/apps"
+		-DMORROWIND_DATA_FILES="${EPREFIX}/usr/share/morrowind-data"
 		-DUSE_SYSTEM_TINYXML=ON
-		-DOPENMW_USE_SYSTEM_RECASTNAVIGATION=ON
+		-DDESIRED_QT_VERSION=5
+		-DBULLET_USE_DOUBLES=ON
 	)
-
-	if [[ ${ELUA} == luajit ]]; then
-		mycmakeargs+=(
-			-DUSE_LUAJIT=ON
-		)
-	else
-		mycmakeargs+=(
-			-DUSE_LUAJIT=OFF
-			-DLua_FIND_VERSION_MAJOR=$(ver_cut 1 $(lua_get_version))
-			-DLua_FIND_VERSION_MINOR=$(ver_cut 2 $(lua_get_version))
-			-DLua_FIND_VERSION_COUNT=2
-			-DLua_FIND_VERSION_EXACT=ON
-		)
-	fi
-
-	if use test ; then
-		mkdir -p "${BUILD_DIR}"/apps/openmw_test_suite/data || die
-		cp "${DISTDIR}"/openmw-template-${MY_TEMPLATE_COMMIT}.omwgame "${BUILD_DIR}"/apps/openmw_test_suite/data/template.omwgame || die
-	fi
 
 	cmake_src_configure
 }
@@ -127,9 +107,9 @@ src_compile() {
 
 	if use doc ; then
 		cmake_src_compile doc
-		find "${BUILD_DIR}"/docs/Doxygen/html \
+		find "${CMAKE_BUILD_DIR}"/docs/Doxygen/html \
 			-name '*.md5' -type f -delete || die
-		HTML_DOCS=( "${BUILD_DIR}"/docs/Doxygen/html/. )
+		HTML_DOCS=( "${CMAKE_BUILD_DIR}"/docs/Doxygen/html/. )
 	fi
 }
 
@@ -148,7 +128,7 @@ src_install() {
 	directly).\n"
 
 	if ! use qt5; then
-		DOC_CONTENTS+="\n\n
+		local DOC_CONTENTS+="\n\n
 		USE flag 'qt5' is disabled, 'openmw-launcher' and
 		'openmw-wizard' are not available. You are on your own for
 		making the Morrowind data files available and pointing
@@ -164,6 +144,10 @@ src_install() {
 }
 
 pkg_postinst() {
-	xdg_pkg_postinst
+	xdg_icon_cache_update
 	readme.gentoo_print_elog
+}
+
+pkg_postrm() {
+	xdg_icon_cache_update
 }

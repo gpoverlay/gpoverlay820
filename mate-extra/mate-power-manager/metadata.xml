@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="project">
 		<email>mate@gentoo.org</email>
@@ -7,6 +7,7 @@
 	</maintainer>
 	<use>
 		<flag name="applet">Enable building of the MATE applet.</flag>
+		<flag name="libsecret">Support locking of keyring via <pkg>app-crypt/libsecret</pkg></flag>
 	</use>
 	<upstream>
 		<remote-id type="github">mate-desktop/mate-power-manager</remote-id>

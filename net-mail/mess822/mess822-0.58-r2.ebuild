@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -13,9 +13,10 @@ SLOT="0"
 KEYWORDS="amd64 ppc x86"
 IUSE=""
 LICENSE="public-domain"
-RESTRICT="test"
 
-RDEPEND="sys-apps/sed"
+RDEPEND=">=sys-apps/sed-4"
+DEPEND="${RDEPEND}"
+RESTRICT="test"
 
 PATCHES=(
 	"${FILESDIR}"/${P}-implicit.patch

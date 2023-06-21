@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -30,7 +30,7 @@ RDEPEND="
 	x11-apps/xmessage
 	x11-libs/libX11
 	x11-misc/xdg-utils
-	mumble? ( net-voip/mumble )
+	mumble? ( media-sound/mumble )
 	nls? ( virtual/libintl )
 	opengl? ( virtual/opengl )
 	pugixml? ( dev-libs/pugixml )
@@ -57,7 +57,6 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	default
-
 	if [[ ${PV} == 9999 ]] ; then
 		eautoreconf
 	fi
@@ -74,8 +73,7 @@ src_configure() {
 		$(use_with sdl2)
 		$(use_enable test unittests)
 	)
-
-	CONFIG_SHELL="${BROOT}/bin/bash" econf "${myeconfargs[@]}"
+	CONFIG_SHELL="/bin/bash" econf "${myeconfargs[@]}"
 }
 
 src_install() {
@@ -96,4 +94,8 @@ src_install() {
 	dosym ${srcpath}/mplus-outline-fonts/mplus-1p-bold.ttf "${destpath}"/mplus-1p-bold.ttf
 	dosym ${srcpath}/mplus-outline-fonts/mplus-1p-regular.ttf "${destpath}"/mplus-1p-regular.ttf
 	dosym ${srcpath}/wqy-microhei/wqy-microhei.ttc "${destpath}"/wqy-microhei.ttf
+}
+
+src_test() {
+	make check
 }

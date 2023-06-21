@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -21,10 +21,7 @@ RDEPEND="bbdb? ( app-emacs/bbdb )
 BDEPEND="${RDEPEND}
 	sys-apps/texinfo"
 
-PATCHES=(
-	"${FILESDIR}"/${PN}-1.9-make-elc.patch
-	"${FILESDIR}"/${P}-emacs-28.patch
-)
+ELISP_PATCHES="${PN}-1.9-make-elc.patch"
 SITEFILE="50${PN}-gentoo.el"
 ELISP_TEXINFO="remember.texi remember-extra.texi"
 DOCS="ChangeLog* NEWS"

@@ -1,9 +1,10 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=5
+GCONF_DEBUG="no"
 
-inherit autotools flag-o-matic gnome2
+inherit autotools eutils flag-o-matic gnome2
 
 DESCRIPTION="GTK based loudspeaker enclosure and crossovernetwork designer"
 HOMEPAGE="http://gspeakers.sourceforge.net/"
@@ -21,25 +22,20 @@ RDEPEND="
 	|| (
 		sci-electronics/gnucap
 		sci-electronics/ngspice
-		sci-electronics/spice
-	)
+		sci-electronics/spice )
 "
-DEPEND="${RDEPEND}"
-BDEPEND="
+DEPEND="${RDEPEND}
 	virtual/pkgconfig
 "
 
-PATCHES=(
-	"${FILESDIR}"/${P}-cxxflags.patch
-	"${FILESDIR}"/${P}-gcc43.patch
-	"${FILESDIR}"/${P}-glib-single-include.patch
-	"${FILESDIR}"/${P}-fix-sigc-includes.patch
-	"${FILESDIR}"/${P}-c++11.patch
-)
-
 src_prepare() {
+	sed -i -e "s/-O0//" src/Makefile.am
+	epatch "${FILESDIR}"/${P}-gcc43.patch
+	epatch "${FILESDIR}"/${P}-glib-single-include.patch
+	epatch "${FILESDIR}"/${P}-fix-sigc-includes.patch
+	epatch "${FILESDIR}"/${P}-c++11.patch
 	append-cxxflags '-std=c++11'
 	mv configure.in configure.ac || die
-	gnome2_src_prepare
 	eautoreconf
+	gnome2_src_prepare
 }

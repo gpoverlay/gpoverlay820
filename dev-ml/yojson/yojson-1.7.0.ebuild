@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,14 +11,14 @@ SRC_URI="https://github.com/ocaml-community/yojson/archive/${PV}.tar.gz -> ${P}.
 
 LICENSE="BSD"
 SLOT="0/${PV}"
-KEYWORDS="amd64"
+KEYWORDS="~amd64"
 IUSE="examples +ocamlopt test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	>=dev-lang/ocaml-4.02.3:=[ocamlopt?]
-	dev-ml/easy-format:=[ocamlopt?]
-	>=dev-ml/biniou-1.2:=[ocamlopt?]
+	>=dev-lang/ocaml-4.02.3:=[ocamlopt=]
+	dev-ml/easy-format:=[ocamlopt=]
+	>=dev-ml/biniou-1.2:=[ocamlopt=]
 "
 DEPEND="
 	${RDEPEND}

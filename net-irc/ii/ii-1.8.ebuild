@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 inherit toolchain-funcs
 
 DESCRIPTION="A minimalist FIFO and filesystem-based IRC client"
@@ -15,8 +15,14 @@ KEYWORDS="amd64 arm ~arm64 ~ppc ~ppc64 x86 ~amd64-linux"
 src_prepare() {
 	default
 
-	sed -i -e '/^LDFLAGS/{s:-s::g; s:= :+= :g}' \
-		-e '/^CFLAGS/{s: -Os::g; s:= :+= :g}' config.mk || die
+	sed -i \
+		-e '/^CFLAGS/{s: -Os::g; s:= :+= :g}' \
+		-e '/^CC/d' \
+		-e '/^LDFLAGS/{s:-s::g; s:= :+= :g}' \
+		config.mk || die
+	sed -i \
+		-e 's|@${CC}|$(CC)|g' \
+		Makefile || die
 }
 
 src_compile() {
@@ -24,9 +30,7 @@ src_compile() {
 }
 
 src_install() {
-	emake \
-		DESTDIR="${D}" \
-		PREFIX="${EPREFIX}"/usr \
-		DOCDIR="${EPREFIX}"/usr/share/doc/${PF} \
-		install
+	dobin ii
+	dodoc CHANGES FAQ README
+	doman *.1
 }

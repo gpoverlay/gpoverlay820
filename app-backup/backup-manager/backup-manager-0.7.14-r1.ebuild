@@ -1,7 +1,8 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
+inherit eutils
 
 MY_P=Backup-Manager-${PV}
 DESCRIPTION="Backup Manager is a command line backup tool for GNU/Linux"
@@ -10,7 +11,7 @@ SRC_URI="https://github.com/sukria/Backup-Manager/archive/${PV}.tar.gz -> ${P}.t
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 ~riscv x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="s3"
 
 DEPEND="dev-lang/perl:=
@@ -34,7 +35,6 @@ src_prepare() {
 
 src_compile() {
 	default
-	emake -C po backup-manager.pot
 	emake -C po
 }
 

@@ -1,15 +1,13 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit desktop wrapper xdg-utils
+inherit eutils desktop xdg-utils
 
 DESCRIPTION="Holiday-themed sequel to the Japanese visual novel and dating sim about birds"
 HOMEPAGE="https://www.devolverdigital.com/games/hatoful-boyfriend-holiday-star"
 SRC_URI="Linux-Standalone-${PV}.rar"
-S="${WORKDIR}/Linux-Standalone"
-
 LICENSE="all-rights-reserved"
 SLOT="0"
 KEYWORDS="-* ~amd64 ~x86"
@@ -29,6 +27,8 @@ RDEPEND="
 		x11-libs/gtk+:2
 	)
 "
+
+S="${WORKDIR}/Linux-Standalone"
 
 DIR="/opt/${PN}"
 QA_PREBUILT="${DIR#/}/*"

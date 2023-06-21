@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person" proxied="yes">
+	<maintainer type="person">
 		<email>rion4ik@gmail.com</email>
 		<name>Sergey Ilinykh</name>
 	</maintainer>
-	<maintainer type="project" proxied="proxy">
+	<maintainer type="project">
 		<email>proxy-maint@gentoo.org</email>
 		<name>Proxy Maintainers</name>
 	</maintainer>
@@ -18,6 +18,7 @@
 		<flag name="extras">Enable Psi+ patchset</flag>
 		<flag name="hunspell">Enable spellchecking using <pkg>app-text/hunspell</pkg></flag>
 		<flag name="iconsets">Install additional iconsets, some of them have no clear licensing</flag>
+		<flag name="keyring">Enable storing password in system keyring manager</flag>
 		<flag name="webengine">Enable themed, html-based chatlogs using <pkg>dev-qt/qtwebengine</pkg></flag>
 		<flag name="whiteboarding">Enable experimental interactive SVG drawing</flag>
 		<flag name="xscreensaver">Use X screensaver protocol extension to monitor idle/active status based on mouse/keyboard events</flag>

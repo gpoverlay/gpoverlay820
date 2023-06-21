@@ -1,9 +1,9 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit autotools virtualx
+inherit autotools multilib virtualx
 
 MY_PV=${PV/_beta/b}
 
@@ -14,7 +14,7 @@ SRC_URI="mirror://sourceforge/project/incrtcl/%5Bincr%20Tcl_Tk%5D-4-source/itk%2
 IUSE=""
 SLOT="0"
 LICENSE="BSD"
-KEYWORDS="amd64 ~arm64 ~ia64 ppc ~riscv sparc x86 ~amd64-linux ~x86-linux"
+KEYWORDS="amd64 ~ia64 ppc sparc x86 ~amd64-linux ~x86-linux"
 RESTRICT="!test? ( test )"
 
 DEPEND="
@@ -23,10 +23,6 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${PN}${MY_PV}"
-
-QA_CONFIG_IMPL_DECL_SKIP=(
-	stat64 # used to test for Large File Support
-)
 
 src_prepare() {
 	mv configure.{in,ac} || die

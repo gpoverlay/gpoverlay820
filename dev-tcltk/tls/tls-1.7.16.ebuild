@@ -3,6 +3,8 @@
 
 EAPI=6
 
+inherit eutils
+
 MY_P="tcl${P}"
 
 DESCRIPTION="TLS OpenSSL extension to Tcl"

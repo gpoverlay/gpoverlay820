@@ -1,9 +1,9 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{6..8} )
 
 inherit python-any-r1 systemd toolchain-funcs
 
@@ -12,7 +12,7 @@ if [[ ${PV} == "9999" ]]; then
 	inherit git-r3
 else
 	SRC_URI="https://get.bitlbee.org/src/${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm64 ~ppc ~ppc64 ~x86"
+	KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
 fi
 
 DESCRIPTION="irc to IM gateway that support multiple IM protocols"
@@ -20,22 +20,21 @@ HOMEPAGE="https://www.bitlbee.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE_PROTOCOLS="purple twitter +xmpp"
-IUSE="debug +gnutls ipv6 libevent nss otr +plugins selinux test xinetd
+IUSE_PROTOCOLS="msn oscar purple twitter +xmpp"
+IUSE="debug +gnutls ipv6 libevent libressl nss otr +plugins selinux test xinetd
 	${IUSE_PROTOCOLS}"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
-	|| ( purple xmpp )
-	purple? ( plugins )
-	test? ( xmpp )
+	|| ( purple xmpp msn oscar )
+	xmpp? ( !nss )
+	test? ( plugins )
 "
 
 COMMON_DEPEND="
 	acct-group/bitlbee
 	acct-user/bitlbee
 	dev-libs/glib:2
-	dev-libs/json-parser:=
 	purple? ( net-im/pidgin )
 	libevent? ( dev-libs/libevent:= )
 	otr? ( >=net-libs/libotr-4 )
@@ -43,7 +42,8 @@ COMMON_DEPEND="
 	!gnutls? (
 		nss? ( dev-libs/nss )
 		!nss? (
-			dev-libs/openssl:0=
+			libressl? ( dev-libs/libressl:= )
+			!libressl? ( dev-libs/openssl:0= )
 		)
 	)
 "
@@ -61,7 +61,7 @@ BDEPEND="${PYTHON_DEPS}
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-3.5-systemd-user.patch"
+	"${FILESDIR}"/${PN}-3.5-systemd-user.patch
 )
 
 src_configure() {
@@ -111,10 +111,8 @@ src_configure() {
 		--prefix=/usr \
 		--datadir=/usr/share/bitlbee \
 		--etcdir=/etc/bitlbee \
-		--libdir=/usr/$(get_libdir) \
-		--pcdir=/usr/$(get_libdir)/pkgconfig \
 		--plugindir=/usr/$(get_libdir)/bitlbee \
-		--external_json_parser=1 \
+		--pcdir=/usr/$(get_libdir)/pkgconfig \
 		--systemdsystemunitdir=$(systemd_get_systemunitdir) \
 		--doc=1 \
 		--strip=0 \

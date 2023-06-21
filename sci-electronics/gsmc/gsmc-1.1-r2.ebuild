@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI="5"
 
-inherit autotools
+inherit autotools eutils
 
 DESCRIPTION="A GTK program for doing Smith Chart calculations"
 HOMEPAGE="https://www.qsl.net/ik5nax/"
@@ -12,20 +12,17 @@ SRC_URI="https://www.qsl.net/ik5nax/${P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+IUSE=""
 
-DEPEND="
+CDEPEND="
 	dev-libs/glib:2
-	x11-libs/gtk+:2
-"
-RDEPEND="${DEPEND}"
-BDEPEND="virtual/pkgconfig"
-
-PATCHES=(
-	"${FILESDIR}"/${P}-autotools.patch
-)
+	x11-libs/gtk+:2"
+DEPEND="${CDEPEND}
+	virtual/pkgconfig"
+RDEPEND="${CDEPEND}"
 
 src_prepare() {
-	default
+	epatch "${FILESDIR}/${P}-autotools.patch"
 	eautoreconf
 }
 

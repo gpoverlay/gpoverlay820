@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="person">
 		<email>conikost@gentoo.org</email>
 		<name>Conrad Kostecki</name>
+	</maintainer>
+	<maintainer type="person">
+		<email>andrey_utkin@gentoo.org</email>
+		<name>Andrey Utkin</name>
 	</maintainer>
 	<longdescription>
 		Spectrum is an open source instant messaging transport.
@@ -19,7 +23,4 @@
 		<flag name="whatsapp">Enables the WhatsApp backend, based on <pkg>net-im/transwhat</pkg>.</flag>
 		<flag name="twitter">Enables the Twitter backend.</flag>
 	</use>
-	<upstream>
-		<remote-id type="github">SpectrumIM/spectrum2</remote-id>
-	</upstream>
 </pkgmetadata>

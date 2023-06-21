@@ -1,9 +1,8 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-
-inherit autotools flag-o-matic xdg toolchain-funcs
+inherit autotools flag-o-matic xdg
 
 DESCRIPTION="A puzzle game where the player has to arrange balls in triplets"
 HOMEPAGE="https://sourceforge.net/projects/zaz/"
@@ -40,8 +39,8 @@ src_prepare() {
 
 src_configure() {
 	append-libs -lvorbis
-	append-cflags $($(tc-getPKG_CONFIG) sdl --cflags)
-	append-cxxflags $($(tc-getPKG_CONFIG) sdl --cflags)
+	append-cflags $(pkg-config sdl --cflags)
+	append-cxxflags $(pkg-config sdl --cflags)
 	econf \
 		--with-applicationdir=/usr/share/applications \
 		--with-icondir=/usr/share/pixmaps \

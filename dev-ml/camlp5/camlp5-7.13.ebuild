@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -12,11 +12,11 @@ S="${WORKDIR}/${PN}-rel$(ver_rs 1- '')"
 
 LICENSE="BSD"
 SLOT="0/${PV}"
-KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86"
 IUSE="doc +ocamlopt"
 
 DEPEND="
-	<dev-lang/ocaml-4.10.2:=[ocamlopt?]
+	>=dev-lang/ocaml-3.10:=[ocamlopt?]
 "
 RDEPEND="${DEPEND}"
 
@@ -36,7 +36,7 @@ src_configure() {
 		-mandir /usr/share/man || die "configure failed"
 }
 
-src_compile() {
+src_compile(){
 	emake out
 	if use ocamlopt; then
 		emake opt

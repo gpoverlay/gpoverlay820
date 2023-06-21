@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="7"
+EAPI="6"
 
 inherit autotools
 
@@ -16,8 +16,8 @@ IUSE=""
 
 RDEPEND="app-i18n/uim
 	~app-i18n/tomoe-gtk-0.6.0"
-DEPEND="${RDEPEND}"
-BDEPEND="virtual/pkgconfig"
+DEPEND="${RDEPEND}
+	virtual/pkgconfig"
 
 src_prepare() {
 	default

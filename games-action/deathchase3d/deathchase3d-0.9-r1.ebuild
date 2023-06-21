@@ -1,28 +1,26 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=6
+inherit eutils
 
-inherit desktop
+DESCRIPTION="A remake of the Sinclair Spectrum game of the same name"
+HOMEPAGE="http://www.autismuk.freeserve.co.uk/"
+SRC_URI="http://www.autismuk.freeserve.co.uk/${P}.tar.gz"
 
-DESCRIPTION="Remake of the Sinclair Spectrum game of the same name"
-HOMEPAGE="https://wiki.gentoo.org/wiki/No_homepage"
-SRC_URI="mirror://gentoo/${P}.tar.gz"
-
-LICENSE="GPL-2+"
+LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+IUSE=""
 
-RDEPEND="media-libs/libsdl[video]"
-DEPEND="${RDEPEND}"
+DEPEND="media-libs/libsdl[video]"
+RDEPEND=${DEPEND}
 
 PATCHES=(
 	"${FILESDIR}/${P}-underlink.patch"
 )
 
 src_install() {
-	dobin ${PN}/${PN}
+	dobin "${PN}/${PN}"
 	dodoc README ${PN}/docs/en/index.html
-
-	make_desktop_entry ${PN} "Death Chase 3D" applications-games
 }

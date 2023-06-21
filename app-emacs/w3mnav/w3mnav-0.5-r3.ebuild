@@ -1,12 +1,12 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=5
 
 inherit elisp
 
 DESCRIPTION="Add Info-like navigation keys to the emacs-w3m web browser"
-HOMEPAGE="https://www.neilvandyke.org/w3mnav/"
+HOMEPAGE="http://www.neilvandyke.org/w3mnav/"
 SRC_URI="mirror://gentoo/${P}.tar.gz"
 
 LICENSE="GPL-2+"

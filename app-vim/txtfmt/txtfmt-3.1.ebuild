@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -14,3 +14,8 @@ KEYWORDS="~amd64 ~x86"
 VIM_PLUGIN_HELPFILES="${PN}.txt"
 
 S=${WORKDIR}
+
+src_prepare() {
+	default
+	rm indent_patch.txt || die
+}

@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-inherit autotools
+inherit autotools eutils
 
 DESCRIPTION="Japanese input method Anthy IMEngine for SCIM"
 HOMEPAGE="http://scim-imengine.sourceforge.jp/index.cgi?cmd=view;name=SCIMAnthy"
@@ -30,9 +30,9 @@ src_prepare() {
 	default
 
 	if use gtk3; then
-		eapply "${WORKDIR}"/patches/*.patch
+		EPATCH_SOURCE="${WORKDIR}/patches" EPATCH_SUFFIX="patch" epatch
 	else
-		eapply "${DISTDIR}"/${P}-gtk2_build.patch
+		epatch "${DISTDIR}/${P}-gtk2_build.patch"
 	fi
 
 	eautoreconf

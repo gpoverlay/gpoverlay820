@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person" proxied="yes">
-		<email>jubalh@iodoru.org</email>
-		<name>Michael Vetter</name>
-	</maintainer>
-	<maintainer type="project" proxied="proxy">
-		<email>proxy-maint@gentoo.org</email>
-		<name>Proxy Maintainers</name>
+	<maintainer type="person">
+		<email>andrey_utkin@gentoo.org</email>
+		<name>Andrey Utkin</name>
 	</maintainer>
 	<longdescription>
 		Profanity is a console based XMPP client written in C using
@@ -18,7 +14,4 @@
 		<flag name="omemo">Enable OMEMO encryption</flag>
 		<flag name="otr">Enable encrypted conversations using Off-The-Records messaging</flag>
 	</use>
-	<upstream>
-		<remote-id type="github">profanity-im/profanity</remote-id>
-	</upstream>
 </pkgmetadata>

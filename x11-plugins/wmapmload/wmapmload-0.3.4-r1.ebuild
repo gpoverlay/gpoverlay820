@@ -1,9 +1,7 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
-inherit autotools
+EAPI=6
 
 DESCRIPTION="dockapp that monitors your apm battery status"
 HOMEPAGE="http://tnemeth.free.fr/projets/dockapps.html"
@@ -19,8 +17,3 @@ RDEPEND="x11-libs/libX11
 	x11-libs/libXt
 	x11-libs/libXpm"
 DEPEND="${RDEPEND}"
-
-src_prepare() {
-	default
-	eautoreconf
-}

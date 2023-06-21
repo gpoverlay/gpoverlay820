@@ -1,27 +1,25 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
-inherit toolchain-funcs
+EAPI=6
+inherit eutils
 
 DESCRIPTION="Rise of the Triad for Linux!"
-HOMEPAGE="https://www.icculus.org/rott/"
-SRC_URI="https://www.icculus.org/rott/releases/${P}.tar.gz
+HOMEPAGE="http://www.icculus.org/rott/"
+SRC_URI="http://www.icculus.org/rott/releases/${P}.tar.gz
 	demo? ( http://filesingularity.timedoctor.org/swdata.zip )"
 
-LICENSE="GPL-2+"
+LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="demo"
 
-RDEPEND="
-	media-libs/libsdl[sound,joystick,video]
+RDEPEND="media-libs/libsdl[sound,joystick,video]
 	media-libs/sdl-mixer"
 DEPEND="${RDEPEND}
 	app-arch/unzip"
 
-S="${WORKDIR}/${P}/rott"
+S=${WORKDIR}/${P}/rott
 
 src_prepare() {
 	default
@@ -33,7 +31,6 @@ src_prepare() {
 }
 
 src_compile() {
-	tc-export CC
 	emake -j1 \
 		EXTRACFLAGS="${CFLAGS} -DDATADIR=\\\"/usr/share/${PN}/\\\"" \
 		SHAREWARE=$(usex demo "1" "0")

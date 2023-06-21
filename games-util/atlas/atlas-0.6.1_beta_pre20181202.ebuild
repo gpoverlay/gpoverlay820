@@ -21,7 +21,6 @@ COMMON_DEPEND="
 	media-libs/freeglut
 	media-libs/glew:0=
 	media-libs/libpng:0=
-	media-libs/plib
 	net-misc/curl
 	sys-libs/zlib
 	virtual/glu
@@ -30,6 +29,7 @@ COMMON_DEPEND="
 "
 DEPEND="${COMMON_DEPEND}
 	>=dev-games/simgear-3.0.0
+	media-libs/plib
 "
 RDEPEND="${COMMON_DEPEND}
 	>=games-simulation/flightgear-3.0.0

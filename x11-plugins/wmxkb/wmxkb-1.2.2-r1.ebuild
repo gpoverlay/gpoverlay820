@@ -1,9 +1,9 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit autotools toolchain-funcs
+inherit toolchain-funcs
 
 DESCRIPTION="Dockable keyboard layout switcher for Window Maker"
 HOMEPAGE="http://wmalms.tripod.com/#WMXKB"
@@ -26,7 +26,6 @@ HTML_DOCS=( doc/manual{,_body,_title}.html )
 src_prepare() {
 	default
 	sed -i -e 's:$(LD) -o:$(CC) $(LDFLAGS) -o:' Makefile.in || die #336528
-	eautoreconf
 }
 
 src_compile() {

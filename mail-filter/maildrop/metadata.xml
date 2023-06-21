@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <maintainer type="person">
-    <email>tupone@gentoo.org</email>
-    <name>Tupone Alfredo</name>
-  </maintainer>
+  <!-- maintainer-needed -->
   <use>
     <flag name="authlib">Add courier-authlib support</flag>
     <flag name="dovecot">Add dovecot authentication support</flag>

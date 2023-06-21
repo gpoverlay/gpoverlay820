@@ -1,19 +1,20 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=5
 
-inherit autotools fortran-2
+AUTOTOOLS_AUTORECONF=true
+
+inherit autotools-utils fortran-2 multilib
 
 DESCRIPTION="2D/3D AFEM code for nonlinear geometric PDE"
 HOMEPAGE="http://fetk.org/codes/mc/index.html"
 SRC_URI="http://www.fetk.org/codes/download/${P}.tar.gz"
-S="${WORKDIR}"/${PN}
 
-LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 x86 ~amd64-linux ~x86-linux"
-IUSE="debug doc"
+LICENSE="GPL-2"
+IUSE="debug doc static-libs"
 
 RDEPEND="
 	dev-libs/maloc
@@ -25,12 +26,14 @@ RDEPEND="
 	sci-libs/umfpack
 	virtual/blas
 	virtual/lapack"
-DEPEND="${RDEPEND}"
-BDEPEND="
+DEPEND="
+	${RDEPEND}
 	doc? (
 		media-gfx/graphviz
 		app-doc/doxygen
-	)"
+		)"
+
+S="${WORKDIR}"/${PN}
 
 PATCHES=(
 	"${FILESDIR}"/1.4-superlu.patch
@@ -38,7 +41,7 @@ PATCHES=(
 	"${FILESDIR}"/1.4-multilib.patch
 	"${FILESDIR}"/1.4-doc.patch
 	"${FILESDIR}"/${P}-unbundle.patch
-)
+	)
 
 src_prepare() {
 	sed \
@@ -46,37 +49,36 @@ src_prepare() {
 		-e 's:UMFPACK_numeric:umfpack_di_numeric:g' \
 		-e 's:buildg_:matvec_:g' \
 		-i configure.ac || die
-
-	default
-	eautoreconf
+	autotools-utils_src_prepare
 }
 
 src_configure() {
-	export FETK_INCLUDE="${ESYSROOT}"/usr/include
-	export FETK_LIBRARY="${ESYSROOT}"/usr/$(get_libdir)
+	local fetk_include
+	local fetk_lib
+	local myeconfargs
 
-	export FETK_MPI_LIBRARY="${FETK_LIBRARY}"
-	export FETK_VF2C_LIBRARY="${FETK_LIBRARY}"
-	export FETK_BLAS_LIBRARY="${FETK_LIBRARY}"
-	export FETK_LAPACK_LIBRARY="${FETK_LIBRARY}"
-	export FETK_AMD_LIBRARY="${FETK_LIBRARY}"
-	export FETK_UMFPACK_LIBRARY="${FETK_LIBRARY}"
-	export FETK_SUPERLU_LIBRARY="${FETK_LIBRARY}"
-	export FETK_ARPACK_LIBRARY="${FETK_LIBRARY}"
-	export FETK_CGCODE_LIBRARY="${FETK_LIBRARY}"
-	export FETK_PMG_LIBRARY="${FETK_LIBRARY}"
+	use doc || myeconfargs+=( --with-doxygen= --with-dot= )
 
-	econf \
-		--disable-static \
-		--disable-triplet \
-		--with-doxygen=$(usex doc "${BROOT}"/usr/bin/doxygen '') \
-		--with-dot=$(usex doc "${BROOT}"/usr/bin/dot '') \
+	fetk_include="${EPREFIX}"/usr/include
+	fetk_lib="${EPREFIX}"/usr/$(get_libdir)
+	export FETK_INCLUDE="${fetk_include}"
+	export FETK_LIBRARY="${fetk_lib}"
+	export FETK_MPI_LIBRARY="${fetk_lib}"
+	export FETK_VF2C_LIBRARY="${fetk_lib}"
+	export FETK_BLAS_LIBRARY="${fetk_lib}"
+	export FETK_LAPACK_LIBRARY="${fetk_lib}"
+	export FETK_AMD_LIBRARY="${fetk_lib}"
+	export FETK_UMFPACK_LIBRARY="${fetk_lib}"
+	export FETK_SUPERLU_LIBRARY="${fetk_lib}"
+	export FETK_ARPACK_LIBRARY="${fetk_lib}"
+	export FETK_CGCODE_LIBRARY="${fetk_lib}"
+	export FETK_PMG_LIBRARY="${fetk_lib}"
+
+	myeconfargs+=(
+		--docdir="${EPREFIX}"/usr/share/doc/${PF}
 		$(use_enable debug vdebug)
-}
-
-src_install() {
-	default
-
-	# no static archives
-	find "${ED}" -name '*.la' -delete || die
+		--disable-triplet
+		--enable-shared
+	)
+	autotools-utils_src_configure
 }

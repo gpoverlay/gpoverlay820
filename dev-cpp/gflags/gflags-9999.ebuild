@@ -1,11 +1,11 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
 inherit cmake-multilib
 
-if [[ ${PV} == *9999* ]]; then
+if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/gflags/gflags"
 else
@@ -14,7 +14,7 @@ else
 fi
 
 DESCRIPTION="Google's C++ argument parsing library"
-HOMEPAGE="https://gflags.github.io/gflags/"
+HOMEPAGE="http://gflags.github.io/gflags/"
 
 LICENSE="BSD"
 SLOT="0/2.2"
@@ -32,5 +32,5 @@ multilib_src_configure() {
 		# >>> /tmp/portage/dev-cpp/gflags-9999/homedir/.cmake/packages/gflags/a7fca4708532331c2d656af0fdc8b8b9
 		-DREGISTER_INSTALL_PREFIX=OFF
 	)
-	cmake_src_configure
+	cmake-utils_src_configure
 }

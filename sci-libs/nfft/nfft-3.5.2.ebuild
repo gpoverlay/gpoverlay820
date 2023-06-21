@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -18,11 +18,18 @@ RDEPEND="sci-libs/fftw:3.0[threads,openmp?]"
 DEPEND="${RDEPEND}"
 
 pkg_pretend() {
-	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
-}
+	if [[ ${MERGE_TYPE} != binary ]] && use openmp; then
+		if ! tc-has-openmp; then
+			ewarn "OpenMP is not available in your current selected compiler"
 
-pkg_setup() {
-	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
+			if tc-is-clang; then
+				ewarn "OpenMP support in sys-devel/clang is provided by sys-libs/libomp,"
+				ewarn "which you will need to build ${CATEGORY}/${PN} with USE=\"openmp\""
+			fi
+
+			die "need openmp capable compiler"
+		fi
+	fi
 }
 
 src_configure() {

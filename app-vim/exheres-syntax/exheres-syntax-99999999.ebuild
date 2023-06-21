@@ -1,7 +1,7 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=6
 
 inherit vim-plugin git-r3
 
@@ -11,8 +11,12 @@ EGIT_REPO_URI="https://git.exherbo.org/git/exheres-syntax.git"
 
 LICENSE="vim"
 SLOT="0"
+IUSE=""
 
 VIM_PLUGIN_HELPFILES="exheres-syntax"
 VIM_PLUGIN_MESSAGES="filetype"
 
-src_compile() { :; }
+src_prepare() {
+	default
+	rm .gitignore Makefile || die
+}

@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -17,4 +17,7 @@ S="${WORKDIR}/vim-${P}"
 
 VIM_PLUGIN_HELPFILES="${PN}"
 
-DOCS=( CHANGELOG.md README.md )
+src_prepare() {
+	default
+	rm LICENSE README.md || die
+}

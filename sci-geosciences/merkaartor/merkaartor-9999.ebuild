@@ -1,10 +1,10 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
-PLOCALES="cs de en es fi fr hr hu id_ID it ja nl pl pt_BR ru sv uk zh_TW"
-inherit flag-o-matic plocale qmake-utils xdg
+PLOCALES="ar cs de en es et fr hr hu id_ID it ja nl pl pt_BR pt ru sk sv uk vi zh_CN zh_TW"
+inherit l10n qmake-utils xdg-utils
 
 if [[ ${PV} != *9999 ]] ; then
 	SRC_URI="https://github.com/openstreetmap/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
@@ -21,6 +21,10 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="debug exif gps libproxy webengine"
 
+BDEPEND="
+	dev-qt/linguist-tools:5
+	virtual/pkgconfig
+"
 DEPEND="
 	dev-qt/qtconcurrent:5
 	dev-qt/qtcore:5
@@ -40,10 +44,6 @@ DEPEND="
 	webengine? ( dev-qt/qtwebengine:5[widgets] )
 "
 RDEPEND="${DEPEND}"
-BDEPEND="
-	dev-qt/linguist-tools:5
-	virtual/pkgconfig
-"
 
 PATCHES=( "${FILESDIR}"/${PN}-0.18.3-sharedir-pluginsdir.patch ) # bug 621826
 
@@ -59,8 +59,8 @@ src_prepare() {
 		rm "translations/${PN}_${1}.ts" || die
 	}
 
-	if [[ -n "$(plocale_get_locales)" ]]; then
-		plocale_for_each_disabled_locale my_rm_loc
+	if [[ -n "$(l10n_get_locales)" ]]; then
+		l10n_for_each_disabled_locale_do my_rm_loc
 		$(qt5_get_bindir)/lrelease src/src.pro || die
 	fi
 
@@ -71,18 +71,13 @@ src_prepare() {
 }
 
 src_configure() {
-	if has_version "<sci-libs/proj-8.0.0" ; then
-		# bug #685234
-		append-cppflags -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H
-	fi
-
 	# TRANSDIR_SYSTEM is for bug #385671
 	local myeqmakeargs=(
-		PREFIX="${EPREFIX}/usr"
-		LIBDIR="${EPREFIX}/usr/$(get_libdir)"
+		PREFIX="${ED}/usr"
+		LIBDIR="${ED}/usr/$(get_libdir)"
 		PLUGINS_DIR="/usr/$(get_libdir)/${PN}/plugins"
 		SHARE_DIR_PATH="/usr/share/${PN}"
-		TRANSDIR_MERKAARTOR="${EPREFIX}/usr/share/${PN}/translations"
+		TRANSDIR_MERKAARTOR="${ED}/usr/share/${PN}/translations"
 		TRANSDIR_SYSTEM="${EPREFIX}/usr/share/qt5/translations"
 		SYSTEM_QTSA=1
 		NODEBUG=$(usex debug 0 1)
@@ -96,6 +91,12 @@ src_configure() {
 	eqmake5 "${myeqmakeargs[@]}" Merkaartor.pro
 }
 
-src_install() {
-	emake install INSTALL_ROOT="${D}"
+pkg_postinst() {
+	xdg_desktop_database_update
+	xdg_icon_cache_update
+}
+
+pkg_postrm() {
+	xdg_desktop_database_update
+	xdg_icon_cache_update
 }

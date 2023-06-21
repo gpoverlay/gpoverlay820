@@ -1,8 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-
+EAPI=6
 inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Small, fast library to generate primes in order"
@@ -12,18 +11,17 @@ SRC_URI="http://cr.yp.to/primegen/${P}.tar.gz"
 LICENSE="public-domain"
 SLOT="0"
 KEYWORDS="amd64 ~ppc x86 ~amd64-linux ~x86-linux"
+IUSE=""
 
 PATCHES=(
-	"${FILESDIR}"/${P}-man.patch
-	"${FILESDIR}"/${P}-missing-headers.patch
-	"${FILESDIR}"/${P}-respect-ar-ranlib.patch
+	"${FILESDIR}/${P}-man.patch"
+	"${FILESDIR}/${P}-missing-headers.patch"
 )
 
 src_prepare() {
 	default
-
-	local file
-	while IFS="" read -d $'\0' -r file; do
+	while IFS="" read -d $'\0' -r file
+	do
 		sed -i -e 's:\(primegen.a\):lib\1:' "${file}" || die
 	done < <(find . -type f -print0)
 	mkdir usr || die
@@ -32,10 +30,9 @@ src_prepare() {
 src_configure() {
 	# Fixes bug #161015
 	append-flags -fsigned-char
-	echo "$(tc-getCC) ${CFLAGS} ${CPPFLAGS}" > conf-cc || die
+	echo "$(tc-getCC) ${CFLAGS}" > conf-cc || die
 	echo "${S}/usr" > conf-home || die
 	echo "$(tc-getCC) ${LDFLAGS}" > conf-ld || die
-	tc-export AR RANLIB
 }
 
 src_test() {
@@ -51,7 +48,7 @@ src_install() {
 		-e "s/#include \"uint32.h\"/$(grep typedef uint32.h)/" \
 		-e "s/#include \"uint64.h\"/$(grep typedef uint64.h)/" \
 		primegen.h || die
-
-	doheader primegen.h
+	insinto /usr/include
+	doins primegen.h
 	dodoc BLURB CHANGES README TODO
 }

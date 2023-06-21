@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,13 +11,13 @@ SRC_URI="https://github.com/dbuenzli/topkg/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="ISC"
 SLOT="0/${PV}"
-KEYWORDS="amd64 arm arm64 ~ppc ppc64 x86"
-IUSE="+ocamlopt"
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86"
+IUSE=""
 
 RDEPEND="dev-ml/result:=
 	dev-ml/ocamlbuild:=
 	dev-ml/findlib:=
-	dev-lang/ocaml:=[ocamlopt?]"
+	dev-lang/ocaml:="
 DEPEND="${RDEPEND}"
 
 src_compile() {
@@ -27,12 +27,7 @@ src_compile() {
 src_install() {
 	# Can't use opam-installer here as it is an opam dep...
 	findlib_src_preinst
-
-	local nativelibs
-	if use ocamlopt; then
-		nativelibs=$(echo _build/src/${PN}*.cm{x,xa,xs,ti} _build/src/${PN}.a)
-	fi
-
+	local nativelibs="$(echo _build/src/${PN}*.cm{x,xa,xs,ti} _build/src/${PN}.a)"
 	ocamlfind install ${PN} _build/pkg/META _build/src/${PN}.mli _build/src/${PN}.cm{a,i} ${nativelibs} || die
 	dodoc CHANGES.md DEVEL.md README.md
 }

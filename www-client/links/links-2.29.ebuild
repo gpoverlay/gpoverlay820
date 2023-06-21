@@ -50,7 +50,7 @@ RDEPEND="
 		media-libs/libjpeg-turbo:=
 	)
 	lzip? (
-		app-arch/lzip
+		app-arch/lzlib
 	)
 	lzma? (
 		app-arch/xz-utils
@@ -91,6 +91,8 @@ REQUIRED_USE="!livecd? ( fbcon? ( gpm ) )
 	svga? ( suid )"
 
 DOCS=( AUTHORS BRAILLE_HOWTO ChangeLog KEYS NEWS README SITES )
+
+PATCHES=( "${FILESDIR}/links-2.29-fix-zstd-only-build.patch" )
 
 src_prepare() {
 	use X && xdg_environment_reset

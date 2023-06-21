@@ -1,10 +1,10 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
 LUA_COMPAT=( lua5-{1..4} )
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{7..9} )
 
 inherit cmake lua-single python-single-r1 xdg-utils
 
@@ -12,37 +12,30 @@ if [[ ${PV} == "9999" ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/weechat/weechat.git"
 else
-	inherit verify-sig
-	SRC_URI="https://weechat.org/files/src/${P}.tar.xz
-		verify-sig? ( https://weechat.org/files/src/${P}.tar.xz.asc )"
-	VERIFY_SIG_OPENPGP_KEY_PATH=${BROOT}/usr/share/openpgp-keys/weechat.org.asc
-	BDEPEND+="verify-sig? ( sec-keys/openpgp-keys-weechat )"
-	KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~riscv ~x86 ~x64-macos"
+	SRC_URI="https://weechat.org/files/src/${P}.tar.xz"
+	KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86 ~x64-macos"
 fi
 
 DESCRIPTION="Portable and multi-interface IRC client"
 HOMEPAGE="https://weechat.org/"
 
 LICENSE="GPL-3"
-SLOT="0/${PV}"
+SLOT="0"
 
 NETWORKS="+irc"
-PLUGINS="+alias +buflist +charset +exec +fifo +fset +logger +relay +scripts +spell +trigger +typing +xfer"
+PLUGINS="+alias +buflist +charset +exec +fifo +fset +logger +relay +scripts +spell +trigger +xfer"
 # dev-lang/v8 was dropped from Gentoo so we can't enable javascript support
-# dev-lang/php eclass support is lacking, php plugins don't work. bug #705702
-SCRIPT_LANGS="guile lua +perl +python ruby tcl"
+SCRIPT_LANGS="guile lua +perl php +python ruby tcl"
 LANGS=" cs de es fr it ja pl ru"
-IUSE="doc enchant man nls selinux test ${SCRIPT_LANGS} ${PLUGINS} ${INTERFACES} ${NETWORKS}"
+IUSE="doc man nls test ${SCRIPT_LANGS} ${PLUGINS} ${INTERFACES} ${NETWORKS}"
 
 REQUIRED_USE="
-	enchant? ( spell )
 	lua? ( ${LUA_REQUIRED_USE} )
 	python? ( ${PYTHON_REQUIRED_USE} )
 	test? ( nls )
 "
 
 RDEPEND="
-	app-arch/zstd:=
 	dev-libs/libgcrypt:0=
 	net-libs/gnutls:=
 	sys-libs/ncurses:0=
@@ -53,19 +46,10 @@ RDEPEND="
 	lua? ( ${LUA_DEPS} )
 	nls? ( virtual/libintl )
 	perl? ( dev-lang/perl:= )
+	php? ( >=dev-lang/php-7.0:*[embed] )
 	python? ( ${PYTHON_DEPS} )
-	ruby? (
-		|| (
-			dev-lang/ruby:3.1
-			dev-lang/ruby:3.0
-			dev-lang/ruby:2.7
-		)
-	)
-	selinux? ( sec-policy/selinux-irc )
-	spell? (
-		enchant? ( app-text/enchant:* )
-		!enchant? ( app-text/aspell )
-	)
+	ruby? ( || ( dev-lang/ruby:2.7 dev-lang/ruby:2.6 dev-lang/ruby:2.5 ) )
+	spell? ( app-text/aspell )
 	tcl? ( >=dev-lang/tcl-8.4.15:0= )
 "
 
@@ -73,7 +57,7 @@ DEPEND="${RDEPEND}
 	test? ( dev-util/cpputest )
 "
 
-BDEPEND+="
+BDEPEND="
 	virtual/pkgconfig
 	doc? ( >=dev-ruby/asciidoctor-1.5.4 )
 	man? ( >=dev-ruby/asciidoctor-1.5.4 )
@@ -81,7 +65,7 @@ BDEPEND+="
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-3.3-cmake_lua_version.patch
+	"${FILESDIR}"/${PN}-3.0-cmake_lua_version.patch
 )
 
 DOCS="AUTHORS.adoc ChangeLog.adoc Contributing.adoc ReleaseNotes.adoc README.adoc"
@@ -117,7 +101,7 @@ src_prepare() {
 	done
 
 	# install docs in correct directory
-	sed -i "s#\${DATAROOTDIR}/doc/\${PROJECT_NAME}#\0-${PVR}/html#" doc/*/CMakeLists.txt || die
+	sed -i "s#\${SHAREDIR}/doc/\${PROJECT_NAME}#\0-${PV}/html#" doc/*/CMakeLists.txt || die
 
 	if [[ ${CHOST} == *-darwin* ]]; then
 		# fix linking error on Darwin
@@ -131,16 +115,14 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
-		-DLIBDIR="${EPREFIX}/usr/$(get_libdir)"
+		-DLIBDIR=/usr/$(get_libdir)
 		-DENABLE_JAVASCRIPT=OFF
 		-DENABLE_LARGEFILE=ON
 		-DENABLE_NCURSES=ON
-		-DENABLE_PHP=OFF
 		-DENABLE_ALIAS=$(usex alias)
 		-DENABLE_BUFLIST=$(usex buflist)
 		-DENABLE_CHARSET=$(usex charset)
 		-DENABLE_DOC=$(usex doc)
-		-DENABLE_ENCHANT=$(usex enchant)
 		-DENABLE_EXEC=$(usex exec)
 		-DENABLE_FIFO=$(usex fifo)
 		-DENABLE_FSET=$(usex fset)
@@ -151,6 +133,7 @@ src_configure() {
 		-DENABLE_MAN=$(usex man)
 		-DENABLE_NLS=$(usex nls)
 		-DENABLE_PERL=$(usex perl)
+		-DENABLE_PHP=$(usex php)
 		-DENABLE_PYTHON=$(usex python)
 		-DENABLE_RELAY=$(usex relay)
 		-DENABLE_RUBY=$(usex ruby)
@@ -160,7 +143,6 @@ src_configure() {
 		-DENABLE_TCL=$(usex tcl)
 		-DENABLE_TESTS=$(usex test)
 		-DENABLE_TRIGGER=$(usex trigger)
-		-DENABLE_TYPING=$(usex typing)
 		-DENABLE_XFER=$(usex xfer)
 	)
 	cmake_src_configure

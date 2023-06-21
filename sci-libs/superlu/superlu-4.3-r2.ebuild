@@ -1,19 +1,15 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit autotools fortran-2 multilib toolchain-funcs
+inherit autotools fortran-2 toolchain-funcs
 
 MY_PN=SuperLU
 
 DESCRIPTION="Sparse LU factorization library"
 HOMEPAGE="https://crd-legacy.lbl.gov/~xiaoye/SuperLU/"
-#SRC_URI="https://portal.nersc.gov/project/sparse/${PN}/${PN}_${PV}.tar.gz"
-# Archive of weird franken-version which we used as 4.3 but upstream changed
-# the above tarball ^. The franken-version we used seemed to have 4.1 references in it?
-# bug #862597.
-SRC_URI="https://dev.gentoo.org/~sam/distfiles/${CATEGORY}/${PN}/${PN}_${PV}.tar.gz"
+SRC_URI="https://crd-legacy.lbl.gov/~xiaoye/SuperLU/${PN}_${PV}.tar.gz"
 S="${WORKDIR}/${MY_PN}_${PV}"
 
 LICENSE="BSD"
@@ -50,9 +46,7 @@ src_configure() {
 		--with-blas="$($(tc-getPKG_CONFIG) --libs blas)"
 	)
 
-	tc-export PKG_CONFIG
-
-	econf "${myeconfargs[@]}"
+	econf
 
 	rm EXAMPLE/*itersol1 || die
 }
@@ -77,12 +71,12 @@ src_install() {
 
 	if use doc; then
 		dodoc DOC/ug.pdf
-		dodoc -r DOC/html/.
+		dodoc DOC/html/*
 	fi
 
 	if use examples; then
 		docinto examples
-		dodoc -r EXAMPLE FORTRAN
+		dodoc EXAMPLE FORTRAN
 	fi
 
 	find "${ED}" -name "*.a" -delete || die

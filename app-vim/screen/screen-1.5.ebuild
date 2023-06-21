@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=5
 
 inherit vim-plugin vcs-snapshot
 
@@ -15,3 +15,7 @@ KEYWORDS="amd64 ~arm64 x86"
 VIM_PLUGIN_HELPFILES="screen.txt"
 
 RDEPEND="|| ( app-misc/screen app-misc/tmux )"
+
+src_prepare() {
+	rm README || die
+}

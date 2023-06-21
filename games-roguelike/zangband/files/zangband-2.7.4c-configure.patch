@@ -1,5 +1,5 @@
---- a/configure.in
-+++ b/configure.in
+--- configure.in.orig
++++ configure.in
 @@ -236,48 +236,5 @@
  AC_CHECK_FUNCS([Tk_SetClassProcs TkpSync])
  AC_CHECK_FUNCS([mkstemp usleep getpwuid getpwnam shmget])

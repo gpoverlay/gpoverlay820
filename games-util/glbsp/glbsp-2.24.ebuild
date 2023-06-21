@@ -1,15 +1,13 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=5
+inherit eutils toolchain-funcs versionator
 
-inherit desktop toolchain-funcs
-
-MY_PV=$(ver_rs 1 '')
+MY_PV=$(delete_version_separator 1)
 DESCRIPTION="A node builder specially designed for OpenGL ports of the DOOM game engine"
 HOMEPAGE="http://glbsp.sourceforge.net/"
 SRC_URI="mirror://sourceforge/glbsp/${PN}_src_${MY_PV}.tar.gz"
-S="${WORKDIR}"/${P}-source
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -17,16 +15,12 @@ KEYWORDS="~amd64 ~x86"
 IUSE="fltk"
 
 DEPEND="fltk? ( x11-libs/fltk:1 )"
-RDEPEND="${DEPEND}"
+RDEPEND=${DEPEND}
 
-PATCHES=(
-	"${FILESDIR}"/${P}-ldflags.patch
-	"${FILESDIR}"/${P}-return-type.patch
-)
+S=${WORKDIR}/${P}-source
 
 src_prepare() {
-	default
-
+	epatch "${FILESDIR}"/${P}-ldflags.patch
 	sed -i \
 		-e "/^CC=/s:=.*:=$(tc-getCC):" \
 		-e "/^CXX=/s:=.*:=$(tc-getCXX):" \

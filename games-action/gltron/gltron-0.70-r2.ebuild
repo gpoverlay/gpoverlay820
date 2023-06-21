@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
 inherit desktop
 
@@ -13,6 +13,7 @@ SRC_URI="mirror://sourceforge/${PN}/${P}-source.tar.gz
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+IUSE=""
 
 DEPEND="
 	media-libs/libmikmod
@@ -21,9 +22,9 @@ DEPEND="
 	media-libs/sdl-mixer[vorbis]
 	media-libs/sdl-sound[vorbis,mikmod]
 	media-libs/smpeg
-	virtual/opengl
-	virtual/glu"
-RDEPEND="${DEPEND}"
+	virtual/opengl"
+
+RDEPEND=${DEPEND}
 
 PATCHES=(
 	"${FILESDIR}"/${P}-configure.patch
@@ -34,7 +35,6 @@ PATCHES=(
 
 src_prepare() {
 	default
-
 	sed -i \
 		-e '/^gltron_LINK/s/$/ $(LDFLAGS)/' \
 		Makefile.in || die
@@ -51,7 +51,6 @@ src_configure() {
 
 src_install() {
 	default
-
 	doicon "${DISTDIR}"/${PN}.png
 	make_desktop_entry ${PN} GLtron
 }

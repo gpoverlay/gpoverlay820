@@ -1,18 +1,23 @@
-# Copyright 2019-2022 Gentoo Authors
+# Copyright 2019-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-inherit go-module xdg
+EAPI=7
+
+inherit go-module
 
 DESCRIPTION="Email client for your terminal"
 HOMEPAGE="https://aerc-mail.org"
 
 if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://git.sr.ht/~rjarry/aerc"
+	EGIT_REPO_URI="https://git.sr.ht/~sircmpwn/aerc"
 else
-	SRC_URI="https://git.sr.ht/~rjarry/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
-	SRC_URI+=" https://dev.gentoo.org/~williamh/dist/${P}-deps.tar.xz"
+	EGO_SUM=(
+		# to be filled on bumps
+	)
+	go-module_set_globals
+	SRC_URI="https://git.sr.ht/~sircmpwn/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz
+		${EGO_SUM_SRC_URI}"
 	KEYWORDS="~amd64 ~ppc64"
 fi
 
@@ -20,12 +25,13 @@ LICENSE="Apache-2.0 BSD BSD-2 MIT"
 SLOT="0"
 IUSE="notmuch"
 
-DEPEND="notmuch? ( net-mail/notmuch:= )"
-RDEPEND="${DEPEND}"
 BDEPEND="
 	>=app-text/scdoc-1.9.7
 	>=dev-lang/go-1.13
 "
+
+DEPEND="notmuch? ( net-mail/notmuch:= )"
+RDEPEND="${DEPEND}"
 
 src_unpack() {
 	if [[ ${PV} == *9999 ]]; then
@@ -37,16 +43,13 @@ src_unpack() {
 }
 
 src_compile() {
-	unset LDFLAGS
-	emake GOFLAGS="$(usex notmuch "-tags=notmuch" "")" \
-		PREFIX="${EPREFIX}/usr" VERSION=${PV}  all
+	use notmuch && export GOFLAGS="-tags=notmuch"
+	emake PREFIX="${EPREFIX}/usr"
 }
 
 src_install() {
-	emake GOFLAGS="$(usex notmuch "-tags=notmuch" "")" \
-		DESTDIR="${ED}" PREFIX="${EPREFIX}/usr" VERSION="${PV}" install
+	emake PREFIX="${EPREFIX}/usr" DESTDIR="${ED}" install
 	einstalldocs
-dodoc CHANGELOG.md
 }
 
 pkg_postinst() {
@@ -65,5 +68,4 @@ pkg_postinst() {
 			elog "need to use them."
 		fi
 	done
-	xdg_pkg_postinst
 }

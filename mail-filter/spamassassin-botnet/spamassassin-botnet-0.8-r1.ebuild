@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=5
 
 inherit perl-module
 
@@ -11,18 +11,20 @@ MY_P="${MY_PN}-${PV}"
 DESCRIPTION="SpamAssassin plugin that attempts to detect messages sent by a botnet"
 HOMEPAGE="https://wiki.gentoo.org/wiki/No_homepage"
 SRC_URI="http://people.ucsc.edu/~jrudd/spamassassin/${MY_P}.tar"
-S="${WORKDIR}"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+IUSE=""
 
 DEPEND=">=mail-filter/spamassassin-3.0.0"
 RDEPEND="${DEPEND}"
 
+S="${WORKDIR}"
+
 src_compile() {
 	# make sure it doesn't try to look for the .pm in the same dir as the .cf
-	sed -rie 's/^(loadplugin.+)[ ]+Botnet.pm/\1/' Botnet.cf || die
+	sed -rie 's/^(loadplugin.+)[ ]+Botnet.pm/\1/' Botnet.cf
 }
 
 src_install() {

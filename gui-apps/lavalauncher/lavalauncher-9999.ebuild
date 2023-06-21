@@ -1,4 +1,4 @@
-# Copyright 2019-2021 Gentoo Authors
+# Copyright 2019-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -23,16 +23,20 @@ IUSE="+svg man"
 
 RDEPEND="
 	dev-libs/wayland
+	gnome-base/librsvg
 	x11-libs/cairo
-	x11-libs/libxkbcommon
-	svg? ( gnome-base/librsvg )
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
 	dev-libs/wayland-protocols
 	virtual/pkgconfig
-	man? ( >=app-text/scdoc-1.9.3 )
 "
+
+if [[ ${PV} == 9999 ]]; then
+	BDEPEND+="man? ( ~app-text/scdoc-9999 )"
+else
+	BDEPEND+="man? ( >=app-text/scdoc-1.9.3 )"
+fi
 
 PATCHES=(
 	"${FILESDIR}/lavalauncher-remove-werror.patch"

@@ -1,37 +1,40 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=5
 
-inherit autotools fortran-2 toolchain-funcs
+AUTOTOOLS_AUTORECONF=true
 
-MY_PV="$(ver_rs 0- -)"
+inherit autotools-utils fortran-2 toolchain-funcs versionator
+
+MY_PV="$(replace_all_version_separators -)"
 
 DESCRIPTION="Matrix elements (integrals) evaluation over Cartesian Gaussian functions"
 HOMEPAGE="https://github.com/evaleev/libint"
 SRC_URI="https://github.com/evaleev/libint/archive/release-${MY_PV}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-release-${MY_PV}"
 
-LICENSE="GPL-2"
 SLOT="1"
+LICENSE="GPL-2"
 KEYWORDS="amd64 x86 ~amd64-linux ~x86-linux"
+IUSE="static-libs"
+
+S="${WORKDIR}/${PN}-release-${MY_PV}"
 
 PATCHES=( "${FILESDIR}"/${P}-as-needed.patch )
 
 src_prepare() {
 	mv configure.{in,ac} || die
-	default
-	eautoreconf
+	autotools-utils_src_prepare
 }
 
 src_configure() {
 	local myeconfargs=(
 		--enable-deriv
 		--enable-r12
-		--with-cc="$(tc-getCC)"
-		--with-cxx="$(tc-getCXX)"
+		--with-cc=$(tc-getCC)
+		--with-cxx=$(tc-getCXX)
 		--with-cc-optflags="${CFLAGS}"
 		--with-cxx-optflags="${CXXFLAGS}"
 	)
-	econf "${myeconfargs[@]}"
+	autotools-utils_src_configure
 }

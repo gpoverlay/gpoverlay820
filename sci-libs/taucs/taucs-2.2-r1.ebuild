@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -16,9 +16,12 @@ IUSE="doc"
 RESTRICT="test"
 
 RDEPEND="
-	sci-libs/metis
 	virtual/blas
-	virtual/lapack"
+	virtual/lapack
+	|| (
+		sci-libs/metis
+		sci-libs/parmetis
+	)"
 DEPEND="${RDEPEND}"
 BDEPEND="virtual/pkgconfig"
 

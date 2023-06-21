@@ -1,35 +1,29 @@
-* Respect CXX, CXXFLAGS, LDFLAGS, LIBS
-* Don't strip binaries
-https://bugs.gentoo.org/336099
+Respect CFLAGS, LDFLAGS, don't strip binaries
 
---- a/Makefile
-+++ b/Makefile
-@@ -1,14 +1,9 @@
--CC       = g++
+http://bugs.gentoo.org/show_bug.cgi?id=336099
+
+--- aewm++-1.1.5/Makefile
++++ aewm++-1.1.5/Makefile
+@@ -1,9 +1,6 @@
+ CC       = g++
 -ADDITIONAL_CFLAGS   = -g -O2 -march=i686 -Wall
--
+ 
  prefix   = /usr
 -INCLUDES = -I$/usr/X11R6
 -LDPATH   = -L/usr/X11R6/lib
--LIBS     = -lXext -lX11
-+LIBS     += -lXext -lX11
+ LIBS     = -lXext -lX11
  
  # SHAPE = Shape Extension
- # NEED_SETENV = Does your Unix not support the setenv function? Use this!
--DEFINES  = -DSHAPE #-DNEED_SETENV 
-+CPPFLAGS += -DSHAPE #-DNEED_SETENV
- HEADERS  = aewm.hh 		\
- 	   client.hh 		\
- 	   windowmanager.hh  	\
-@@ -28,14 +23,10 @@
+@@ -28,14 +25,13 @@
  all: aewm++
  
  aewm++: $(OBJS)
 -	$(CC) $(OBJS) $(LDPATH) $(LIBS) -o $@
--
--$(OBJS): %.o: %.cc $(HEADERS)
++	$(CXX) $(LDFLAGS) $(OBJS) $(LDPATH) $(LIBS) -o $@
+ 
+ $(OBJS): %.o: %.cc $(HEADERS)
 -	$(CC) $(CFLAGS) $(ADDITIONAL_CFLAGS) $(DEFINES) $(INCLUDES) -c $< -o $@
-+	$(CXX) $(LDFLAGS) $(CXXFLAGS) $(OBJS) $(LIBS) -o $@
++	$(CXX) $(CXXFLAGS) $(DEFINES) $(INCLUDES) -c $< -o $@
  
  install: all
 -	mkdir -p $(DESTDIR)$(prefix)/bin

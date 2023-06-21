@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit cmake fortran-2
+inherit cmake-utils fortran-2
 
 DESCRIPTION="Calculation of some eigenvectors of a large real, symmetrical, matrix"
 HOMEPAGE="http://ecole.modelisation.free.fr/modes.html"
@@ -17,12 +17,10 @@ RESTRICT="mirror bindist"
 
 S="${WORKDIR}"/Source_RTB2011
 
-DOCS=( diagrtb.README )
-
 src_prepare() {
 	cp "${FILESDIR}"/CMakeLists.txt . || die
 
-	cmake_src_prepare
+	cmake-utils_src_prepare
 }
 
 src_configure() {
@@ -30,5 +28,5 @@ src_configure() {
 		-DEXAMPLES=$(usex examples)
 	)
 
-	cmake_src_configure
+	cmake-utils_src_configure
 }

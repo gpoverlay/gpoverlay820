@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person" proxied="yes">
+	<maintainer type="person">
 		<email>powerman-asdf@yandex.ru</email>
 		<name>Alex Efros</name>
 	</maintainer>
-	<maintainer type="project" proxied="proxy">
+	<maintainer type="project">
 		<email>proxy-maint@gentoo.org</email>
 		<name>Proxy Maintainers</name>
 	</maintainer>
@@ -21,6 +21,6 @@
 		like to say secure - but it's just a beta) and yet functional.
 	</longdescription>
 	<upstream>
-		<remote-id type="github">3proxy/3proxy</remote-id>
+		<remote-id type="github">z3APA3A/3proxy</remote-id>
 	</upstream>
 </pkgmetadata>

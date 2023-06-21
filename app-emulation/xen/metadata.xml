@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person" proxied="yes">
+	<maintainer type="person">
 		<email>hydrapolic@gmail.com</email>
 		<name>Tomáš Mózes</name>
 	</maintainer>
-	<maintainer type="project" proxied="proxy">
+	<maintainer type="project">
 		<email>proxy-maint@gentoo.org</email>
 		<name>Proxy Maintainers</name>
 	</maintainer>
@@ -14,7 +14,6 @@
 		<name>Gentoo Xen Project</name>
 	</maintainer>
 	<use>
-		<flag name="boot-symlinks">Symlink xen.gz variants in /boot, disable on fat filesystems</flag>
 		<flag name="flask">Enable the Flask XSM module from NSA</flag>
 		<flag name="efi">Adds efi boot support, requires LDFLAG -melf_x86_64 for amd64</flag>
 	</use>

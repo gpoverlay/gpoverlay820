@@ -1,8 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-
+EAPI=6
 inherit autotools desktop flag-o-matic toolchain-funcs
 
 DESCRIPTION="8ball, 9ball, snooker and carambol game"
@@ -23,24 +22,19 @@ RDEPEND="x11-libs/libXaw
 	sdl? ( media-libs/libsdl[video] )
 	!sdl? ( media-libs/freeglut )
 "
-DEPEND="${RDEPEND}"
-BDEPEND="virtual/pkgconfig"
-
-PATCHES=(
-	"${FILESDIR}"/${P}-no_nvidia.patch
-	"${FILESDIR}"/${P}-freetype_pkgconfig.patch
-	"${FILESDIR}"/${P}-fbsd.patch
-	"${FILESDIR}"/${P}-as-needed.patch
-	"${FILESDIR}"/${P}-gl-clamp.patch
-)
+DEPEND="${RDEPEND}
+	virtual/pkgconfig"
 
 src_prepare() {
 	default
-
+	eapply \
+		"${FILESDIR}"/${P}-no_nvidia.patch \
+		"${FILESDIR}"/${P}-freetype_pkgconfig.patch \
+		"${FILESDIR}"/${P}-fbsd.patch \
+		"${FILESDIR}"/${P}-as-needed.patch \
+		"${FILESDIR}"/${P}-gl-clamp.patch
 	mv configure.{in,ac} || die
 	rm aclocal.m4
-
-	tc-export PKG_CONFIG
 
 	eautoreconf
 }

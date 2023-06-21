@@ -1,9 +1,9 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..10} )
+PYTHON_COMPAT=( python{3_7,3_8} )
 
 inherit vim-plugin python-r1
 
@@ -13,18 +13,17 @@ MY_P="${MY_PN}-${PV}"
 DESCRIPTION="vim plugin: mail client for vim"
 HOMEPAGE="https://github.com/soywod/iris.vim"
 SRC_URI="https://github.com/soywod/iris.vim/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${MY_P}"
 
 LICENSE="MIT"
 KEYWORDS="~amd64 ~x86"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-RDEPEND="${PYTHON_DEPS}
-	dev-python/imapclient[${PYTHON_USEDEP}]
-"
+RDEPEND="
+	dev-python/imapclient
+	${PYTHON_DEPS}"
 
-DOCS=( README.md CHANGELOG.md )
+S="${WORKDIR}/${MY_P}"
 
 src_install() {
 	mv api.py iris-api || die

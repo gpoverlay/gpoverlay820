@@ -1,9 +1,7 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-
-inherit toolchain-funcs
 
 DESCRIPTION="WMnet is a dock.app network monitor"
 HOMEPAGE="https://www.dockapps.net/wmnet"
@@ -19,24 +17,14 @@ RDEPEND="x11-libs/libX11
 	x11-libs/libXext"
 DEPEND="${RDEPEND}
 	x11-base/xorg-proto
-	elibc_musl? ( net-libs/ppp-defs )"
-BDEPEND="
-	app-text/rman
-	sys-devel/gcc
-	>=x11-misc/imake-1.0.8-r1"
+	x11-misc/imake
+	app-text/rman"
 
 PATCHES=( "${WORKDIR}"/${P}-misc.patch )
 
-src_configure() {
-	CC="$(tc-getBUILD_CC)" LD="$(tc-getLD)" \
-		IMAKECPP="${IMAKECPP:-${CHOST}-gcc -E}" xmkmf || die "xmkmf failed"
-}
-
 src_compile() {
-	emake \
-		CC="$(tc-getCC)" \
-		CDEBUGFLAGS="${CFLAGS}" \
-		LDOPTIONS="${LDFLAGS}"
+	xmkmf || die "xmkmf failed."
+	emake CDEBUGFLAGS="${CFLAGS}" LDOPTIONS="${LDFLAGS}"
 }
 
 src_install() {

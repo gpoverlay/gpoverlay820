@@ -1,21 +1,22 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
 inherit autotools flag-o-matic systemd
 
 DESCRIPTION="Optimized multi algo CPU miner"
 HOMEPAGE="https://github.com/JayDDee/cpuminer-opt"
-IUSE="cpu_flags_x86_sse2 curl"
+IUSE="cpu_flags_x86_sse2 curl libressl"
 LICENSE="GPL-2"
 SLOT="0"
 REQUIRED_USE="cpu_flags_x86_sse2"
 DEPEND="
-	dev-libs/gmp:=
-	dev-libs/jansson:=
+	dev-libs/gmp:0
+	dev-libs/jansson
 	>=net-misc/curl-7.15[ssl]
-	dev-libs/openssl:0=
+	!libressl? ( dev-libs/openssl:0= )
+	libressl? ( dev-libs/libressl:0= )
 "
 RDEPEND="${DEPEND}"
 if [[ ${PV} == "9999" ]] ; then

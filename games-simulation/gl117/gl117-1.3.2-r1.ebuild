@@ -1,41 +1,37 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
-inherit desktop
+EAPI=6
+inherit eutils
 
 MY_P="gl-117-${PV}-src"
+DESCRIPTION="An action flight simulator"
+HOMEPAGE="http://www.heptargon.de/gl-117/gl-117.html"
+SRC_URI="mirror://sourceforge/gl-117/${MY_P}.tar.bz2"
 
-DESCRIPTION="Action flight simulator"
-HOMEPAGE="https://sourceforge.net/projects/gl-117/"
-SRC_URI="
-	mirror://sourceforge/gl-117/${MY_P}.tar.bz2
-	https://dev.gentoo.org/~ionen/distfiles/${PN}.png"
-S="${WORKDIR}/${MY_P}"
-
-LICENSE="GPL-2+"
+LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+IUSE=""
 
-RDEPEND="
+DEPEND="
 	media-libs/freeglut
-	media-libs/libsdl[joystick,opengl,sound,video]
+	media-libs/libsdl[sound,joystick,opengl,video]
 	media-libs/sdl-mixer[mod]
 	virtual/glu
 	virtual/opengl"
-DEPEND="${RDEPEND}"
+RDEPEND=${DEPEND}
+
+S=${WORKDIR}/${MY_P}
 
 PATCHES=(
 	"${FILESDIR}"/${P}-mode.patch
 )
 
 src_install() {
-	default
-
+	DOCS="doc/gl-117.pdf AUTHORS ChangeLog FAQ NEWS README" \
+		default
+	newicon doc/src/falcon.jpg ${PN}.jpg
+	make_desktop_entry gl-117 GL-117 /usr/share/pixmaps/${PN}.jpg
 	doman doc/gl-117.6
-	dodoc doc/gl-117.pdf
-
-	doicon "${DISTDIR}"/${PN}.png
-	make_desktop_entry gl-117 GL-117
 }

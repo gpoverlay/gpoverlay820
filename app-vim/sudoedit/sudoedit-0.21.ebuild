@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=5
 
 inherit vim-plugin
 
@@ -16,5 +16,4 @@ RDEPEND="|| ( app-admin/sudo sys-apps/shadow )"
 src_prepare() {
 	# remove unused windows related files
 	rm autoload/{sudo.cmd,SudoEdit.vbs} || die
-	default
 }

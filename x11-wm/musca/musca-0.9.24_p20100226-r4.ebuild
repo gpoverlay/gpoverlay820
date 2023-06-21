@@ -1,8 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-
 inherit savedconfig toolchain-funcs
 
 DESCRIPTION="A simple dynamic window manager, with features nicked from ratpoison and dwm"
@@ -22,8 +21,6 @@ RDEPEND="
 	>=x11-misc/dmenu-4.4
 	apis? ( x11-misc/xbindkeys )
 "
-BDEPEND="virtual/pkgconfig"
-
 PATCHES=(
 	"${FILESDIR}"/${PN}-0.9.24-make.patch
 	"${FILESDIR}"/${PN}-0.9.24_p20100226-dmenu-4.4.patch
@@ -49,7 +46,7 @@ src_prepare() {
 		fi
 	done
 
-	tc-export CC PKG_CONFIG
+	tc-export CC
 }
 
 src_install() {

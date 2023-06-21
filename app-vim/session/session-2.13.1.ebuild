@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -16,3 +16,10 @@ VIM_PLUGIN_HELPFILES="${PN}.txt"
 RDEPEND=">=app-vim/vim-misc-1.17.6"
 
 S=${WORKDIR}/vim-${P}
+
+src_prepare() {
+	default
+
+	# remove unneeded files
+	rm addon-info.json *.md || die
+}

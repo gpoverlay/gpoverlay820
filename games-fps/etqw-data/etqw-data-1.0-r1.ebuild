@@ -1,11 +1,11 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 inherit cdrom
 
 DESCRIPTION="Enemy Territory: Quake Wars data files"
-HOMEPAGE="https://zerowing.idsoftware.com/linux/etqw/ETQWFrontPage/index.html"
+HOMEPAGE="http://zerowing.idsoftware.com/linux/etqw/ETQWFrontPage/"
 SRC_URI=""
 
 LICENSE="ETQW"

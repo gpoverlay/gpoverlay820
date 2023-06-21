@@ -1,29 +1,30 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=5
 
-inherit toolchain-funcs
+inherit eutils toolchain-funcs
 
-DESCRIPTION="Random number sequence test and entropy calculation"
-HOMEPAGE="https://www.fourmilab.ch/random/ https://github.com/Fourmilab/ent_random_sequence_tester"
-SRC_URI="https://dev.gentoo.org/~jstein/dist/${P}.zip"
+DESCRIPTION="Pseudorandom number sequence test"
+HOMEPAGE="http://www.fourmilab.ch/random/"
+SRC_URI="mirror://gentoo/random-${PV}.zip"
+
+SLOT="0"
+LICENSE="public-domain"
+KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
+IUSE=""
+
+RDEPEND=""
+DEPEND="app-arch/unzip"
+
 S="${WORKDIR}"
 
-LICENSE="public-domain"
-SLOT="0"
-KEYWORDS="amd64 x86 ~amd64-linux ~x86-linux"
-
-BDEPEND="app-arch/unzip"
-
-PATCHES=( "${FILESDIR}"/${PV}-gentoo.patch )
-
 src_prepare() {
-	default
+	epatch "${FILESDIR}"/${PV}-gentoo.patch
 	tc-export CC
 }
 
 src_install() {
 	dobin ${PN}
-	dodoc ${PN}.html ${PN}itle.gif
+	dohtml ${PN}.html ${PN}itle.gif
 }

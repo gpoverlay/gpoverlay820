@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
+	<maintainer type="person">
+		<email>bman@gentoo.org</email>
+		<name>Aaron Bauman</name>
+	</maintainer>
 	<maintainer type="person">
 		<email>prometheanfire@gentoo.org</email>
 		<name>Matthew Thode</name>
 	</maintainer>
-	<maintainer type="person" proxied="yes">
+	<maintainer type="person">
 		<email>speedjack95@gmail.com</email>
 		<name>Niccolò Scatena</name>
 	</maintainer>
@@ -22,8 +26,15 @@
 		something else.
 	</longdescription>
 	<use>
-		<flag name="grimshot">Install 'grimshot': script for taking screenshots</flag>
+		<flag name="elogind">Enable support for rootless session via elogind</flag>
+		<flag name="fish-completion">Enable fish completion support</flag>
+		<flag name="man">Build and install man pages</flag>
+		<flag name="seatd">Enable support for rootless session via <pkg>sys-auth/seatd</pkg></flag>
 		<flag name="swaybar">Install 'swaybar': sway's status bar component</flag>
+		<flag name="swaybg">Install 'swaybg': allows to set a desktop background image</flag>
+		<flag name="swayidle">Install 'swayidle': idle manager to run commands when user is inactive</flag>
+		<flag name="swaylock">Install 'swaylock': sway's screen locker</flag>
+		<flag name="swaymsg">Install 'swaymsg': tool for communicating with a running sway instance</flag>
 		<flag name="swaynag">Install 'swaynag': shows a message with buttons</flag>
 		<flag name="tray">Enable support for StatusNotifierItem tray specification</flag>
 		<flag name="wallpapers">Install sway's default wallpaper image</flag>

@@ -1,15 +1,15 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
-inherit autotools
+inherit autotools flag-o-matic
 
 DESCRIPTION="ncurses based sudoku game"
-HOMEPAGE="https://jubalh.github.io/nudoku/"
+HOMEPAGE="https://jubalh.github.io/nudoku"
 SRC_URI="https://github.com/jubalh/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
-LICENSE="GPL-3+"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="cairo"
@@ -25,7 +25,6 @@ RDEPEND="${DEPEND}"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-2.1.0-ncurses-link.patch"
-	"${FILESDIR}/${PN}-2.1.0-include-locale.patch"
 )
 
 src_prepare() {

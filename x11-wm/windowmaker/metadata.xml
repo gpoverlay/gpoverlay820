@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="project">
 		<email>gnustep@gentoo.org</email>
@@ -11,7 +11,4 @@
 			it."</flag>
 		<flag name="xrandr">Enable XRandR window extension support</flag>
 	</use>
-	<upstream>
-		<remote-id type="github">window-maker/wmaker</remote-id>
-	</upstream>
 </pkgmetadata>

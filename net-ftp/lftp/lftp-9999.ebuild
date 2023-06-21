@@ -1,17 +1,17 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 inherit autotools git-r3 libtool xdg-utils
 
 DESCRIPTION="A sophisticated ftp/sftp/http/https/torrent client and file transfer program"
-HOMEPAGE="http://lftp.yar.ru/"
+HOMEPAGE="https://lftp.tech/"
 EGIT_REPO_URI="https://github.com/lavv17/lftp"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="convert-mozilla-cookies +gnutls idn nls socks5 +ssl verify-file"
+IUSE="convert-mozilla-cookies +gnutls idn ipv6 libressl nls socks5 +ssl verify-file"
 
 RDEPEND="
 	>=sys-libs/ncurses-5.1:=
@@ -26,7 +26,10 @@ RDEPEND="
 	)
 	ssl? (
 		gnutls? ( >=net-libs/gnutls-1.2.3:0= )
-		!gnutls? ( dev-libs/openssl:0= )
+		!gnutls? (
+			!libressl? ( dev-libs/openssl:0= )
+			libressl? ( dev-libs/libressl:0= )
+		)
 	)
 	verify-file? (
 		dev-perl/String-CRC32
@@ -57,14 +60,8 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-4.9.1-libdir-readline.patch
 )
 
-# Gnulib false positive #900064
-QA_CONFIG_IMPL_DECL_SKIP="( MIN )"
-
 src_prepare() {
 	default
-
-	# bug #875692
-	sed -e '/#include/s/cmath/math.h/' -i trio/*.c || die
 
 	gnulib-tool --update || die
 
@@ -76,12 +73,12 @@ src_prepare() {
 
 src_configure() {
 	econf \
+		$(use_enable ipv6) \
 		$(use_enable nls) \
 		$(use_with idn libidn2) \
 		$(use_with socks5 socksdante "${EPREFIX}"/usr) \
-		$(usex ssl "$(use_with !gnutls openssl "${EPREFIX}"/usr)" '--without-openssl') \
+		$(usex ssl "$(use_with !gnutls openssl ${EPREFIX}/usr)" '--without-openssl') \
 		$(usex ssl "$(use_with gnutls)" '--without-gnutls') \
-		--enable-ipv6
 		--enable-packager-mode \
 		--sysconfdir="${EPREFIX}"/etc/${PN} \
 		--with-modules \

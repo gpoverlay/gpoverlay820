@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="person">
 		<email>conikost@gentoo.org</email>
@@ -18,7 +18,6 @@
 	</use>
 	<upstream>
 		<bugs-to>https://gitlab.com/dave_m/clamtk/issues</bugs-to>
-		<remote-id type="github">dave-theunsub/clamtk</remote-id>
 		<remote-id type="gitlab">dave_m/clamtk</remote-id>
 	</upstream>
 </pkgmetadata>

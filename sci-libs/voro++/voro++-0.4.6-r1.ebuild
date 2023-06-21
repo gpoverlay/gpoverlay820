@@ -1,11 +1,11 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit cmake
+inherit cmake-utils
 
-DESCRIPTION="3D Voronoi cell software library"
+DESCRIPTION="A 3D Voronoi cell software library"
 HOMEPAGE="http://math.lbl.gov/voro++/"
 SRC_URI="http://math.lbl.gov/voro++/download/dir/${P}.tar.gz"
 
@@ -15,3 +15,10 @@ KEYWORDS="amd64 x86"
 IUSE=""
 
 PATCHES=( "${FILESDIR}/${P}-cmake.patch" )
+
+src_configure() {
+	local mycmakeargs=(
+		-DLIB=$(get_libdir)
+	)
+	cmake-utils_src_configure
+}

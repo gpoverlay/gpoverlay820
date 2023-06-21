@@ -1,8 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-
 inherit desktop fortran-2 flag-o-matic toolchain-funcs
 
 MY_P="${PN}${PV}"
@@ -51,10 +50,6 @@ src_compile() {
 
 	# Use -mieee on alpha, according to the Makefile
 	use alpha && append-flags -mieee
-
-	# GCC 10 workaround
-	# bug #724556
-	append-fflags $(test-flags-FC -fallow-argument-mismatch)
 
 	args=(
 		CC="$(tc-getCC) ${CFLAGS}"

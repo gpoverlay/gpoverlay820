@@ -1,5 +1,6 @@
---- a/Border.C
-+++ b/Border.C
+diff -ur wm2-4/Border.C wm2-4.new/Border.C
+--- wm2-4/Border.C	1997-03-21 12:12:30.000000000 +0100
++++ wm2-4.new/Border.C	2007-06-30 16:56:10.000000000 +0200
 @@ -183,7 +183,7 @@
  
      if (m_label) free(m_label);
@@ -9,8 +10,9 @@
  
      int len = strlen(m_label);
      m_tabHeight = XRotTextWidth(m_tabFont, m_label, len) + 6 + m_tabWidth;
---- a/Buttons.C
-+++ b/Buttons.C
+diff -ur wm2-4/Buttons.C wm2-4.new/Buttons.C
+--- wm2-4/Buttons.C	1997-03-21 12:12:30.000000000 +0100
++++ wm2-4.new/Buttons.C	2007-06-30 16:56:10.000000000 +0200
 @@ -139,7 +139,11 @@
  		       (allowExit && ((n) > clients.count())) ? "[Exit wm2]" \
  		       : clients.item((n)-1)->label())
@@ -23,8 +25,9 @@
  	clients.append(m_hiddenClients.item(i));
      }
      int nh = clients.count() + 1;
---- a/Client.C
-+++ b/Client.C
+diff -ur wm2-4/Client.C wm2-4.new/Client.C
+--- wm2-4/Client.C	1997-03-21 12:12:30.000000000 +0100
++++ wm2-4.new/Client.C	2007-06-30 16:56:10.000000000 +0200
 @@ -4,7 +4,7 @@
  
  #include <X11/Xutil.h>
@@ -52,8 +55,9 @@
  }
  
  
---- a/Client.h
-+++ b/Client.h
+diff -ur wm2-4/Client.h wm2-4.new/Client.h
+--- wm2-4/Client.h	1997-03-21 12:12:30.000000000 +0100
++++ wm2-4.new/Client.h	2007-06-30 16:56:10.000000000 +0200
 @@ -2,6 +2,8 @@
  #ifndef _CLIENT_H_
  #define _CLIENT_H_
@@ -72,8 +76,9 @@
      int getIntegerProperty(Atom);
  
      // accessors 
---- a/Config.h
-+++ b/Config.h
+diff -ur wm2-4/Config.h wm2-4.new/Config.h
+--- wm2-4/Config.h	1997-03-21 12:12:30.000000000 +0100
++++ wm2-4.new/Config.h	2007-06-30 16:56:10.000000000 +0200
 @@ -39,6 +39,9 @@
  
  #define CONFIG_FRAME_THICKNESS    7
@@ -89,8 +94,9 @@
  
  #endif
 -
---- a/General.h
-+++ b/General.h
+diff -ur wm2-4/General.h wm2-4.new/General.h
+--- wm2-4/General.h	1997-03-21 12:12:30.000000000 +0100
++++ wm2-4.new/General.h	2007-06-30 16:56:10.000000000 +0200
 @@ -32,7 +32,7 @@
  #define NewString(x) (strcpy((char *)malloc(strlen(x)+1),(x)))
  
@@ -100,8 +106,9 @@
  #endif
  
  #define signal(x,y)     \
---- a/Makefile
-+++ b/Makefile
+diff -ur wm2-4/Makefile wm2-4.new/Makefile
+--- wm2-4/Makefile	1997-03-21 12:12:30.000000000 +0100
++++ wm2-4.new/Makefile	2007-06-30 16:56:10.000000000 +0200
 @@ -1,8 +1,8 @@
  
 -LIBS	=  -L/usr/X11/lib -lXext -lX11 -lXmu -lm
@@ -113,8 +120,9 @@
  CFLAGS	= -O2
  OBJECTS	= Border.o Buttons.o Client.o Events.o Main.o Manager.o Rotated.o
  
---- a/Manager.C
-+++ b/Manager.C
+diff -ur wm2-4/Manager.C wm2-4.new/Manager.C
+--- wm2-4/Manager.C	1997-03-21 12:12:30.000000000 +0100
++++ wm2-4.new/Manager.C	2007-06-30 16:56:10.000000000 +0200
 @@ -368,7 +368,7 @@
      return m_currentTime;
  }
@@ -124,8 +132,9 @@
  {
      m_signalled = True;
  }
---- a/Manager.h
-+++ b/Manager.h
+diff -ur wm2-4/Manager.h wm2-4.new/Manager.h
+--- wm2-4/Manager.h	1997-03-21 12:12:30.000000000 +0100
++++ wm2-4.new/Manager.h	2007-06-30 16:56:10.000000000 +0200
 @@ -85,7 +85,7 @@
  
      static Boolean m_initialising;

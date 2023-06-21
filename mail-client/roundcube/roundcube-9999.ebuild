@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -16,7 +16,7 @@ HOMEPAGE="https://roundcube.net"
 # for bundled PEAR components, googiespell and utf8.class.php
 LICENSE="GPL-3 BSD PHP-2.02 PHP-3 MIT public-domain"
 
-IUSE="change-password enigma exif fileinfo ldap mysql postgres sqlite ssl spell zip"
+IUSE="change-password enigma ldap mysql postgres sqlite ssl spell"
 REQUIRED_USE="|| ( mysql postgres sqlite )"
 
 # this function only sets DEPEND so we need to include that in RDEPEND
@@ -24,7 +24,7 @@ need_httpd_cgi
 
 RDEPEND="
 	${DEPEND}
-	>=dev-lang/php-7.4.0[exif?,fileinfo?,filter,gd,iconv,intl,json(+),ldap?,pdo,postgres?,session,sqlite?,ssl?,unicode,xml,zip?]
+	>=dev-lang/php-5.4.0[filter,gd,iconv,json(+),ldap?,pdo,postgres?,session,sqlite?,ssl?,unicode,xml]
 	virtual/httpd-php
 	change-password? (
 		dev-lang/php[sockets]
@@ -59,7 +59,6 @@ src_unpack() {
 	if [[ "${PV}" == *9999* ]]; then
 		git-r3_src_unpack
 		pushd "${S}" > /dev/null || die
-		rm Makefile || die
 		mv composer.json-dist composer.json || die
 		composer install --no-dev || die
 		./bin/install-jsdeps.sh || die
@@ -72,7 +71,7 @@ src_unpack() {
 src_install() {
 	webapp_src_preinst
 
-	dodoc CHANGELOG.md INSTALL README.md UPGRADING SECURITY.md
+	dodoc CHANGELOG INSTALL README.md UPGRADING
 
 	insinto "${MY_HTDOCSDIR}"
 	doins -r [[:lower:]]* SQL

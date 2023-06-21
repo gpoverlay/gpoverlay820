@@ -1,16 +1,14 @@
 --- a/src/makefile
 +++ b/src/makefile
-@@ -10,9 +10,7 @@
+@@ -10,8 +10,6 @@
      ###############################
  
  
 -CC = gcc
 -CFLAGS =  -c -O -I$ -DCONS
--#CFLAGS =  -g -c -I$ -DCONS
-+CPPFLAGS += -I. -DCONS
+ #CFLAGS =  -g -c -I$ -DCONS
  LIBS = -lm
  #
- 
 @@ -23,33 +21,4 @@
  
  #

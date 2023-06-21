@@ -1,5 +1,6 @@
---- a/src/command.c
-+++ b/src/command.c
+diff -Nur euler-1.61.0.orig/src/command.c euler-1.61.0/src/command.c
+--- euler-1.61.0.orig/src/command.c	2010-11-19 17:50:54.000000000 +0000
++++ euler-1.61.0/src/command.c	2010-11-19 18:23:11.000000000 +0000
 @@ -606,7 +606,7 @@
  void do_help (void)
  {	char name[256];
@@ -9,8 +10,9 @@
  	char *p,*end,*pnote;
  	builtintyp *b;
  	scan_space();
---- a/src/stack.h
-+++ b/src/stack.h
+diff -Nur euler-1.61.0.orig/src/stack.h euler-1.61.0/src/stack.h
+--- euler-1.61.0.orig/src/stack.h	2010-11-19 17:50:54.000000000 +0000
++++ euler-1.61.0/src/stack.h	2010-11-19 18:19:23.000000000 +0000
 @@ -63,7 +63,7 @@
  #endif
  } dims;
@@ -20,8 +22,9 @@
  
  typedef struct { header hd; double val; } realtyp;
  
---- a/src/udf.c
-+++ b/src/udf.c
+diff -Nur euler-1.61.0.orig/src/udf.c euler-1.61.0/src/udf.c
+--- euler-1.61.0.orig/src/udf.c	2010-11-19 17:50:54.000000000 +0000
++++ euler-1.61.0/src/udf.c	2010-11-19 18:21:20.000000000 +0000
 @@ -334,7 +334,7 @@
  {	char name[16];
  	header *hd;

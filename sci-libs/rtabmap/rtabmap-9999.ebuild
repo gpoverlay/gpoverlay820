@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -9,16 +9,15 @@ if [ "${PV#9999}" != "${PV}" ] ; then
 	EGIT_REPO_URI="https://github.com/introlab/rtabmap"
 fi
 
-inherit ${SCM} cmake multilib
-
-VER_SUFFIX=rolling
+inherit ${SCM} cmake-utils multilib
 
 if [ "${PV#9999}" != "${PV}" ] ; then
+	KEYWORDS=""
 	SRC_URI=""
 else
 	KEYWORDS="~amd64"
-	SRC_URI="https://github.com/introlab/rtabmap/archive/${PV}-${VER_SUFFIX}.tar.gz -> ${P}.tar.gz"
-	S="${WORKDIR}/${P}-${VER_SUFFIX}"
+	SRC_URI="https://github.com/introlab/rtabmap/archive/${PV}.tar.gz -> ${P}.tar.gz"
+	S="${WORKDIR}/${P}"
 fi
 
 DESCRIPTION="Real-Time Appearance-Based Mapping (RGB-D Graph SLAM)"
@@ -34,7 +33,6 @@ RDEPEND="
 	sys-libs/zlib
 	sci-libs/octomap:=
 	dev-libs/boost:=
-	dev-cpp/yaml-cpp:=
 	ieee1394? ( media-libs/libdc1394:2= )
 	openni2? ( dev-libs/OpenNI2 )
 	qt5? (
@@ -47,8 +45,6 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 BDEPEND="virtual/pkgconfig"
 
-PATCHES=( "${FILESDIR}/yamlcpp.patch" )
-
 src_configure() {
 	local mycmakeargs=(
 		"-DWITH_QT=$(usex qt5 ON OFF)"
@@ -56,11 +52,11 @@ src_configure() {
 		"-DWITH_OPENNI2=$(usex openni2 ON OFF)"
 		"-DBUILD_EXAMPLES=$(usex examples ON OFF)"
 	)
-	cmake_src_configure
+	cmake-utils_src_configure
 }
 
 src_install() {
-	cmake_src_install
+	cmake-utils_src_install
 	# Needed since we force ros crawling to be done only in
 	# /usr/share/ros_packages/
 	insinto /usr/share/ros_packages/${PN}

@@ -1,9 +1,7 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-
-inherit autotools
 
 DESCRIPTION="a simple host status monitoring dockapp"
 HOMEPAGE="https://sourceforge.net/projects/wmping"
@@ -28,11 +26,6 @@ PATCHES=(
 	)
 
 DOCS=( AUTHORS CHANGES README )
-
-src_prepare() {
-	default
-	eautoreconf
-}
 
 src_install() {
 	if use suid; then

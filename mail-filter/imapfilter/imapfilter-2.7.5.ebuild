@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -13,17 +13,22 @@ SRC_URI="https://github.com/lefcha/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 ppc x86"
+KEYWORDS="~amd64 ~ppc ~x86"
+
+IUSE="libressl"
 
 REQUIRED_USE="${LUA_REQUIRED_USE}"
 
 RDEPEND="
-	dev-libs/openssl:0=
+	!libressl? ( dev-libs/openssl:0= )
+	libressl? ( dev-libs/libressl:0= )
 	dev-libs/libpcre
 	${LUA_DEPS}"
 DEPEND="${RDEPEND}"
 
 DOCS="AUTHORS NEWS README samples/*"
+
+PATCHES=( "${FILESDIR}"/${P}-libressl.patch )
 
 src_prepare() {
 	default
@@ -38,8 +43,8 @@ src_compile() {
 	emake \
 		CC="$(tc-getCC)" \
 		LDFLAGS="${LDFLAGS}" \
-		INCDIRS="$(lua_get_CFLAGS)" \
-		LIBLUA="$(lua_get_LIBS)"
+		INCDIRS=$(lua_get_CFLAGS) \
+		LIBLUA=$(lua_get_LIBS)
 }
 
 src_install() {

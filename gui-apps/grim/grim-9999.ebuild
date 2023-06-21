@@ -1,51 +1,44 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
-inherit bash-completion-r1 meson
+inherit meson
 
-DESCRIPTION="Grab images from a Wayland compositor"
-HOMEPAGE="https://sr.ht/~emersion/grim"
+DESCRIPTION="Grab images from a Wayland compositor."
+HOMEPAGE="https://github.com/emersion/grim"
 
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://git.sr.ht/~emersion/${PN}"
+	EGIT_REPO_URI="https://github.com/emersion/${PN}.git"
 else
 	SRC_URI="https://github.com/emersion/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm64 ~loong ~ppc64 ~riscv ~x86"
-	S="${WORKDIR}/${PN}-v${PV}"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 LICENSE="MIT"
 SLOT="0"
 IUSE="+man jpeg"
 
-RDEPEND="
-	dev-libs/wayland
-	media-libs/libpng
-	x11-libs/pixman
-	jpeg? ( media-libs/libjpeg-turbo )
-"
-DEPEND="${RDEPEND}
+DEPEND="
 	>=dev-libs/wayland-protocols-1.14
-"
-BDEPEND="man? ( app-text/scdoc )"
+	dev-libs/wayland
+	jpeg? ( virtual/jpeg )
+	x11-libs/cairo"
+
+RDEPEND="${DEPEND}"
+
+if [[ ${PV} == 9999 ]]; then
+	BDEPEND+="man? ( ~app-text/scdoc-9999 )"
+else
+	BDEPEND+="man? ( app-text/scdoc )"
+fi
 
 src_configure() {
 	local emesonargs=(
 		$(meson_feature jpeg)
 		$(meson_feature man man-pages)
-		"-Dbash-completions=false"
-		"-Dfish-completions=false"
+		"-Dwerror=false"
 	)
 	meson_src_configure
-}
-
-src_install() {
-	meson_src_install
-
-	newbashcomp contrib/completions/bash/grim.bash grim
-	insinto /usr/share/fish/vendor_completions.d/
-	doins contrib/completions/fish/grim.fish
 }

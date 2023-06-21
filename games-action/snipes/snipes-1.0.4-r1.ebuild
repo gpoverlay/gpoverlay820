@@ -1,37 +1,35 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=6
 
-inherit desktop flag-o-matic multilib toolchain-funcs
+inherit desktop toolchain-funcs
 
 DESCRIPTION="2D scrolling shooter, resembles the old DOS game of same name"
-HOMEPAGE="https://wiki.gentoo.org/wiki/No_homepage"
-SRC_URI="mirror://gentoo/${P}.tar.gz"
+HOMEPAGE="https://cyp.github.com/snipes/"
+SRC_URI="https://cyp.github.com/snipes/${P}.tar.gz"
 
-LICENSE="GPL-2+"
+LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+IUSE=""
 
-RDEPEND="media-libs/libsdl[sound,video]"
-DEPEND="${RDEPEND}"
+DEPEND="media-libs/libsdl[sound,video]"
+RDEPEND=${DEPEND}
 
 PATCHES=(
-	"${FILESDIR}"/${P}-ldflags.patch
+	"${FILESDIR}"/${P}-nongnulinker.patch
 )
 
 src_compile() {
-	tc-export CC LD
-
-	# lld requires abi flags to be passed even if native (bug #730852)
-	LDLIBS=-lm emake RAW_LDFLAGS="$(get_abi_LDFLAGS) $(raw-ldflags)"
+	tc-getLD
+	default
 }
 
 src_install() {
-	dobin ${PN}
-	doman ${PN}.6
-	einstalldocs
-
+	dobin snipes
+	doman snipes.6
+	dodoc ChangeLog
 	doicon ${PN}.png
-	make_desktop_entry ${PN} ${PN^}
+	make_desktop_entry snipes "Snipes"
 }

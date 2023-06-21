@@ -4,13 +4,13 @@
 USER="minetest"
 
 # group
-GROUP="minetest"
+GROUP="@GROUP@"
 
 # pidfile
-PIDFILE="/run/minetest.pid"
+PIDFILE="/var/run/minetest.pid"
 
 # executable
-MINETESTBIN="/usr/bin/minetestserver"
+MINETESTBIN="@BINDIR@/minetestserver"
 
 # additional arguments for the server
 ARGS="--logfile /var/log/minetest/minetest-server.log"

@@ -1,5 +1,5 @@
---- a/SetupBattle.cpp
-+++ b/SetupBattle.cpp
+--- src/SetupBattle.cpp
++++ src/SetupBattle.cpp
 @@ -18,7 +18,7 @@
  #include "PreBattle.h"
  

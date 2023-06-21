@@ -1,7 +1,7 @@
 https://github.com/fcitx/fcitx/issues/250
 
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
+--- /CMakeLists.txt
++++ /CMakeLists.txt
 @@ -96,12 +96,15 @@
    endif()
  endif()

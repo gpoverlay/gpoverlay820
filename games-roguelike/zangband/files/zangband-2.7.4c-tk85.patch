@@ -1,5 +1,5 @@
---- a/configure.in
-+++ b/configure.in
+--- configure.in.orig
++++ configure.in
 @@ -141,12 +141,12 @@
  ])
  

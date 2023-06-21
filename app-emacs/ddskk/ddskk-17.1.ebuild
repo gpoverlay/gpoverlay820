@@ -1,8 +1,9 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="7"
-USE_RUBY="ruby27 ruby30"
+USE_RUBY="ruby25 ruby26 ruby27"
+NEED_EMACS="24.3"
 
 inherit elisp ruby-single vcs-snapshot
 
@@ -12,7 +13,7 @@ SRC_URI="https://github.com/skk-dev/${PN}/archive/${P}_Neppu.tar.gz -> ${P}.tar.
 
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS="amd64 ppc ppc64 x86 ~amd64-linux ~x86-linux ~ppc-macos"
+KEYWORDS="~amd64 ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux ~ppc-macos"
 IUSE="ruby"
 RESTRICT="test"
 

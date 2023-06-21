@@ -1,9 +1,9 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
-inherit git-r3 webapp
+inherit git-r3 prefix webapp
 
 DESCRIPTION="Tiny Tiny RSS - A web-based news feed (RSS/Atom) aggregator using AJAX"
 HOMEPAGE="https://tt-rss.org/"
@@ -12,21 +12,7 @@ LICENSE="GPL-3"
 SLOT="${PV}" # Single live slot.
 IUSE="+acl daemon gd +mysqli postgres"
 REQUIRED_USE="|| ( mysqli postgres )"
-
-PHP_SLOTS="8.1 8.0 7.4"
-PHP_USE="gd?,mysqli?,postgres?,curl,fileinfo,intl,json(+),pdo,unicode,xml"
-
-php_rdepend() {
-	local slot
-	echo "|| ("
-	for slot in ${PHP_SLOTS}; do
-		echo "(
-			virtual/httpd-php:${slot}
-			dev-lang/php:${slot}[$1]
-		)"
-	done
-	echo ")"
-}
+PHP_USE="gd?,mysqli?,postgres?,curl,fileinfo,intl,json,pdo,unicode,xml"
 
 DEPEND="
 	daemon? ( acl? ( sys-apps/acl ) )
@@ -37,11 +23,12 @@ RDEPEND="
 	daemon? (
 		acct-user/ttrssd
 		acct-group/ttrssd
-		$(php_rdepend "${PHP_USE},cli,pcntl")
+		dev-lang/php:*[${PHP_USE},cli,pcntl]
 	)
 	!daemon? (
-		$(php_rdepend "${PHP_USE}")
+		dev-lang/php:*[${PHP_USE}]
 	)
+	virtual/httpd-php:*
 "
 
 DEPEND="
@@ -49,6 +36,14 @@ DEPEND="
 "
 
 need_httpd_cgi # From webapp.eclass
+
+src_configure() {
+	hprefixify config.php-dist
+
+	sed -i -r \
+		-e "/'DB_TYPE'/s:,.*:, '$(usex mysqli mysql pgsql)'); // mysql or pgsql:" \
+		config.php-dist || die
+}
 
 src_install() {
 	webapp_src_preinst
@@ -66,10 +61,10 @@ src_install() {
 	done
 
 	if use daemon; then
-		webapp_hook_script "${FILESDIR}"/permissions-r1
+		webapp_hook_script "${FILESDIR}"/permissions
 		webapp_postinst_txt en "${FILESDIR}"/postinstall-en-with-daemon-r1.txt
 
-		newinitd "${FILESDIR}"/ttrssd.initd-r4 ttrssd
+		newinitd "${FILESDIR}"/ttrssd.initd-r3 ttrssd
 		newconfd "${FILESDIR}"/ttrssd.confd-r2 ttrssd
 
 		insinto /etc/logrotate.d
@@ -84,6 +79,8 @@ src_install() {
 }
 
 pkg_postinst() {
+	elog "You need to merge config.php-dist into config.php manually when upgrading."
+
 	if use vhosts && [[ -n ${REPLACING_VERSIONS} ]]; then
 		elog
 		elog "The live ebuild does not automatically upgrade your installations so"

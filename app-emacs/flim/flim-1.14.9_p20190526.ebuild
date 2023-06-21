@@ -12,7 +12,7 @@ SRC_URI="https://github.com/wanderlust/flim/archive/${GITHUB_SHA1}.tar.gz -> ${P
 
 LICENSE="GPL-2+"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~ia64 ppc ~ppc64 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos"
+KEYWORDS="~alpha amd64 ~ia64 ppc ~ppc64 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos ~sparc-solaris"
 
 DEPEND=">=app-emacs/apel-10.8"
 RDEPEND="${DEPEND}
@@ -22,7 +22,9 @@ S="${WORKDIR}/${PN}-${GITHUB_SHA1}"
 SITEFILE="60${PN}-gentoo.el"
 
 src_compile() {
-	default
+	emake PREFIX="${ED}/usr" \
+		LISPDIR="${ED}/${SITELISP}" \
+		VERSION_SPECIFIC_LISPDIR="${ED}/${SITELISP}"
 }
 
 src_install() {

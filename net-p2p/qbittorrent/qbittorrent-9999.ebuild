@@ -1,130 +1,68 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
-inherit cmake edo multibuild systemd xdg
+inherit xdg-utils
 
 DESCRIPTION="BitTorrent client in C++ and Qt"
-HOMEPAGE="https://www.qbittorrent.org"
+HOMEPAGE="https://www.qbittorrent.org
+	  https://github.com/qbittorrent"
 
 if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/qbittorrent/qBittorrent.git"
 	inherit git-r3
+	EGIT_REPO_URI="https://github.com/${PN}/qBittorrent.git"
 else
 	SRC_URI="https://github.com/qbittorrent/qBittorrent/archive/release-${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~riscv ~x86"
-	S="${WORKDIR}"/qBittorrent-release-${PV}
+	KEYWORDS="amd64 ~arm ~ppc64 x86"
+	S="${WORKDIR}/qBittorrent-release-${PV}"
 fi
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="+dbus +gui qt6 test webui"
-RESTRICT="!test? ( test )"
-REQUIRED_USE="|| ( gui webui )"
+IUSE="+dbus debug webui +X"
+REQUIRED_USE="dbus? ( X )"
 
 RDEPEND="
-	>=dev-libs/openssl-1.1.1:=
-	>=net-libs/libtorrent-rasterbar-1.2.18:=
-	>=sys-libs/zlib-1.2.11
-	virtual/libiconv
-	gui? (
+	>=dev-libs/boost-1.62.0-r1:=
+	dev-qt/qtcore:5
+	dev-qt/qtnetwork:5[ssl]
+	dev-qt/qtxml:5
+	>=net-libs/libtorrent-rasterbar-1.2.11:0=
+	sys-libs/zlib
+	dbus? ( dev-qt/qtdbus:5 )
+	X? (
 		dev-libs/geoip
-		!qt6? (
-			dev-qt/qtgui:5
-			dev-qt/qtsvg:5
-			dev-qt/qtwidgets:5
-			dbus? ( dev-qt/qtdbus:5 )
-		)
-		qt6? (
-			dev-qt/qtbase:6[dbus?,gui,widgets]
-			dev-qt/qtsvg:6
-		)
-	)
-	qt6? ( dev-qt/qtbase:6[network,ssl,sql,sqlite,xml(+)] )
-	!qt6? (
-		dev-qt/qtcore:5
-		dev-qt/qtnetwork:5[ssl]
-		dev-qt/qtsql:5[sqlite]
-		dev-qt/qtxml:5
+		dev-qt/qtgui:5
+		dev-qt/qtsvg:5
+		dev-qt/qtwidgets:5
 	)"
-DEPEND="
-	${RDEPEND}
-	dev-libs/boost
-	test? (
-		!qt6? ( dev-qt/qttest:5 )
-		qt6? ( dev-qt/qtbase:6[test] )
-	)"
-BDEPEND="
-	!qt6? ( dev-qt/linguist-tools:5 )
-	qt6? ( dev-qt/qttools:6[linguist] )
-	virtual/pkgconfig"
+DEPEND="${RDEPEND}
+	dev-qt/linguist-tools:5"
 
-DOCS=( AUTHORS Changelog CONTRIBUTING.md README.md )
+BDEPEND="virtual/pkgconfig"
 
-src_prepare() {
-	MULTIBUILD_VARIANTS=()
-	use gui && MULTIBUILD_VARIANTS+=( gui )
-	use webui && MULTIBUILD_VARIANTS+=( nogui )
-
-	cmake_src_prepare
-}
+DOCS=( AUTHORS Changelog CONTRIBUTING.md README.md TODO )
 
 src_configure() {
-	my_src_configure() {
-		local mycmakeargs=(
-			# musl lacks execinfo.h
-			-DSTACKTRACE=$(usex !elibc_musl)
-
-			# More verbose build logs are preferable for bug reports
-			-DVERBOSE_CONFIGURE=ON
-
-			-DQT6=$(usex qt6)
-
-			-DWEBUI=$(usex webui)
-
-			-DTESTING=$(usex test)
-		)
-
-		if [[ ${MULTIBUILD_VARIANT} == "gui" ]]; then
-			# We do this in multibuild, see bug #839531 for why.
-			# Fedora has to do the same thing.
-			mycmakeargs+=(
-				-DGUI=ON
-				-DDBUS=$(usex dbus)
-				-DSYSTEMD=OFF
-			)
-		else
-			mycmakeargs+=(
-				-DGUI=OFF
-				-DDBUS=OFF
-				# The systemd service calls qbittorrent-nox, which is only
-				# installed when GUI=OFF.
-				-DSYSTEMD=ON
-				-DSYSTEMD_SERVICES_INSTALL_DIR="$(systemd_get_systemunitdir)"
-			)
-		fi
-
-		cmake_src_configure
-	}
-
-	multibuild_foreach_variant my_src_configure
-}
-
-src_compile() {
-	multibuild_foreach_variant cmake_src_compile
-}
-
-src_test() {
-	my_src_test() {
-		cd "${BUILD_DIR}"/test || die
-		edo ctest .
-	}
-
-	multibuild_foreach_variant my_src_test
+	econf \
+	$(use_enable dbus qt-dbus) \
+	$(use_enable debug) \
+	$(use_enable webui) \
+	$(use_enable X gui)
 }
 
 src_install() {
-	multibuild_foreach_variant cmake_src_install
+	emake STRIP="/bin/false" INSTALL_ROOT="${D}" install
 	einstalldocs
+}
+
+pkg_postinst() {
+	xdg_icon_cache_update
+	xdg_desktop_database_update
+}
+
+pkg_postrm() {
+	xdg_icon_cache_update
+	xdg_desktop_database_update
 }

@@ -1,9 +1,9 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 DISTUTILS_USE_SETUPTOOLS=rdepend
 inherit distutils-r1
 
@@ -13,12 +13,10 @@ SRC_URI="https://github.com/rdiff-backup/${PN}/releases/download/v${PV}/${P}.tar
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm ~mips ppc ppc64 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos"
+KEYWORDS="~alpha ~amd64 ~arm ~mips ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos"
 IUSE="examples"
-# Tests use a tox environment and separate steps for test env preparation
-RESTRICT="test"
 
-DEPEND="dev-python/setuptools-scm[${PYTHON_USEDEP}]
+DEPEND="dev-python/setuptools_scm[${PYTHON_USEDEP}]
 	>=net-libs/librsync-1.0:0="
 RDEPEND="dev-python/pylibacl[${PYTHON_USEDEP}]
 	dev-python/pyxattr[${PYTHON_USEDEP}]
@@ -26,7 +24,6 @@ RDEPEND="dev-python/pylibacl[${PYTHON_USEDEP}]
 
 PATCHES=(
 	"${FILESDIR}/${PN}-2.0.3-no-docs.patch"
-	"${FILESDIR}/${P}-py311.patch"
 )
 
 python_install_all() {

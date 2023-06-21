@@ -1,8 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-
+EAPI=6
 inherit autotools flag-o-matic toolchain-funcs
 
 DESCRIPTION="Handles power management and special keys on laptops"
@@ -12,31 +11,36 @@ SRC_URI="mirror://sourceforge/pbbuttons/${P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ppc ~x86"
-IUSE="acpi alsa doc ibam macbook oss"
+IUSE="acpi alsa doc ibam macbook oss static-libs"
 
 RDEPEND="
-	dev-libs/glib
-	alsa? ( media-libs/alsa-lib )
+	>=dev-libs/glib-2.6
+	alsa? ( >=media-libs/alsa-lib-1.0 )
 	macbook? (
 		sys-apps/pciutils
 		sys-libs/libsmbios
-	)"
-DEPEND="${RDEPEND}"
-BDEPEND="doc? ( app-doc/doxygen )"
+	)
+"
+DEPEND="
+	 ${RDEPEND}
+	doc? ( app-doc/doxygen )
+"
 PATCHES=(
-	"${FILESDIR}"/${PN}-0.8.1-cpufreq.patch
-	"${FILESDIR}"/${PN}-0.8.1-fnmode.patch
-	"${FILESDIR}"/${PN}-0.8.1-laptopmode.sh.patch
-	"${FILESDIR}"/${PN}-0.8.1-lm.patch
-	"${FILESDIR}"/${PN}-0.8.1-lz.patch
-	"${FILESDIR}"/${P}-fno-common.patch
+	"${FILESDIR}/${PN}-0.8.1-cpufreq.patch"
+	"${FILESDIR}/${PN}-0.8.1-fnmode.patch"
+	"${FILESDIR}/${PN}-0.8.1-laptopmode.sh.patch"
+	"${FILESDIR}/${PN}-0.8.1-lm.patch"
+	"${FILESDIR}/${PN}-0.8.1-lz.patch"
 )
 
 src_prepare() {
-	# Don't link with g++ if we don't use ibam
-	use ibam || eapply "${FILESDIR}"/${PN}-0.8.1-g++.patch
+	### Don't link with g++ if we don't use ibam
+	if ! use ibam; then
+		eapply "${FILESDIR}/${PN}-0.8.1-g++.patch"
+	fi
 
 	default
+
 	eautoconf
 }
 
@@ -44,7 +48,6 @@ src_configure() {
 	# Fix crash bug on some systems
 	replace-flags -O? -O1
 
-	local laptop
 	if use macbook; then
 		laptop=macbook
 	elif use x86 || use amd64; then
@@ -58,12 +61,12 @@ src_configure() {
 		laptop=powerbook
 	fi
 
-	econf \
+	laptop=$laptop \
+		econf \
 		$(use_with alsa) \
 		$(use_with doc doxygen_docs) \
 		$(use_with ibam) \
-		$(use_with oss) \
-		laptop="${laptop}"
+		$(use_with oss)
 
 }
 
@@ -86,9 +89,9 @@ src_install() {
 
 	default
 
-	rm "${ED}"/usr/$(get_libdir)/libpbb.a || die
+	use static-libs || rm "${D}"/usr/$(get_libdir)/libpbb.a
 
-	newinitd "${FILESDIR}"/pbbuttonsd.rc6 pbbuttonsd
+	newinitd "${FILESDIR}/pbbuttonsd.rc6" pbbuttonsd
 	dodoc README
 	use doc && dodoc -r doc/
 
@@ -98,7 +101,7 @@ src_install() {
 	keepdir /etc/power/suspend.d
 	exeinto /etc/power/scripts.d
 	doexe "${FILESDIR}"/wireless
-	dosym ../scripts.d/wireless /etc/power/resume.d/wireless
+	ln -s "${D}"/etc/power/scripts.d/wireless "${D}"/etc/power/resume.d/wireless
 }
 
 pkg_postinst() {

@@ -1,27 +1,26 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{6..9} )
 
 if [[ ${PV} == 9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/STEllAR-GROUP/hpx.git"
 else
-	SRC_URI="https://github.com/STEllAR-GROUP/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://github.com/STEllAR-GROUP/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
 fi
 inherit check-reqs cmake multiprocessing python-single-r1
 
 DESCRIPTION="C++ runtime system for parallel and distributed applications"
-HOMEPAGE="https://hpx.stellar-group.org/"
+HOMEPAGE="https://stellar.cct.lsu.edu/tag/hpx/"
 
 SLOT="0"
 LICENSE="Boost-1.0"
-IUSE="examples jemalloc mpi papi +perftools tbb zlib"
-# tests fail to compile
-RESTRICT="test"
+IUSE="doc examples jemalloc mpi papi +perftools tbb test"
+RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	${PYTHON_REQUIRED_USE}
@@ -30,18 +29,26 @@ REQUIRED_USE="
 
 BDEPEND="
 	virtual/pkgconfig
+	doc? (
+		${PYTHON_DEPS}
+		app-doc/doxygen
+		$(python_gen_cond_dep '
+			dev-python/sphinx[${PYTHON_MULTI_USEDEP}]
+			dev-python/sphinx_rtd_theme[${PYTHON_MULTI_USEDEP}]
+			>=dev-python/breathe-4.22[${PYTHON_MULTI_USEDEP}]
+		')
+	)
+	test? ( ${PYTHON_DEPS} )
 "
 RDEPEND="
 	${PYTHON_DEPS}
-	>=dev-cpp/asio-1.12.0
 	dev-libs/boost:=
-	sys-apps/hwloc:=
-	jemalloc? ( dev-libs/jemalloc:= )
+	sys-apps/hwloc
+	sys-libs/zlib
 	mpi? ( virtual/mpi )
 	papi? ( dev-libs/papi )
-	perftools? ( dev-util/google-perftools:= )
-	tbb? ( dev-cpp/tbb:= )
-	zlib? ( sys-libs/zlib )
+	perftools? ( dev-util/google-perftools )
+	tbb? ( dev-cpp/tbb )
 "
 DEPEND="${RDEPEND}"
 
@@ -70,12 +77,11 @@ pkg_setup() {
 src_configure() {
 	local mycmakeargs=(
 		-DHPX_WITH_EXAMPLES=OFF
-		-DHPX_WITH_DOCUMENTATION=OFF
+		-DHPX_WITH_DOCUMENTATION=$(usex doc)
 		-DHPX_WITH_PARCELPORT_MPI=$(usex mpi)
 		-DHPX_WITH_PAPI=$(usex papi)
 		-DHPX_WITH_GOOGLE_PERFTOOLS=$(usex perftools)
-		-DHPX_WITH_COMPRESSION_ZLIB=$(usex zlib)
-		-DHPX_WITH_TESTS=OFF
+		-DBUILD_TESTING=$(usex test)
 	)
 	if use jemalloc; then
 		mycmakeargs+=( -DHPX_WITH_MALLOC=jemalloc )
@@ -92,6 +98,12 @@ src_configure() {
 
 src_compile() {
 	cmake_src_compile
+	use test && cmake_build tests
+}
+
+src_test() {
+	# avoid over-suscribing
+	cmake_src_test -j1
 }
 
 src_install() {

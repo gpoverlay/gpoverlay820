@@ -1,8 +1,8 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit autotools
+inherit autotools eutils
 
 DESCRIPTION="GTK+ MUD client with many features and an easy scripting language"
 HOMEPAGE="http://dw.nl.eu.org/mudix.html"

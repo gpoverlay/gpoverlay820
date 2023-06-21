@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-inherit autotools
+inherit ltprune autotools
 
 if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="https://github.com/bitlbee/bitlbee-steam.git"
@@ -33,6 +33,5 @@ src_prepare() {
 
 src_install() {
 	default
-
-	find "${ED}" -name '*.la' -delete || die
+	prune_libtool_files --modules
 }

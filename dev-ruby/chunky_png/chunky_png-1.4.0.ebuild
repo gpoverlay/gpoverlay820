@@ -1,10 +1,9 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-# Can't do ruby32 until https://github.com/wvanbergen/chunky_png/pull/169 is merged
-USE_RUBY="ruby26 ruby27 ruby30 ruby31"
+USE_RUBY="ruby25 ruby26 ruby27"
 
 RUBY_FAKEGEM_RECIPE_TEST="rspec3"
 
@@ -20,7 +19,7 @@ RUBY_FAKEGEM_GEMSPEC="chunky_png.gemspec"
 inherit ruby-fakegem
 
 DESCRIPTION="Pure Ruby library that can read and write PNG images"
-HOMEPAGE="https://github.com/wvanbergen/chunky_png"
+HOMEPAGE="https://wiki.github.com/wvanbergen/chunky_png"
 
 LICENSE="MIT"
 SLOT="0"

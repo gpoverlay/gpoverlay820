@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -7,7 +7,7 @@ inherit cmake
 
 DESCRIPTION="DJ's Hex Calculator"
 HOMEPAGE="http://www.delorie.com/store/hcalc/ https://github.com/jlec/hcalc"
-SRC_URI="https://github.com/jlec/hcalc/archive/refs/tags/${PV}.tar.gz -> ${P}.gh.tar.gz"
+SRC_URI="https://github.com/downloads/jlec/hcalc/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -18,10 +18,7 @@ RDEPEND="
 	x11-libs/libXpm"
 DEPEND="${RDEPEND}"
 
-PATCHES=(
-	"${FILESDIR}"/${P}-fno-common.patch
-	"${FILESDIR}"/${P}-clang16.patch
-)
+PATCHES=( "${FILESDIR}"/${P}-fno-common.patch )
 
 pkg_postinst() {
 	einfo "Enter hcalc to run and use kill or ctrl-c to exit."

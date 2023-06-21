@@ -1,10 +1,10 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 MY_P=${P/_}
-inherit desktop flag-o-matic
+inherit desktop
 
 DESCRIPTION="Board games system"
 HOMEPAGE="http://gtkboard.sourceforge.net/indexold.html"
@@ -41,9 +41,6 @@ src_prepare() {
 }
 
 src_configure() {
-	# bug #858614
-	filter-lto
-
 	econf \
 		--enable-gtk2 \
 		--enable-sdl \

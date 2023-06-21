@@ -1,12 +1,12 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit cmake git-r3 toolchain-funcs
+inherit cmake-multilib git-r3 toolchain-funcs
 
 DESCRIPTION="Fast Artificial Neural Network Library"
-HOMEPAGE="http://leenissen.dk/fann/wp/"
+HOMEPAGE="http://leenissen.dk/fann/"
 EGIT_REPO_URI="https://github.com/libfann/fann"
 
 LICENSE="LGPL-2.1"
@@ -20,9 +20,9 @@ src_test() {
 }
 
 src_install() {
-	cmake_src_install
+	cmake-multilib_src_install
 	if use examples; then
-		dodoc -r examples
-		docompress -x /usr/share/doc/${PF}/examples
+		insinto /usr/share/doc/${PF}
+		doins -r examples
 	fi
 }

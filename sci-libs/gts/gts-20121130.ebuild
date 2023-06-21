@@ -1,62 +1,49 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=5
 
-inherit autotools
+AUTOTOOLS_AUTORECONF=1
 
-MY_P=${P/-20/-snapshot-}
+inherit autotools-utils
+
+MYP=${P/-20/-snapshot-}
 
 DESCRIPTION="GNU Triangulated Surface Library"
 HOMEPAGE="http://gts.sourceforge.net/"
-SRC_URI="http://gts.sourceforge.net/tarballs/${MY_P}.tar.gz"
-S="${WORKDIR}/${MY_P}"
+SRC_URI="http://gts.sourceforge.net/tarballs/${MYP}.tar.gz"
 
-LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="amd64 ~arm64 hppa ~loong ~m68k ~mips ppc ppc64 ~riscv x86 ~amd64-linux ~x86-linux"
-IUSE="doc test"
-RESTRICT="test" # bug #277165
+LICENSE="LGPL-2"
+KEYWORDS="amd64 ~arm64 hppa ~mips ppc ppc64 ~riscv x86 ~amd64-linux ~x86-linux"
+IUSE="doc examples static-libs test"
 
 RDEPEND="dev-libs/glib:2"
-DEPEND="${RDEPEND}"
-BDEPEND="
+DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	doc? ( dev-util/gtk-doc )
 	test? ( media-libs/netpbm )"
 
-PATCHES=( "${FILESDIR}"/${PN}-20121130-autotools.patch )
+# buggy
+RESTRICT=test
 
-src_prepare() {
-	default
+S="${WORKDIR}/${MYP}"
 
-	# fix doc generation (bug #727536)
-	sed -i 's/\xe9/\xc3\xa9/;s/\xf6/\xc3\xb6/' src/*.{c,h} || die
+AUTOTOOLS_IN_SOURCE_BUILD=1
 
-	# allow to run tests (bug #277165)
-	chmod +x test/*/*.sh || die
-
-	eautoreconf
-}
-
-src_configure() {
-	econf --disable-static
-}
+PATCHES=( "${FILESDIR}"/${PN}-20111025-autotools.patch )
 
 src_compile() {
-	default
-
-	if use doc; then
-		emake DOC_MAIN_SGML_FILE=gts-docs.xml -C doc html
-		HTML_DOCS=( doc/html/. )
-	fi
+	autotools-utils_src_compile
+	use doc && autotools-utils_src_compile -C doc html
+	chmod +x test/*/*.sh || die
 }
 
 src_install() {
-	default
-
-	docinto examples
-	dodoc examples/*.c
-
-	find "${ED}" -name '*.la' -delete || die
+	use doc && HTML_DOCS=("${AUTOTOOLS_BUILD_DIR}"/doc/html/)
+	autotools-utils_src_install
+	if use examples; then
+		insinto /usr/share/doc/${PF}/examples
+		doins examples/*.c
+	fi
 }

@@ -1,11 +1,11 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=5
 
 FORTRAN_STANDARD="90"
 
-inherit flag-o-matic fortran-2 multilib multiprocessing toolchain-funcs
+inherit eutils flag-o-matic fortran-2 multilib multiprocessing toolchain-funcs
 
 DESCRIPTION="Message-passing parallel language and runtime system"
 HOMEPAGE="http://charm.cs.uiuc.edu/"
@@ -19,8 +19,8 @@ IUSE="charmdebug charmtracing charmproduction cmkopt examples mlogft mpi ampi nu
 RDEPEND="mpi? ( virtual/mpi )"
 DEPEND="
 	${RDEPEND}
-	net-libs/libtirpc"
-BDEPEND="virtual/pkgconfig"
+	net-libs/libtirpc
+	"
 
 REQUIRED_USE="
 	cmkopt? ( !charmdebug !charmtracing )
@@ -57,7 +57,7 @@ get_opts() {
 	fi
 
 	CHARM_OPTS+="$(usex numa ' --with-numa' '')"
-	echo ${CHARM_OPTS}
+	echo $CHARM_OPTS
 }
 
 src_prepare() {
@@ -97,8 +97,6 @@ src_prepare() {
 
 	# Fix QA notice. Filed report with upstream.
 	append-cflags -DALLOCA_H
-
-	eapply_user
 }
 
 src_compile() {
@@ -125,7 +123,7 @@ src_install() {
 	# Make charmc play well with gentoo before we move it into /usr/bin. This
 	# patch cannot be applied during src_prepare() because the charmc wrapper
 	# is used during building.
-	eapply "${FILESDIR}/charm-6.5.1-charmc-gentoo.patch"
+	epatch "${FILESDIR}/charm-6.5.1-charmc-gentoo.patch"
 
 	sed -e "s|gentoo-include|${P}|" \
 		-e "s|gentoo-libdir|$(get_libdir)|g" \
@@ -156,13 +154,16 @@ src_install() {
 
 	# Install libs incl. charm objects
 	for i in lib*/*.{so,a}; do
-		[[ ${i} = *.a ]] && ! use static-libs && continue
+		[[ ${i} = *.a ]] && use !static-libs && continue
 		if [[ -L ${i} ]]; then
 			i=$(readlink -e "${i}") || die
 		fi
 		[[ -s $i ]] || continue
-		[[ ${i} = *.so ]] && dolib.so "${i}" || dolib.a "${i}"
+		[[ ${i} = *.so ]] && dolib.so "${i}" || dolib "${i}"
 	done
+
+	# Basic docs.
+	dodoc CHANGES README
 
 	# Install examples.
 	if use examples; then
@@ -172,8 +173,8 @@ src_install() {
 		find examples/ -name 'Makefile' | xargs sed \
 			-r "s:./charmrun:./charmrun ++local:" -i || \
 			die "Failed to fix examples"
-		docinto examples
-		dodoc -r examples/charm++/*
+		insinto /usr/share/doc/${PF}/examples
+		doins -r examples/charm++/*
 		docompress -x /usr/share/doc/${PF}/examples
 	fi
 }

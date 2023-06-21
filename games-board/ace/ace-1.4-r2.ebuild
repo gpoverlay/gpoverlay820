@@ -1,9 +1,9 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit autotools desktop flag-o-matic
+inherit autotools desktop
 
 DESCRIPTION="DJ Delorie's Ace of Penguins solitaire games"
 HOMEPAGE="http://www.delorie.com/store/ace/"
@@ -27,7 +27,6 @@ PATCHES=(
 	"${FILESDIR}/${P}-clang.patch"
 	"${FILESDIR}/${P}-gcc10.patch"
 	"${FILESDIR}/${P}-malloc.patch"
-	"${FILESDIR}/${P}-isgraph-include.patch"
 )
 
 src_prepare() {
@@ -38,11 +37,6 @@ src_prepare() {
 }
 
 src_configure() {
-	# Actually fixed upstream but a fair number of commits in CVS(!)
-	# since last release, bug #858608. Can drop after 1.4.
-	# https://www.delorie.com/bin/cvsweb.cgi/ace/lib/cards.h.diff?r1=1.16&r2=1.17&cvsroot=ace
-	filter-lto
-
 	econf \
 		--disable-static \
 		--program-prefix=ace-
@@ -51,7 +45,7 @@ src_configure() {
 src_install() {
 	default
 
-	find "${ED}" -name '*.la' -delete || die
+	rm "${ED}/usr/$(get_libdir)/libcards.la" || die
 
 	dodoc docs/*
 	newicon docs/as.gif ${PN}.gif
@@ -59,6 +53,6 @@ src_install() {
 	cd "${ED}/usr/bin" || die
 	local p
 	for p in *; do
-		make_desktop_entry ${p} "Ace ${p/ace-/}" /usr/share/pixmaps/${PN}.gif
+		make_desktop_entry $p "Ace ${p/ace-/}" /usr/share/pixmaps/${PN}.gif
 	done
 }

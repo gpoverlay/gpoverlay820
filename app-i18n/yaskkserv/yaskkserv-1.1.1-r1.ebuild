@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="7"
@@ -12,12 +12,13 @@ SRC_URI="http://umiushi.org/~wac/${PN}/${P}.tar.xz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 x86"
-IUSE="gnutls systemd"
+IUSE="gnutls libressl systemd"
 
 RDEPEND="app-i18n/skk-jisyo
 	gnutls? ( net-libs/gnutls:= )
 	!gnutls? (
-		dev-libs/openssl:0=
+		!libressl? ( dev-libs/openssl:0= )
+		libressl? ( dev-libs/libressl:0= )
 	)
 	systemd? ( sys-apps/systemd )"
 DEPEND="${RDEPEND}

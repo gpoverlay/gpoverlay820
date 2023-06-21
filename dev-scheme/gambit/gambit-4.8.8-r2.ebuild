@@ -1,9 +1,9 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=6
 
-inherit flag-o-matic elisp-common
+inherit eutils elisp-common
 
 MY_PV="${PV//./_}"
 MY_P="${PN}-v${MY_PV}"
@@ -14,12 +14,14 @@ SRC_URI="http://www-labs.iro.umontreal.ca/~gambit/download/gambit/v${PV%.*}/sour
 
 LICENSE="|| ( Apache-2.0 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS="amd64 ~ppc64 x86 ~amd64-linux ~x86-linux"
+KEYWORDS="~amd64 ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 
-RDEPEND="ssl? ( dev-libs/openssl:0= )"
-DEPEND="${RDEPEND}"
-BDEPEND="
-	app-text/ghostscript-gpl
+RDEPEND="ssl? (
+		!libressl? ( dev-libs/openssl:0= )
+		libressl? ( dev-libs/libressl:0= )
+	)"
+DEPEND="
+	${RDEPEND}
 	emacs? ( >=app-editors/emacs-23.1:* )
 "
 
@@ -27,12 +29,9 @@ SITEFILE="50gambit-gentoo.el"
 
 S="${WORKDIR}/${MY_P}" #-devel
 
-IUSE="emacs ssl static"
+IUSE="emacs libressl ssl static"
 
 src_configure() {
-	# bug #858254
-	filter-lto
-
 	econf \
 		$(use_enable !static shared) \
 		$(use_enable ssl openssl) \

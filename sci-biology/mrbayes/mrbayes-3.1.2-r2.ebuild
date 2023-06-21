@@ -1,29 +1,26 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=5
 
-inherit toolchain-funcs
+inherit eutils toolchain-funcs
 
 DESCRIPTION="Bayesian Inference of Phylogeny"
 HOMEPAGE="http://mrbayes.csit.fsu.edu/"
 SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
 
-LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux ~ppc-macos"
+LICENSE="GPL-2"
+KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~sparc-solaris"
 IUSE="debug mpi readline"
 
 DEPEND="
-	sys-libs/ncurses:=
+	sys-libs/ncurses:0=
 	mpi? ( virtual/mpi )
-	readline? ( sys-libs/readline:= )
-"
+	readline? ( sys-libs/readline:0= )"
 RDEPEND="${DEPEND}"
 
 src_prepare() {
-	default
-
 	if use mpi; then
 		sed -e "s:MPI ?= no:MPI=yes:" -i Makefile || die "Patching MPI support."
 	fi
@@ -33,7 +30,7 @@ src_prepare() {
 	else
 		# Only needed for OSX with an old (4.x) version of
 		# libreadline, but it doesn't hurt for other distributions.
-		eapply "${FILESDIR}"/mb_readline_312.patch
+		epatch "${FILESDIR}"/mb_readline_312.patch
 	fi
 	sed -e 's:-ggdb::g' -i Makefile || die
 }
@@ -44,7 +41,7 @@ src_compile() {
 	if use mpi; then
 		mycc=mpicc
 	else
-		mycc="$(tc-getCC)"
+		mycc=$(tc-getCC)
 	fi
 
 	use mpi && myconf="MPI=yes"

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person" proxied="yes">
+	<maintainer type="person">
 		<email>jaco@uls.co.za</email>
 		<name>Jaco Kroon</name>
 	</maintainer>
-	<maintainer type="project" proxied="proxy">
+	<maintainer type="project">
 		<email>proxy-maint@gentoo.org</email>
 		<name>Proxy Maintainers</name>
 	</maintainer>
@@ -14,4 +14,7 @@
 	real estate and provides good keyboard control. It is currently based on 
 	aewm.
 	</longdescription>
+	<upstream>
+		<remote-id type="sourceforge">evilwm</remote-id>
+	</upstream>
 </pkgmetadata>

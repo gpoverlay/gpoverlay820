@@ -7,8 +7,7 @@ depend() {
 }
 
 start() {
-	IFS=$(printf '\n.'); # Set separator (IFS) to <newline><dot>
-	IFS=${IFS%.};        # Remove <dot> - The <dot> was because shells remove trailing newlines with $(..)
+	IFS=$'\n'
 	for line in `grep -v '^[[:space:]]*#' /etc/vtund-start.conf | grep -v '^[[:space:]]*$'`
 	do
 		echo $line | 

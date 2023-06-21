@@ -1,13 +1,13 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-LUA_COMPAT=( lua5-1 lua5-2 )
-CMAKE_REMOVE_MODULES_LIST="FindASPELL FindLua"
-PLOCALES="be bg cs da de el en es eu fr hu ie it pl pt_BR ru sk sr sr@latin sv_SE tr uk vi zh_CN"
+LUA_COMPAT=( lua5-1 )
 
-inherit cmake lua-single plocale xdg-utils
+PLOCALES="be bg cs de el en es eu fr hu it pl pt_BR ru sk sr sr@latin sv_SE tr uk vi zh_CN"
+
+inherit cmake l10n lua-single xdg-utils
 [[ ${PV} = *9999* ]] && inherit git-r3
 
 DESCRIPTION="Qt/DC++ based client for DirectConnect and ADC protocols"
@@ -15,9 +15,11 @@ HOMEPAGE="https://github.com/eiskaltdcpp/eiskaltdcpp"
 
 LICENSE="GPL-2 GPL-3"
 SLOT="0"
-IUSE="cli daemon dbus +dht examples gold gtk idn javascript libcanberra libnotify lua +minimal pcre +qt5 spell sqlite upnp"
+IUSE="cli daemon dbus +dht examples -gtk idn -javascript json libcanberra libnotify lua +minimal pcre +qt5 spell sqlite upnp -xmlrpc"
 
 REQUIRED_USE="
+	?? ( json xmlrpc )
+	cli? ( ^^ ( json xmlrpc ) )
 	dbus? ( qt5 )
 	javascript? ( qt5 )
 	libcanberra? ( gtk )
@@ -28,14 +30,16 @@ REQUIRED_USE="
 "
 
 if [[ ${PV} != *9999* ]]; then
-	SRC_URI="mirror://sourceforge/project/${PN}/Sources/${P}.tar.xz"
+	SRC_URI="https://github.com/${PN}/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~amd64 ~x86"
 else
 	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
+	KEYWORDS=""
 fi
 
 RDEPEND="
 	app-arch/bzip2
+	dev-libs/boost:=
 	dev-libs/openssl:0=
 	sys-apps/attr
 	sys-libs/zlib
@@ -46,9 +50,10 @@ RDEPEND="
 		dev-perl/Data-Dump
 		dev-perl/Term-ShellUI
 		virtual/perl-Getopt-Long
-		dev-perl/JSON-RPC
+		json? ( dev-perl/JSON-RPC )
+		xmlrpc? ( dev-perl/RPC-XML )
 	)
-	daemon? ( dev-libs/jsoncpp:= )
+	daemon? ( xmlrpc? ( dev-libs/xmlrpc-c[abyss,cxx] ) )
 	gtk? (
 		dev-libs/glib:2
 		x11-libs/gtk+:3
@@ -78,30 +83,26 @@ RDEPEND="
 	)
 	upnp? ( net-libs/miniupnpc )
 "
-DEPEND="${RDEPEND}"
-BDEPEND="
+DEPEND="${RDEPEND}
 	sys-devel/gettext
 	virtual/pkgconfig
 	qt5? ( dev-qt/linguist-tools:5 )
-	gold? ( sys-devel/binutils[gold] )
 "
 
 DOCS=( AUTHORS ChangeLog.txt )
 
-pkg_setup() {
-	use lua && lua-single_pkg_setup
-}
+CMAKE_REMOVE_MODULES_LIST="FindLua"
 
 src_prepare() {
 	cmake_src_prepare
-	plocale_find_changes 'eiskaltdcpp-qt/translations' '' '.ts'
+	l10n_find_plocales_changes 'eiskaltdcpp-qt/translations' '' '.ts'
 }
 
 src_configure() {
 	local mycmakeargs=(
 		-DLIB_INSTALL_DIR="$(get_libdir)"
-		-Dlinguas="$(plocale_get_locales)"
-		-DCREATE_MO=ON
+		-Dlinguas="$(l10n_get_locales)"
+		-DLOCAL_MINIUPNP=OFF
 		-DUSE_GTK=OFF
 		-DUSE_LIBGNOME2=OFF
 		-DUSE_QT=OFF
@@ -119,29 +120,26 @@ src_configure() {
 		-DPERL_REGEX=$(usex pcre)
 		-DUSE_QT5=$(usex qt5)
 		-DUSE_ASPELL=$(usex spell)
-		-DLOCAL_ASPELL_DATA=OFF
 		-DUSE_QT_SQLITE=$(usex sqlite)
 		-DUSE_MINIUPNP=$(usex upnp)
-		-DFORCE_XDG=ON
-		-DENABLE_STACKTRACE=OFF
-		-DUSE_GOLD=$(usex gold)
-		-DLOCAL_JSONCPP=OFF
-		-DBUILD_STATIC=OFF
-		-DINSTALL_QT_TRANSLATIONS=OFF
-		-DCOMPRESS_MANPAGES=OFF
-		-DUSE_CLI_JSONRPC=$(usex cli)
-		-DJSONRPC_DAEMON=$(usex daemon)
 	)
+	if use cli; then
+		mycmakeargs+=(
+			-DUSE_CLI_JSONRPC=$(usex json)
+			-DUSE_CLI_XMLRPC=$(usex xmlrpc)
+		)
+	fi
+	if use daemon; then
+		mycmakeargs+=(
+			-DJSONRPC_DAEMON=$(usex json)
+			-DXMLRPC_DAEMON=$(usex xmlrpc)
+		)
+	fi
 	if use lua; then
 		mycmakeargs+=(
 			-DLUA_SCRIPT=ON
-			-DWITH_LUASCRIPTS=$(usex examples)
+			-DWITH_LUASCRIPTS=ON
 			-DLUA_VERSION=$(ver_cut 1-2 $(lua_get_version))
-		)
-	else
-		mycmakeargs+=(
-			-DLUA_SCRIPT=OFF
-			-DWITH_LUASCRIPTS=OFF
 		)
 	fi
 	if use qt5 || use gtk; then

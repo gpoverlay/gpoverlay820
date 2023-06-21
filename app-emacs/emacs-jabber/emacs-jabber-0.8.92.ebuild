@@ -1,7 +1,7 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=5
 
 inherit elisp
 
@@ -18,7 +18,6 @@ RDEPEND="app-emacs/hexrgb"
 DEPEND="${RDEPEND}
 	sys-apps/texinfo"
 
-PATCHES=( "${FILESDIR}"/${P}-emacs-28.patch )
 SITEFILE="50${PN}-gentoo.el"
 ELISP_TEXINFO="jabber.texi"
 DOCS="AUTHORS NEWS README"

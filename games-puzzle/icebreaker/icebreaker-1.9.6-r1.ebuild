@@ -1,12 +1,12 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit desktop eapi7-ver
+inherit desktop
 
 DESCRIPTION="Trap and capture penguins on Antarctica"
 HOMEPAGE="http://www.mattdm.org/icebreaker/"
-SRC_URI="http://www.mattdm.org/${PN}/$(ver_cut 1-2).x/${P}.tgz"
+SRC_URI="http://www.mattdm.org/${PN}/1.9.x/${P}.tgz"
 
 LICENSE="GPL-2"
 SLOT="0"

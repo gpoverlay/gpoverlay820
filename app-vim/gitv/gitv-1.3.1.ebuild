@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -24,7 +24,7 @@ RDEPEND="
 	app-vim/fugitive"
 
 src_prepare() {
-	rm -f doc/tags || die
+	rm -f doc/tags addon-info.json roadmap.md || die
 	rm -r img || die
 	default
 }

@@ -1,5 +1,6 @@
---- a/configure.in
-+++ b/configure.in
+diff -Naur euler-1.61.0/configure.in euler-1.61.0-new/configure.in
+--- euler-1.61.0/configure.in	2005-10-30 16:40:27.000000000 +0000
++++ euler-1.61.0-new/configure.in	2006-02-08 23:38:54.000000000 +0000
 @@ -8,8 +8,6 @@
  AM_CONFIG_HEADER(config.h)
  
@@ -20,8 +21,9 @@
  
  
  dnl Checks for header files.
---- a/src/Makefile.am
-+++ b/src/Makefile.am
+diff -Naur euler-1.61.0/src/Makefile.am euler-1.61.0-new/src/Makefile.am
+--- euler-1.61.0/src/Makefile.am	2005-10-30 22:48:35.000000000 +0000
++++ euler-1.61.0-new/src/Makefile.am	2006-02-08 23:41:32.000000000 +0000
 @@ -7,10 +7,6 @@
  INCLUDES = \
  	$(GTK_CFLAGS)

@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -10,7 +10,7 @@ inherit fortran-2 toolchain-funcs versionator
 LAPACKP=lapack-3.6.0.tgz
 
 DESCRIPTION="Automatically Tuned Linear Algebra Software"
-HOMEPAGE="https://math-atlas.sourceforge.net"
+HOMEPAGE="http://math-atlas.sourceforge.net/"
 SRC_URI="mirror://sourceforge/math-atlas/${PN}${PV}.tar.bz2
 	fortran? ( lapack? ( http://www.netlib.org/lapack/${LAPACKP} ) )"
 

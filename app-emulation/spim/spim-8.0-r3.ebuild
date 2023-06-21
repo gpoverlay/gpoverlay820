@@ -1,9 +1,8 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-
-inherit desktop toolchain-funcs
+EAPI=6
+inherit toolchain-funcs
 
 DESCRIPTION="MIPS Simulator"
 HOMEPAGE="http://spimsimulator.sourceforge.net/"
@@ -17,26 +16,23 @@ IUSE="doc X"
 RDEPEND="
 	X? (
 		media-fonts/font-adobe-100dpi
-		x11-libs/libXaw
+		x11-libs/libXaw )
+"
+DEPEND="${RDEPEND}
+	X? (
+		x11-base/xorg-proto
+		x11-misc/imake
 	)
-"
-DEPEND="
-	${RDEPEND}
-	X? ( x11-base/xorg-proto )
-"
-BDEPEND="
 	sys-devel/bison
-	X? ( x11-misc/imake )
 "
-
 # test hangs forever, disabling it
 RESTRICT="test"
 
 src_prepare() {
-	# fix bug #240005 and bug #243588
+	# fix bugs 240005 and 243588
 	eapply "${FILESDIR}/${P}-r1-respect_env.patch"
 
-	# fix bug #330389
+	#fix bug 330389
 	sed -i -e 's:-12-\*-75-:-14-\*-100-:g' xspim/xspim.c || die
 
 	default
@@ -60,10 +56,6 @@ src_compile() {
 	fi
 }
 
-src_test() {
-	emake -C spim test
-}
-
 src_install() {
 	emake DESTDIR="${ED}" -C spim install
 	newman Documentation/spim.man spim.1
@@ -81,4 +73,8 @@ src_install() {
 	if use doc ; then
 		dodoc Documentation/TeX/{cycle,spim}.ps
 	fi
+}
+
+src_test() {
+	emake -C spim test
 }

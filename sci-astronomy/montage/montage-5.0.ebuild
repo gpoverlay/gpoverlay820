@@ -1,19 +1,20 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit toolchain-funcs flag-o-matic
+inherit eutils toolchain-funcs
 
 MYPN=Montage
+
 DESCRIPTION="Toolkit for assembling FITS images into mosaics"
 HOMEPAGE="http://montage.ipac.caltech.edu/"
 SRC_URI="http://montage.ipac.caltech.edu/download/${MYPN}_v${PV}.tar.gz"
-S="${WORKDIR}/${MYPN}"
 
 LICENSE="BSD GPL-2"
 KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
 SLOT="0"
+
 IUSE="doc mpi"
 
 RDEPEND="
@@ -23,7 +24,6 @@ RDEPEND="
 	virtual/jpeg:0
 	mpi? ( virtual/mpi )"
 DEPEND="${RDEPEND}"
-BDEPEND="virtual/pkgconfig"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-4.1-fix_format_errors.patch
@@ -31,9 +31,10 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-5.0-fix_freetype_incude.patch
 )
 
+S="${WORKDIR}/${MYPN}"
+
 src_prepare() {
 	default
-
 	sed -e '/cfitsio/d' \
 		-e '/wcssubs/d' \
 		-e '/jpeg/d' \
@@ -41,9 +42,6 @@ src_prepare() {
 		-i lib/src/Makefile || die
 
 	tc-export CC AR
-
-	# bug #708396
-	append-cflags -fcommon
 
 	find . -name Makefile\* | xargs sed -i \
 		-e "/^CC.*=/s:\(gcc\|cc\):$(tc-getCC):g" \

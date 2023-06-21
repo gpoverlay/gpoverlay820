@@ -1,10 +1,10 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
-PYTHON_REQ_USE="threads(+),xml(+)"
+PYTHON_COMPAT=( python3_{6,7,8,9} )
+PYTHON_REQ_USE="threads(+),xml"
 
 MY_PV="${PV/_alpha/.alpha}"
 MY_PV="${MY_PV/_beta/.beta}"
@@ -21,7 +21,7 @@ BRANDING="${PN}-branding-gentoo-0.8.tar.xz"
 # PATCHSET="${P}-patchset-01.tar.xz"
 
 [[ ${MY_PV} == *9999* ]] && inherit git-r3
-inherit autotools bash-completion-r1 check-reqs flag-o-matic java-pkg-opt-2 multiprocessing python-single-r1 qmake-utils toolchain-funcs xdg-utils
+inherit autotools bash-completion-r1 check-reqs eapi8-dosym flag-o-matic java-pkg-opt-2 multiprocessing python-single-r1 qmake-utils toolchain-funcs xdg-utils
 
 DESCRIPTION="A full office productivity suite"
 HOMEPAGE="https://www.libreoffice.org"
@@ -44,12 +44,12 @@ unset DEV_URI
 # These are bundles that can't be removed for now due to huge patchsets.
 # If you want them gone, patches are welcome.
 ADDONS_SRC=(
-	# not packaged in Gentoo
-	"${ADDONS_URI}/dragonbox-1.1.3.tar.gz"
 	# not packaged in Gentoo, https://www.netlib.org/fp/dtoa.c
 	"${ADDONS_URI}/dtoa-20180411.tgz"
 	# not packaged in Gentoo, https://skia.org/
-	"${ADDONS_URI}/skia-m103-b301ff025004c9cd82816c86c547588e6c24b466.tar.xz"
+	"${ADDONS_URI}/skia-m85-e684c6daef6bfb774a325a069eda1f76ca6ac26c.tar.xz"
+	# QR code generating library for >=libreoffice-6.4, bug #691740
+	"${ADDONS_URI}/QR-Code-generator-1.4.0.tar.gz"
 	"base? (
 		${ADDONS_URI}/commons-logging-1.2-src.tar.gz
 		${ADDONS_URI}/ba2930200c9f019c2d93a8c88c651a0f-flow-engine-0.9.4.zip
@@ -83,12 +83,13 @@ unset ADDONS_SRC
 LO_EXTS="nlpsolver scripting-beanshell scripting-javascript wiki-publisher"
 
 IUSE="accessibility base bluetooth +branding clang coinmp +cups custom-cflags +dbus debug eds firebird
-googledrive gstreamer +gtk kde ldap +mariadb odk pdfimport postgres test valgrind vulkan
+googledrive gstreamer +gtk kde ldap +mariadb odk pdfimport postgres test vulkan
 $(printf 'libreoffice_extensions_%s ' ${LO_EXTS})"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	base? ( firebird java )
 	bluetooth? ( dbus )
+	gtk? ( dbus )
 	libreoffice_extensions_nlpsolver? ( java )
 	libreoffice_extensions_scripting-beanshell? ( java )
 	libreoffice_extensions_scripting-javascript? ( java )
@@ -101,12 +102,20 @@ LICENSE="|| ( LGPL-3 MPL-1.1 )"
 SLOT="0"
 
 [[ ${MY_PV} == *9999* ]] || \
-KEYWORDS="~amd64 ~arm ~arm64 ~loong ~ppc64 ~riscv ~x86 ~amd64-linux"
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~amd64-linux"
 
+BDEPEND="
+	dev-util/intltool
+	sys-devel/bison
+	sys-devel/flex
+	sys-devel/gettext
+	virtual/pkgconfig
+	odk? ( >=app-doc/doxygen-1.8.4 )
+"
 COMMON_DEPEND="${PYTHON_DEPS}
 	app-arch/unzip
 	app-arch/zip
-	app-crypt/gpgme:=[cxx]
+	app-crypt/gpgme[cxx]
 	app-text/hunspell:=
 	>=app-text/libabw-0.1.0
 	>=app-text/libebook-0.1
@@ -115,7 +124,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	app-text/libexttextcat
 	app-text/liblangtag
 	>=app-text/libmspub-0.1.0
-	>=app-text/libmwaw-0.3.21
+	>=app-text/libmwaw-0.3.1
 	>=app-text/libnumbertext-1.0.6
 	>=app-text/libodfgen-0.1.0
 	app-text/libqxp
@@ -124,62 +133,71 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	app-text/libwpg:0.3
 	>=app-text/libwps-0.4
 	app-text/mythes
-	dev-cpp/abseil-cpp:=
 	>=dev-cpp/clucene-2.3.3.4-r2
-	>=dev-cpp/libcmis-0.5.2-r2
+	>=dev-cpp/libcmis-0.5.2
 	dev-db/unixODBC
 	dev-lang/perl
-	dev-libs/boost:=[nls]
+	>=dev-libs/boost-1.72.0:=[nls]
 	dev-libs/expat
 	dev-libs/hyphen
 	dev-libs/icu:=
 	dev-libs/libassuan
 	dev-libs/libgpg-error
-	>=dev-libs/liborcus-0.18.0:0/0.18
+	dev-libs/liborcus:0/0.16
 	dev-libs/librevenge
 	dev-libs/libxml2
 	dev-libs/libxslt
 	dev-libs/nspr
 	dev-libs/nss
 	>=dev-libs/redland-1.0.16
-	>=dev-libs/xmlsec-1.2.35:=[nss]
-	>=games-engines/box2d-2.4.1:0
+	>=dev-libs/xmlsec-1.2.28[nss]
 	media-gfx/fontforge
 	media-gfx/graphite2
 	media-libs/fontconfig
-	>=media-libs/freetype-2.11.0-r1:2
-	>=media-libs/harfbuzz-5.1.0:=[graphite,icu]
+	media-libs/freetype:2
+	>=media-libs/harfbuzz-0.9.42:=[graphite,icu]
 	media-libs/lcms:2
 	>=media-libs/libcdr-0.1.0
 	>=media-libs/libepoxy-1.3.1[X]
 	>=media-libs/libfreehand-0.1.0
-	media-libs/libjpeg-turbo:=
 	media-libs/libpagemaker
 	>=media-libs/libpng-1.4:0=
 	>=media-libs/libvisio-0.1.0
-	media-libs/libwebp:=
 	media-libs/libzmf
-	media-libs/openjpeg:=
-	media-libs/tiff:=
-	media-libs/zxing-cpp:=
+	net-libs/neon
 	net-misc/curl
-	sci-mathematics/lpsolve:=
+	sci-mathematics/lpsolve
 	sys-libs/zlib
+	virtual/glu
+	virtual/jpeg:0
 	virtual/opengl
 	x11-libs/cairo[X]
 	x11-libs/libXinerama
 	x11-libs/libXrandr
 	x11-libs/libXrender
 	accessibility? (
-		$(python_gen_cond_dep 'dev-python/lxml[${PYTHON_USEDEP}]')
+		$(python_gen_cond_dep 'dev-python/lxml[${PYTHON_MULTI_USEDEP}]')
 	)
 	bluetooth? (
 		dev-libs/glib:2
 		net-wireless/bluez
 	)
+	clang? (
+		|| (
+			(	sys-devel/clang:12
+				sys-devel/llvm:12
+				=sys-devel/lld-12*	)
+			(	sys-devel/clang:11
+				sys-devel/llvm:11
+				=sys-devel/lld-11*	)
+			(	sys-devel/clang:10
+				sys-devel/llvm:10
+				=sys-devel/lld-10*	)
+		)
+	)
 	coinmp? ( sci-libs/coinor-mp )
 	cups? ( net-print/cups )
-	dbus? ( sys-apps/dbus )
+	dbus? ( sys-apps/dbus[X] )
 	eds? (
 		dev-libs/glib:2
 		gnome-base/dconf
@@ -191,12 +209,11 @@ COMMON_DEPEND="${PYTHON_DEPS}
 		media-libs/gst-plugins-base:1.0
 	)
 	gtk? (
-		app-accessibility/at-spi2-core:2
 		dev-libs/glib:2
 		dev-libs/gobject-introspection
 		gnome-base/dconf
-		media-libs/mesa[egl(+)]
-		x11-libs/gtk+:3[X]
+		media-libs/mesa[egl]
+		x11-libs/gtk+:3
 		x11-libs/pango
 	)
 	kde? (
@@ -210,12 +227,12 @@ COMMON_DEPEND="${PYTHON_DEPS}
 		kde-frameworks/kio:5
 		kde-frameworks/kwindowsystem:5
 	)
-	ldap? ( net-nds/openldap:= )
+	ldap? ( net-nds/openldap )
 	libreoffice_extensions_scripting-beanshell? ( dev-java/bsh )
-	libreoffice_extensions_scripting-javascript? ( >=dev-java/rhino-1.7.14:1.6 )
-	mariadb? ( dev-db/mariadb-connector-c:= )
-	!mariadb? ( dev-db/mysql-connector-c:= )
-	pdfimport? ( >=app-text/poppler-22.06:=[cxx] )
+	libreoffice_extensions_scripting-javascript? ( dev-java/rhino:1.6 )
+	mariadb? ( dev-db/mariadb-connector-c )
+	!mariadb? ( dev-db/mysql-connector-c )
+	pdfimport? ( app-text/poppler:=[cxx] )
 	postgres? ( >=dev-db/postgresql-9.0:*[kerberos] )
 "
 # FIXME: cppunit should be moved to test conditional
@@ -227,14 +244,18 @@ DEPEND="${COMMON_DEPEND}
 	dev-perl/Archive-Zip
 	>=dev-util/cppunit-1.14.0
 	>=dev-util/gperf-3.1
-	dev-util/mdds:1/2.1
+	dev-util/mdds:1/1.5
 	media-libs/glm
+	sys-devel/ucpp
 	x11-base/xorg-proto
 	x11-libs/libXt
 	x11-libs/libXtst
 	java? (
 		dev-java/ant-core
-		>=virtual/jdk-11
+		|| (
+			dev-java/openjdk:11
+			dev-java/openjdk-bin:11
+		)
 	)
 	test? (
 		app-crypt/gnupg
@@ -242,46 +263,26 @@ DEPEND="${COMMON_DEPEND}
 		media-fonts/dejavu
 		media-fonts/liberation-fonts
 	)
-	valgrind? ( dev-util/valgrind )
 "
 RDEPEND="${COMMON_DEPEND}
-	acct-group/libreoffice
-	acct-user/libreoffice
 	!app-office/libreoffice-bin
 	!app-office/libreoffice-bin-debug
+	!app-office/openoffice
 	media-fonts/liberation-fonts
 	|| ( x11-misc/xdg-utils kde-plasma/kde-cli-tools )
-	java? ( >=virtual/jre-11 )
+	java? ( || (
+		dev-java/openjdk:11
+		dev-java/openjdk-jre-bin:11
+		>=virtual/jre-1.8
+	) )
 	kde? ( kde-frameworks/breeze-icons:* )
-"
-BDEPEND="
-	dev-util/intltool
-	sys-apps/which
-	sys-devel/bison
-	sys-devel/flex
-	sys-devel/gettext
-	virtual/pkgconfig
-	clang? (
-		|| (
-			(	sys-devel/clang:16
-				sys-devel/llvm:16
-				=sys-devel/lld-16*	)
-			(	sys-devel/clang:15
-				sys-devel/llvm:15
-				=sys-devel/lld-15*	)
-			(	sys-devel/clang:14
-				sys-devel/llvm:14
-				=sys-devel/lld-14*	)
-		)
-	)
-	odk? ( >=app-doc/doxygen-1.8.4 )
 "
 if [[ ${MY_PV} != *9999* ]] && [[ ${PV} != *_* ]]; then
 	PDEPEND="=app-office/libreoffice-l10n-$(ver_cut 1-2)*"
 else
 	# Translations are not reliable on live ebuilds
 	# rather force people to use english only.
-	RDEPEND+=" !app-office/libreoffice-l10n"
+	PDEPEND="!app-office/libreoffice-l10n"
 fi
 
 PATCHES=(
@@ -290,7 +291,7 @@ PATCHES=(
 	# not upstreamable stuff
 	"${FILESDIR}/${PN}-5.3.4.2-kioclient5.patch"
 	"${FILESDIR}/${PN}-6.1-nomancompress.patch"
-	"${FILESDIR}/${PN}-7.2.0.4-qt5detect.patch"
+	"${FILESDIR}/${PN}-7.0.3.1-qt5detect.patch"
 )
 
 S="${WORKDIR}/${PN}-${MY_PV}"
@@ -400,9 +401,6 @@ src_configure() {
 		NM=llvm-nm
 		RANLIB=llvm-ranlib
 		LDFLAGS+=" -fuse-ld=lld"
-
-		# Not implemented by Clang, bug #903889
-		filter-flags -Wlto-type-mismatch -Werror=lto-type-mismatch
 	else
 		# Force gcc
 		einfo "Enforcing the use of gcc due to USE=-clang ..."
@@ -411,10 +409,6 @@ src_configure() {
 		CXX=${CHOST}-g++
 		NM=gcc-nm
 		RANLIB=gcc-ranlib
-
-		# Apparently the Clang flags get used even for GCC builds sometimes.
-		# bug #838115
-		sed -i -e "s/-flto=thin/-flto/" solenv/gbuild/platform/com_GCC_defs.mk || die
 	fi
 
 	if use custom-cflags ; then
@@ -433,6 +427,10 @@ src_configure() {
 
 	# Ensure we use correct toolchain
 	tc-export CC CXX LD AR NM OBJDUMP RANLIB PKG_CONFIG
+
+	if use vulkan && ! use clang ; then
+		ewarn "Building skia with gcc may lead to performance issues. Disable vulkan or enable clang."
+	fi
 
 	# optimization flags
 	export GMAKE_OPTIONS="${MAKEOPTS}"
@@ -459,6 +457,7 @@ src_configure() {
 	# --without-system-sane: just sane.h header that is used for scan in writer,
 	#   not linked or anything else, worthless to depend on
 	# --disable-pdfium: not yet packaged
+	# --without-system-qrcodegen: has no real build system and LO is the only user
 	local myeconfargs=(
 		--with-system-dicts
 		--with-system-epoxy
@@ -469,6 +468,7 @@ src_configure() {
 		--enable-cairo-canvas
 		--enable-largefile
 		--enable-mergelibs
+		--enable-neon
 		--enable-python=system
 		--enable-randr
 		--enable-release-build
@@ -481,7 +481,6 @@ src_configure() {
 		--disable-online-update
 		--disable-openssl
 		--disable-pdfium
-		--disable-qt6
 		--with-extra-buildid="${gentoo_buildid}"
 		--enable-extension-integration
 		--with-external-dict-dir="${EPREFIX}/usr/share/myspell"
@@ -490,8 +489,7 @@ src_configure() {
 		--with-external-tar="${DISTDIR}"
 		--with-lang=""
 		--with-parallelism=$(makeopts_jobs)
-		--with-system-abseil
-		--with-system-openjpeg
+		--with-system-ucpp
 		--with-tls=nss
 		--with-vendor="Gentoo Foundation"
 		--with-x
@@ -500,10 +498,10 @@ src_configure() {
 		--with-help="html"
 		--without-helppack-integration
 		--with-system-gpgmepp
-		--without-system-dragonbox
 		--without-system-jfreereport
-		--without-system-libfixmath
+		--without-system_apache_commons
 		--without-system-sane
+		--without-system-qrcodegen
 		$(use_enable base report-builder)
 		$(use_enable bluetooth sdremote-bluetooth)
 		$(use_enable coinmp)
@@ -527,7 +525,6 @@ src_configure() {
 		$(use_with googledrive gdrive-client-secret ${google_default_client_secret})
 		$(use_with java)
 		$(use_with odk doxygen)
-		$(use_with valgrind)
 	)
 
 	if use eds || use gtk; then
@@ -551,14 +548,18 @@ src_configure() {
 			--without-junit
 			--without-system-hsqldb
 			--with-ant-home="${ANT_HOME}"
-			--with-jdk-home="${JAVA_HOME}"
 		)
+		if has_version "dev-java/openjdk:11"; then
+			myeconfargs+=( -with-jdk-home="${EPREFIX}/usr/$(get_libdir)/openjdk-11" )
+		elif has_version "dev-java/openjdk-bin:11"; then
+			myeconfargs+=( --with-jdk-home="/opt/openjdk-bin-11" )
+		fi
 
 		use libreoffice_extensions_scripting-beanshell && \
 			myeconfargs+=( --with-beanshell-jar=$(java-pkg_getjar bsh bsh.jar) )
 
 		use libreoffice_extensions_scripting-javascript && \
-			myeconfargs+=( --with-rhino-jar=$(java-pkg_getjar rhino-1.6 rhino.jar) )
+			myeconfargs+=( --with-rhino-jar=$(java-pkg_getjar rhino-1.6 js.jar) )
 	fi
 
 	is-flagq "-flto*" && myeconfargs+=( --enable-lto )
@@ -574,15 +575,20 @@ src_compile() {
 	addpredict /dev/ati
 	addpredict /dev/nvidiactl
 
-	default
+	local target
+	use test && target="build" || target="build-nocheck"
+
+	# this is not a proper make script
+	make ${target} || die
 }
 
 src_test() {
-	emake unitcheck
-	emake slowcheck
+	make unitcheck || die
+	make slowcheck || die
 }
 
 src_install() {
+	# This is not Makefile so no buildserver
 	emake DESTDIR="${D}" distro-pack-install -o build -o check
 
 	# bug 593514
@@ -627,15 +633,17 @@ EOF
 	# link python bridge in site-packages, bug 667802
 	local py pyc loprogdir=/usr/$(get_libdir)/libreoffice/program
 	for py in uno.py unohelper.py officehelper.py; do
-		dosym -r ${loprogdir}/${py} $(python_get_sitedir)/${py}
+		dosym8 -r ${loprogdir}/${py} $(python_get_sitedir)/${py}
 		while IFS="" read -d $'\0' -r pyc; do
 			pyc=${pyc//*\/}
-			dosym -r ${loprogdir}/__pycache__/${pyc} $(python_get_sitedir)/__pycache__/${pyc}
+			dosym8 -r ${loprogdir}/__pycache__/${pyc} $(python_get_sitedir)/__pycache__/${pyc}
 		done < <(find "${D}"${lodir}/program -type f -name ${py/.py/*.pyc} -print0)
 	done
 
-	newinitd "${FILESDIR}/libreoffice.initd" libreoffice
-	newconfd "${FILESDIR}/libreoffice.confd" libreoffice
+	# bug 709450
+	mkdir -p "${ED}"/usr/share/metainfo || die
+	mv "${ED}"/usr/share/appdata/* "${ED}"/usr/share/metainfo/ || die
+	rmdir "${ED}"/usr/share/appdata || die
 }
 
 pkg_postinst() {

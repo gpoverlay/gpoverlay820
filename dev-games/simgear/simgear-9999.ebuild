@@ -1,9 +1,9 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit cmake toolchain-funcs git-r3
+inherit eutils cmake toolchain-funcs flag-o-matic git-r3
 
 DESCRIPTION="Development library for simulation games"
 HOMEPAGE="https://www.flightgear.org/"
@@ -26,10 +26,10 @@ COMMON_DEPEND="
 	sys-libs/zlib
 	virtual/opengl
 	dns? ( net-libs/udns )
-	gdal? ( sci-libs/gdal:= )
+	gdal? ( sci-libs/gdal )
 "
 DEPEND="${COMMON_DEPEND}
-	dev-libs/boost
+	>=dev-libs/boost-1.44
 "
 RDEPEND="${COMMON_DEPEND}
 	subversion? ( dev-vcs/subversion )

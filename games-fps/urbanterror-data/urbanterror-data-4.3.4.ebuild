@@ -1,23 +1,21 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-
-CHECKREQS_DISK_BUILD="3300M"
-CHECKREQS_DISK_USR="1400M"
+EAPI="6"
 
 inherit check-reqs
 
 ENGINE_PV=${PV}
+
 MY_PN=UrbanTerror
 MY_PV=43_full
 
 DESCRIPTION="Data files for UrbanTerror"
 HOMEPAGE="https://www.urbanterror.info"
+
 # load the base image and save it as .0 file
 # use 43_full-2.zip as upstream fixed something back then
 SRC_URI="https://up.barbatos.fr/urt/${MY_PN}${MY_PV}_2.zip -> ${PN}-4.3.0.zip"
-S="${WORKDIR}/${MY_PN}43"
 
 # fetch updates recursively for |4.3.x-4.3.0|
 if [[ "${PV}" != "4.3.0" ]]; then
@@ -32,9 +30,13 @@ unset MY_CTR
 LICENSE="Q3AEULA-20000111 urbanterror-4.2-maps"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-RESTRICT="bindist mirror"
+RESTRICT="bindist"
+DEPEND="app-arch/unzip"
 
-BDEPEND="app-arch/unzip"
+S="${WORKDIR}/${MY_PN}43"
+
+CHECKREQS_DISK_BUILD="3300M"
+CHECKREQS_DISK_USR="1400M"
 
 src_prepare() {
 	default

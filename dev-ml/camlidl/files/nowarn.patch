@@ -1,5 +1,7 @@
---- a/compiler/Makefile
-+++ b/compiler/Makefile
+Index: camlidl-1.05/compiler/Makefile
+===================================================================
+--- camlidl-1.05.orig/compiler/Makefile
++++ camlidl-1.05/compiler/Makefile
 @@ -29,7 +29,7 @@ PROG=camlidl$(EXE)
  all: $(PROG)
  

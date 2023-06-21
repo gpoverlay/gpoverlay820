@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -17,8 +17,9 @@ SRC_URI="
 "
 
 LICENSE="GPL-2"
-KEYWORDS="~amd64 ~riscv ~x86"
+KEYWORDS="~amd64 ~x86"
 SLOT="0"
+IUSE=""
 
 RDEPEND="sys-libs/gdbm:0="
 DEPEND="${RDEPEND}"
@@ -45,7 +46,6 @@ src_install() {
 
 	insinto /etc
 	doins sjeng.rc
-
 	insinto /usr/share/games/sjeng
-	doins books/*.opn
+	doins books/*.opn || die
 }

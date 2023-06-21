@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="7"
+EAPI=6
 
 inherit autotools flag-o-matic
 
@@ -15,16 +15,16 @@ KEYWORDS="amd64 ppc ppc64 sparc x86"
 IUSE="debug"
 
 DEPEND="sys-libs/ncurses:0"
-RDEPEND="media-fonts/font-misc-misc
-	media-fonts/intlfonts
-	media-fonts/unifont"
+RDEPEND="
+	media-fonts/unifont
+	media-fonts/font-misc-misc
+	media-fonts/intlfonts"
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-sigchld-debian.patch
-	"${FILESDIR}"/${PN}-no-kernel-headers.patch
-	"${FILESDIR}"/${PN}-gentoo.patch
-	"${FILESDIR}"/${PN}-wrong-inline-gcc5.patch
-	"${FILESDIR}"/${PN}-automake-1.13.patch
+	"${FILESDIR}"/${P}-sigchld-debian.patch
+	"${FILESDIR}"/${P}-no-kernel-headers.patch
+	"${FILESDIR}"/${P}-gentoo.patch
+	"${FILESDIR}"/${P}-wrong-inline-gcc5.patch
 )
 
 src_prepare() {
@@ -38,15 +38,15 @@ src_configure() {
 }
 
 src_install() {
-	dodir /etc /usr/share/fonts/${PN}
+	dodir /etc /usr/share/fonts/jfbterm
 	default
 
-	mv "${ED}"/etc/${PN}.conf{.sample,} || die
+	mv "${ED%/}"/etc/jfbterm.conf{.sample,} || die
 
-	doman ${PN}.{1,conf.5}
+	doman jfbterm.1 jfbterm.conf.5
 
 	# install example config files
 	docinto examples
-	dodoc ${PN}.conf.sample*
+	dodoc jfbterm.conf.sample*
 	docompress -x /usr/share/doc/${PF}/examples
 }

@@ -1,9 +1,9 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit desktop toolchain-funcs
+inherit desktop
 
 MY_PN=${PN/grabi/GrabI}
 
@@ -39,7 +39,7 @@ src_prepare() {
 
 src_compile() {
 	emake clean
-	emake CC="$(tc-getCC)" CFLAGS="${CFLAGS} -Wall" SYSTEM="${LDFLAGS}"
+	emake CFLAGS="${CFLAGS} -Wall" SYSTEM="${LDFLAGS}"
 }
 
 src_install() {

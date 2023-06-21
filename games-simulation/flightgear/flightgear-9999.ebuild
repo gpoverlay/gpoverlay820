@@ -1,9 +1,9 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit cmake toolchain-funcs git-r3
+inherit cmake bash-completion-r1 flag-o-matic toolchain-funcs git-r3
 
 DESCRIPTION="Open Source Flight Simulator"
 HOMEPAGE="https://www.flightgear.org/"
@@ -14,7 +14,7 @@ EGIT_BRANCH="next"
 LICENSE="GPL-2"
 KEYWORDS=""
 SLOT="0"
-IUSE="cpu_flags_x86_sse2 dbus debug examples gdal openmp qt5 +udev +utils"
+IUSE="cpu_flags_x86_sse2 dbus debug examples gdal openmp qt5 +udev +utils vim-syntax"
 
 # Needs --fg-root with path to flightgear-data passed to test runner passed,
 # not really worth patching
@@ -26,7 +26,6 @@ COMMON_DEPEND="
 	dev-games/openscenegraph[jpeg,png]
 	~dev-games/simgear-${PV}[gdal=]
 	media-libs/openal
-	>=media-libs/plib-1.8.5
 	>=media-libs/speex-1.2.0:0
 	media-libs/speexdsp:0
 	media-sound/gsm
@@ -34,7 +33,7 @@ COMMON_DEPEND="
 	virtual/glu
 	x11-libs/libX11
 	dbus? ( >=sys-apps/dbus-1.6.18-r1 )
-	gdal? ( >=sci-libs/gdal-2.0.0:= )
+	gdal? ( >=sci-libs/gdal-2.0.0:0 )
 	qt5? (
 		>=dev-qt/qtcore-5.7.1:5
 		>=dev-qt/qtdeclarative-5.7.1:5
@@ -54,7 +53,9 @@ COMMON_DEPEND="
 "
 # libXi and libXmu are build-only-deps according to FindGLUT.cmake
 DEPEND="${COMMON_DEPEND}
-	dev-libs/boost
+	>=dev-libs/boost-1.44
+	>=media-libs/plib-1.8.5
+	qt5? ( >=dev-qt/linguist-tools-5.7.1:5 )
 	utils? (
 		x11-libs/libXi
 		x11-libs/libXmu
@@ -63,7 +64,6 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND="${COMMON_DEPEND}
 	~games-simulation/${PN}-data-${PV}
 "
-BDEPEND="qt5? ( >=dev-qt/linguist-tools-5.7.1:5 )"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-2020.3.5-cmake.patch"
@@ -72,11 +72,7 @@ PATCHES=(
 DOCS=(AUTHORS ChangeLog NEWS README Thanks)
 
 pkg_pretend() {
-	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
-}
-
-pkg_setup() {
-	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
+	use openmp && tc-check-openmp
 }
 
 src_configure() {
@@ -91,7 +87,6 @@ src_configure() {
 		-DENABLE_GDAL=$(usex gdal)
 		-DENABLE_GPSSMOOTH=$(usex utils)
 		-DENABLE_HID_INPUT=$(usex udev)
-		-DENABLE_IAX=$(usex utils)
 		-DENABLE_JS_DEMO=$(usex utils)
 		-DENABLE_JSBSIM=ON
 		-DENABLE_LARCSIM=ON
@@ -159,10 +154,12 @@ src_install() {
 	fi
 
 	# Install nasal script syntax
-	insinto /usr/share/vim/vimfiles/syntax
-	doins scripts/syntax/{ac3d,nasal}.vim
-	insinto /usr/share/vim/vimfiles/ftdetect/
-	doins "${FILESDIR}"/{ac3d,nasal}.vim
+	if use vim-syntax; then
+		insinto /usr/share/vim/vimfiles/syntax
+		doins scripts/syntax/{ac3d,nasal}.vim
+		insinto /usr/share/vim/vimfiles/ftdetect/
+		doins "${FILESDIR}"/{ac3d,nasal}.vim
+	fi
 }
 
 pkg_postinst() {

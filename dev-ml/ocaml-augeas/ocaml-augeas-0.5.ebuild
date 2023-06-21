@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI="5"
 
 inherit findlib
 
@@ -13,6 +13,7 @@ SRC_URI="https://people.redhat.com/~rjones/augeas/files/${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+IUSE=""
 
 DEPEND="app-admin/augeas
 		dev-ml/ocaml-autoconf

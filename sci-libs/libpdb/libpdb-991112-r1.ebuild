@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-inherit toolchain-funcs
+inherit eutils toolchain-funcs
 
 DESCRIPTION="PDB Record I/O Libraries -- c version"
 HOMEPAGE="http://www.cgl.ucsf.edu/Overview/software.html"

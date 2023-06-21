@@ -1,9 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-
-inherit toolchain-funcs
+EAPI=6
 
 DESCRIPTION="Bomberman clone w/multiplayer support"
 HOMEPAGE="http://www.xdr.com/dash/bomber.html"
@@ -12,6 +10,7 @@ SRC_URI="http://www.xdr.com/dash/${P}.tgz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+IUSE=""
 
 DEPEND="x11-libs/libX11"
 RDEPEND="!sci-biology/emboss
@@ -40,17 +39,9 @@ src_prepare() {
 		-e "s:=\"data\":=\"/usr/share/${PN}\":" sound.c || die
 }
 
-src_compile() {
-	tc-export CC
-
-	emake
-}
-
 src_install() {
 	dobin matcher bomber
-
 	insinto /usr/share/${PN}
 	doins -r data/*
-
 	dodoc README Changelog
 }

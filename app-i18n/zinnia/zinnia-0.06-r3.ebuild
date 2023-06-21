@@ -1,7 +1,7 @@
-# Copyright 2010-2021 Gentoo Authors
+# Copyright 2010-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="8"
+EAPI="6"
 
 inherit autotools flag-o-matic perl-module toolchain-funcs
 
@@ -15,19 +15,25 @@ KEYWORDS="amd64 ~arm64 ~ppc64 x86"
 IUSE="perl static-libs"
 
 PATCHES=(
-	"${FILESDIR}"/${P}-c++11.patch
-	"${FILESDIR}"/${P}-flags.patch
-	"${FILESDIR}"/${P}-perl.patch
+	"${FILESDIR}/${P}-flags.patch"
+	"${FILESDIR}/${P}-perl_build.patch"
+	"${FILESDIR}/${P}-c++-2011.patch"
 )
 
-HTML_DOCS=( doc/{index{,-ja}.html,${PN}.css} )
+DOCS=(AUTHORS)
 
 src_prepare() {
 	default
-	sed -i "s/AM_CONFIG_HEADER/AC_CONFIG_HEADERS/" configure.in || die
-
-	mv configure.{in,ac} || die
+	mv configure.in configure.ac || die
+	sed -e "s/AM_CONFIG_HEADER/AC_CONFIG_HEADERS/" -i configure.ac || die
 	eautoreconf
+
+	if use perl; then
+			pushd perl > /dev/null
+			PATCHES=()
+			perl-module_src_prepare
+			popd > /dev/null
+	fi
 }
 
 src_configure() {
@@ -38,7 +44,8 @@ src_compile() {
 	default
 
 	if use perl; then
-			cd perl >/dev/null || die
+			pushd perl > /dev/null
+
 			# We need to run this here as otherwise it won't pick up the
 			# just-built -lzinnia and cause the extension to have
 			# undefined symbols.
@@ -53,7 +60,7 @@ src_compile() {
 				OPTIMIZE="${CPPFLAGS} ${CXXFLAGS}" \
 				LDDLFLAGS="-shared" \
 				OTHERLDFLAGS="${LDFLAGS}"
-			cd - >/dev/null || die
+			popd > /dev/null
 	fi
 }
 
@@ -63,12 +70,16 @@ src_test() {
 
 src_install() {
 	default
-	einstalldocs
 	find "${D}" -name "*.la" -delete || die
 
 	if use perl; then
-			cd perl >/dev/null || die
+			pushd perl > /dev/null
 			perl-module_src_install
-			cd - >/dev/null || die
+			popd > /dev/null
 	fi
+
+	(
+		docinto html
+		dodoc doc/*.css doc/*.html
+	)
 }

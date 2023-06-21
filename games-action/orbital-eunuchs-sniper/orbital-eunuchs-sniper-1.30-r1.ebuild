@@ -1,33 +1,31 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=6
 
 inherit autotools desktop
 
-MY_P="${PN//-/_}-${PV}"
+MY_P=${PN//-/_}-${PV}
 DESCRIPTION="Snipe terrorists from your orbital base"
-HOMEPAGE="https://icculus.org/oes/"
-SRC_URI="https://icculus.org/oes/${MY_P}.tar.gz"
-S="${WORKDIR}/${MY_P}"
+HOMEPAGE="http://icculus.org/oes/"
+SRC_URI="http://filesingularity.timedoctor.org/${MY_P}.tar.gz"
 
 LICENSE="ZLIB"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+IUSE=""
 
-DEPEND="
-	media-libs/libsdl[joystick,video]
+DEPEND="media-libs/libsdl[joystick,video]
 	media-libs/sdl-image[png]
 	media-libs/sdl-mixer[vorbis]"
-RDEPEND="${DEPEND}"
+RDEPEND=${DEPEND}
 
-DOCS=( AUTHORS ChangeLog readme.txt README TODO )
+S=${WORKDIR}/${MY_P}
 
 PATCHES=(
 	"${FILESDIR}"/${P}-datadir.patch
 	"${FILESDIR}"/${P}-gcc43.patch
 )
-
 src_prepare() {
 	default
 
@@ -38,6 +36,7 @@ src_prepare() {
 }
 
 src_install() {
-	default
-	make_desktop_entry snipe2d "Orbital Eunuchs Sniper" applications-games
+	DOCS="AUTHORS ChangeLog readme.txt README TODO" \
+		default
+	make_desktop_entry snipe2d "Orbital Eunuchs Sniper"
 }

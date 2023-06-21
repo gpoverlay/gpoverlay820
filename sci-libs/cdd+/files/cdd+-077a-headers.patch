@@ -1,5 +1,10 @@
---- a/Integer.h
-+++ b/Integer.h
+Index: Integer.h
+===================================================================
+RCS file: /home/imocvs/cdd+/Integer.h,v
+retrieving revision 1.1.1.1
+diff -u -p -r1.1.1.1 Integer.h
+--- Integer.h	2008/12/15 01:19:52	1.1.1.1
++++ Integer.h	2008/12/15 01:24:04
 @@ -23,6 +23,7 @@
  #include <gmp_init.h>
  #include <cctype>
@@ -8,8 +13,13 @@
  
  class Integer; class Rational;
  
---- a/Rational.cc
-+++ b/Rational.cc
+Index: Rational.cc
+===================================================================
+RCS file: /home/imocvs/cdd+/Rational.cc,v
+retrieving revision 1.1.1.1
+diff -u -p -r1.1.1.1 Rational.cc
+--- Rational.cc	2008/12/15 01:19:52	1.1.1.1
++++ Rational.cc	2008/12/15 01:25:14
 @@ -17,6 +17,7 @@
  
  #include <cctype>
@@ -18,8 +28,13 @@
  
  Rational& Rational::set(const char* s) throw (gmp_error)
  {
---- a/Rational.h
-+++ b/Rational.h
+Index: Rational.h
+===================================================================
+RCS file: /home/imocvs/cdd+/Rational.h,v
+retrieving revision 1.1.1.1
+diff -u -p -r1.1.1.1 Rational.h
+--- Rational.h	2008/12/15 01:19:52	1.1.1.1
++++ Rational.h	2008/12/15 01:27:08
 @@ -17,6 +17,7 @@
  #define _POLYMAKE_GMP_RATIONAL_H "$Project: polymake $$Id$
  
@@ -37,8 +52,13 @@
        *den_buf++ = '/';
        denominator(a).putstr(os.flags(), den_buf);
     }
---- a/gmp_init.cc
-+++ b/gmp_init.cc
+Index: gmp_init.cc
+===================================================================
+RCS file: /home/imocvs/cdd+/gmp_init.cc,v
+retrieving revision 1.1.1.1
+diff -u -p -r1.1.1.1 gmp_init.cc
+--- gmp_init.cc	2008/12/15 01:19:52	1.1.1.1
++++ gmp_init.cc	2008/12/15 01:23:45
 @@ -16,6 +16,7 @@
  #ident "$Project: polymake $$Id$
  

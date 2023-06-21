@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-<maintainer type="person" proxied="yes">
-  <email>alexander@neuwirth-informatik.de</email>
-  <name>Alexander Puck Neuwirth</name>
-</maintainer>
-<maintainer type="project" proxied="proxy">
+<maintainer type="project">
   <email>sci-physics@gentoo.org</email>
   <name>Gentoo Physics Project</name>
 </maintainer>
@@ -22,7 +18,4 @@
   version 4.1 onwards a configuration script facilitates the
   installation of LHAPDF.
 </longdescription>
-<upstream>
- <remote-id type="gitlab">hepcedar/lhapdf</remote-id>
-</upstream>
 </pkgmetadata>

@@ -3,6 +3,8 @@
 
 EAPI=7
 
+inherit eutils multilib
+
 MY_P="${PN}${PV}"
 
 DESCRIPTION="Object Oriented Enhancements for Tcl/Tk"

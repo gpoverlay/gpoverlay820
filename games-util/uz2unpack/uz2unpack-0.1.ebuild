@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=5
 
 inherit toolchain-funcs
 
@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
 DEPEND="sys-libs/zlib"
-RDEPEND="${DEPEND}"
+RDEPEND=${DEPEND}
 
 src_compile() {
 	emake CC="$(tc-getCC)" LDLIBS=-lz ${PN}

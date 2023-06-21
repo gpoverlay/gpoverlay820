@@ -1,7 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=5
+
+inherit eutils multilib
 
 DESCRIPTION="IRSIM is a \"switch-level\" simulator"
 HOMEPAGE="http://opencircuitdesign.com/irsim/"
@@ -10,23 +12,27 @@ SRC_URI="http://opencircuitdesign.com/irsim/archive/${P}.tgz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+IUSE=""
 
-RDEPEND="
-	dev-lang/tcl:=
-	dev-lang/tk:=
-"
-DEPEND="${RDEPEND}"
-BDEPEND="app-shells/tcsh"
+RDEPEND="dev-lang/tcl:0
+	dev-lang/tk:0"
+DEPEND="${RDEPEND}
+	app-shells/tcsh"
 
-PATCHES=(
-	"${FILESDIR}"/${PN}-9.7.72-ldflags.patch
-	"${FILESDIR}"/${PN}-9.7.79-datadir.patch
-)
+src_prepare() {
+	epatch "${FILESDIR}"/${PN}-9.7.72-ldflags.patch
+	epatch "${FILESDIR}"/${PN}-9.7.79-datadir.patch
+}
 
 src_configure() {
 	# Short-circuit top-level configure script to retain CFLAGS
-	cd scripts || die
+	cd scripts
 	econf
+}
+
+src_install() {
+	emake DESTDIR="${D}" DOCDIR=/usr/share/doc/${PF} install
+	dodoc README
 }
 
 pkg_postinst() {

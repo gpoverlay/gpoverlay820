@@ -1,7 +1,7 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
 inherit desktop toolchain-funcs
 
@@ -21,8 +21,8 @@ fi
 LICENSE="ISC"
 SLOT="0"
 
-DEPEND="x11-libs/libX11
-	x11-libs/libXft
+DEPEND="x11-libs/libXft
+	x11-libs/libXinerama
 	x11-libs/libXrandr
 "
 RDEPEND="${DEPEND}"

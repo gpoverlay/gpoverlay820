@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<!-- maintainer-needed -->
 	<longdescription lang="en">
@@ -12,6 +12,5 @@
 			<name>Anders Lindén</name>
 		</maintainer>
 		<doc lang="en">http://bashburn.dose.se/index.php?s=docs</doc>
-		<remote-id type="gitlab">anders.linden/BashBurn</remote-id>
 	</upstream>
 </pkgmetadata>

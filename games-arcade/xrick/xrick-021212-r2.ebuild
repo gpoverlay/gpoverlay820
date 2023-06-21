@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -15,8 +15,7 @@ KEYWORDS="~amd64 ~ppc64 ~x86"
 RESTRICT="mirror bindist" # bug #149097
 
 DEPEND="media-libs/libsdl[video]"
-RDEPEND="${DEPEND}
-	!~media-libs/libsdl-1.2.60"
+RDEPEND="${DEPEND}"
 
 PATCHES=(
 	"${FILESDIR}"/${P}-exit.patch

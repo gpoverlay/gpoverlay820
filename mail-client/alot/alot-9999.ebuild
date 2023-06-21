@@ -1,15 +1,13 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{9..11} )
+DISTUTILS_USE_SETUPTOOLS=rdepend
+PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit distutils-r1
 
-DESCRIPTION="Experimental terminal UI for net-mail/notmuch written in Python"
-HOMEPAGE="https://github.com/pazz/alot"
 if [[ ${PV} == "9999" ]]; then
 	EGIT_REPO_URI="https://github.com/pazz/alot/"
 	inherit git-r3
@@ -18,9 +16,13 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
+DESCRIPTION="Experimental terminal UI for net-mail/notmuch written in Python"
+HOMEPAGE="https://github.com/pazz/alot"
+
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="doc"
+IUSE="doc test"
+RESTRICT="!test? ( test )"
 
 RDEPEND="
 	app-crypt/gpgme[python,${PYTHON_USEDEP}]
@@ -28,23 +30,24 @@ RDEPEND="
 	dev-python/python-magic[${PYTHON_USEDEP}]
 	dev-python/urwid[${PYTHON_USEDEP}]
 	dev-python/urwidtrees[${PYTHON_USEDEP}]
-	dev-python/twisted[${PYTHON_USEDEP}]
+	>=dev-python/twisted-18.4[${PYTHON_USEDEP}]
 	net-mail/mailbase
-	net-mail/notmuch[crypt,python,${PYTHON_USEDEP}]
-"
-BDEPEND="
-	dev-python/sphinx[${PYTHON_USEDEP}]
+	net-mail/notmuch[crypt,python]
+	"
+DEPEND="
+	doc? ( dev-python/sphinx[${PYTHON_USEDEP}] )
 	test? (
+		${RDEPEND}
 		dev-python/mock[${PYTHON_USEDEP}]
 	)
-"
+	"
 
 PATCHES=(
-	"${FILESDIR}/0.9-0001-remove-non-working-test.patch"
-	"${FILESDIR}/${PN}-0.10-no-intersphinx-docs.patch"
-)
+	"${FILESDIR}/${PV}-0001-remove-non-working-test.patch"
+	"${FILESDIR}/${PV}-0002-update-reference-to-envelope-body.patch"
+	)
 
-distutils_enable_tests unittest
+distutils_enable_tests setup.py
 
 python_compile_all() {
 	emake -C docs man

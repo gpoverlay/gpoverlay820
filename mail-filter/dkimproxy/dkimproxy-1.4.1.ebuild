@@ -1,7 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=5
+
+inherit eutils
 
 DESCRIPTION="An SMTP proxy server for adding DKIM headers"
 HOMEPAGE="http://dkimproxy.sourceforge.net"

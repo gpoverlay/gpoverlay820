@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -67,6 +67,9 @@ RDEPEND="${DEPEND}
 	virtual/checkpassword
 	virtual/daemontools
 	authcram? ( >=net-mail/cmd5checkpw-0.30 )
+	ssl? (
+		pop3? ( sys-apps/ucspi-ssl )
+	)
 	!mail-mta/courier
 	!mail-mta/esmtp
 	!mail-mta/exim
@@ -79,6 +82,17 @@ RDEPEND="${DEPEND}
 	!mail-mta/sendmail
 	!mail-mta/ssmtp[mta]
 "
+
+pkg_setup() {
+	if [[ -n "${QMAIL_PATCH_DIR}" ]]; then
+		eerror
+		eerror "The QMAIL_PATCH_DIR variable for custom patches"
+		eerror "has been removed from ${PN}. If you need custom patches"
+		eerror "see 'user patches' in the portage manual."
+		eerror
+		die "QMAIL_PATCH_DIR is not supported anymore"
+	fi
+}
 
 src_unpack() {
 	genqmail_src_unpack
@@ -168,6 +182,10 @@ pkg_postinst() {
 	elog "http://www.lifewithqmail.com/"
 	elog "  -- Life with qmail"
 	elog
+}
+
+pkg_preinst() {
+	qmail_tcprules_fixup
 }
 
 pkg_config() {

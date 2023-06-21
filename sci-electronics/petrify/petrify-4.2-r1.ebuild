@@ -1,22 +1,25 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=5
 
 DESCRIPTION="Synthesize Petri nets into asynchronous circuits"
 HOMEPAGE="http://www.lsi.upc.edu/~jordicf/petrify/"
-SRC_URI="http://www.lsi.upc.edu/~jordicf/petrify/distrib/${P}-linux.tgz"
-S="${WORKDIR}"/${PN}
+SRC_URI="http://www.lsi.upc.edu/~jordicf/petrify/distrib/petrify-4.2-linux.tgz"
 
 LICENSE="Old-MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+IUSE=""
 
 RDEPEND="media-gfx/graphviz"
+DEPEND=""
 
 RESTRICT="strip"
 
-QA_PREBUILT="opt/petrify/petrify"
+QA_PREBUILT="/opt/petrify/petrify"
+
+S="${WORKDIR}"/${PN}
 
 src_install() {
 	exeinto /opt/petrify
@@ -24,11 +27,9 @@ src_install() {
 	dosym petrify /opt/petrify/draw_astg
 	dosym petrify /opt/petrify/write_sg
 
-	dodoc -r doc/.
+	dodoc doc/*
 	doman man/man1/*
 
 	dodir /etc/env.d
-	newenvd - 00petrify <<- _EOF_
-		PATH="${EPREFIX}/opt/petrify"
-	_EOF_
+	echo "PATH=${EPREFIX}/opt/petrify" > "${ED}"/etc/env.d/00petrify
 }

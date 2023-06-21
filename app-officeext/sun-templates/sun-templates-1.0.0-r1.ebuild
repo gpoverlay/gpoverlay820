@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=5
 
 OFFICE_EXTENSIONS=(
 	"472ffb92d82cf502be039203c606643d-Sun-ODF-Template-Pack-en-US_${PV}.oxt"
@@ -22,3 +22,4 @@ SRC_URI="${URI_EXTENSIONS}"
 LICENSE="sun-bcla-j2me"
 SLOT="0"
 KEYWORDS="amd64 x86"
+IUSE=""

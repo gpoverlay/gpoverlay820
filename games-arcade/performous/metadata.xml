@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="project">
 		<email>games@gentoo.org</email>
@@ -11,6 +11,7 @@
 	<use>
 		<flag name="midi">Enable MIDI I/O support</flag>
 		<flag name="songs">Install a few demo songs</flag>
+		<flag name="tools">Enable building of song extraction utilities for SingStar and Guitar Hero</flag>
 		<flag name="webcam">Enable Webcam support</flag>
 	</use>
 	<upstream>

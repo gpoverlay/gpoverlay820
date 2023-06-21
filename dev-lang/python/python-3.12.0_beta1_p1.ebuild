@@ -5,7 +5,7 @@ EAPI="7"
 WANT_LIBTOOL="none"
 
 inherit autotools check-reqs flag-o-matic multiprocessing pax-utils
-inherit prefix python-utils-r1 toolchain-funcs verify-sig
+inherit python-utils-r1 toolchain-funcs verify-sig
 
 MY_PV=${PV/_beta/b}
 MY_P="Python-${MY_PV%_p*}"
@@ -169,6 +169,7 @@ src_configure() {
 			--timeout 1200
 
 			-x test_gdb
+			-x test_dtrace
 
 			# All of these seem to occasionally hang for PGO inconsistently
 			# They'll even hang here but be fine in src_test sometimes.
@@ -301,7 +302,6 @@ src_configure() {
 		append-cppflags -I"${ESYSROOT}"/usr/include/ncursesw
 	fi
 
-	hprefixify setup.py
 	econf "${myeconfargs[@]}"
 
 	if grep -q "#define POSIX_SEMAPHORES_NOT_ENABLED 1" pyconfig.h; then

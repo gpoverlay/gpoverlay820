@@ -1,7 +1,7 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
 WX_GTK_VER="3.0-gtk3"
 inherit wxwidgets xdg cmake
@@ -29,12 +29,12 @@ REQUIRED_USE="
 "
 
 RDEPEND="
-	>=media-libs/libpng-1.4:=
+	>=media-libs/libpng-1.4:0=
 	media-libs/libsdl2[joystick]
+	link? ( >=media-libs/libsfml-2.0:= )
 	sys-libs/zlib:=
 	virtual/glu
 	virtual/opengl
-	link? ( >=media-libs/libsfml-2.0:= )
 	lirc? ( app-misc/lirc )
 	nls? ( virtual/libintl )
 	wxwidgets? (
@@ -48,16 +48,14 @@ DEPEND="
 "
 BDEPEND="
 	app-arch/zip
-	virtual/pkgconfig
 	wxwidgets? ( virtual/imagemagick-tools )
-	amd64? ( || ( dev-lang/nasm dev-lang/yasm ) )
 	x86? ( || ( dev-lang/nasm dev-lang/yasm ) )
 	nls? ( sys-devel/gettext )
+	virtual/pkgconfig
 "
 
 src_configure() {
 	use wxwidgets && setup-wxwidgets
-
 	local mycmakeargs=(
 		-DENABLE_FFMPEG=$(usex ffmpeg)
 		-DENABLE_LINK=$(usex link)
@@ -69,14 +67,10 @@ src_configure() {
 		-DENABLE_ASM_SCALERS=$(usex x86)
 		-DCMAKE_SKIP_RPATH=ON
 		-DENABLE_LTO=OFF
-		-DENABLE_ONLINEUPDATES=OFF
-		-DDISABLE_MACOS_PACKAGE_MANAGERS=ON
 	)
-
 	if use wxwidgets; then
 		mycmakeargs+=( -DENABLE_OPENAL=$(usex openal) )
 	fi
-
 	cmake_src_configure
 }
 
@@ -87,7 +81,6 @@ src_install() {
 		dodoc doc/ReadMe.SDL.txt
 		doman src/debian/vbam.6
 	fi
-
 	use wxwidgets && doman src/debian/visualboyadvance-m.6
 }
 

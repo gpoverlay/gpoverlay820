@@ -1,9 +1,8 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-
-inherit toolchain-funcs
+EAPI=6
+inherit eutils
 
 DESCRIPTION="A multi-player game of strategy and coordination"
 HOMEPAGE="https://inf.ug.edu.pl/~piotao/xbattle/mirror/www.lysator.liu.se/XBattleAI/"
@@ -12,6 +11,7 @@ SRC_URI="https://inf.ug.edu.pl/~piotao/xbattle/mirror/www.lysator.liu.se/XBattle
 LICENSE="xbattle"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+IUSE=""
 
 # Since this uses similar code and the same binary name as the original XBattle,
 # we want to make sure you can't install both at the same time
@@ -20,18 +20,11 @@ RDEPEND="
 	dev-lang/tk:0
 	x11-libs/libX11
 	x11-libs/libXext
-	!games-strategy/xbattle
-"
-DEPEND="
-	${RDEPEND}
-	x11-base/xorg-proto
-"
-BDEPEND="
+	!games-strategy/xbattle"
+DEPEND="${RDEPEND}
 	app-text/rman
 	x11-misc/imake
-"
-
-DOCS=( CONTRIBUTORS README README.AI TODO xbattle.dot )
+	x11-base/xorg-proto"
 
 PATCHES=(
 	"${FILESDIR}"/${P}-sandbox.patch
@@ -40,12 +33,10 @@ PATCHES=(
 src_prepare() {
 	default
 	rm -f xbcs/foo.xbc~ || die
-	rm config.cache || die
-
-	tc-export CC
 }
 
 src_install() {
-	default
-	mv "${ED}/usr/bin/"{,xb_}gauntletCampaign || die
+	DOCS="CONTRIBUTORS README README.AI TODO xbattle.dot" \
+		default
+	mv "${D}/usr/bin/"{,xb_}gauntletCampaign || die
 }

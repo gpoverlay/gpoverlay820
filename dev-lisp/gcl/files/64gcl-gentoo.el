@@ -1,3 +1,4 @@
+;; site-init for dev-lisp/gcl
 (add-to-list 'load-path "@SITELISP@")
 (autoload 'run "gcl" "Run GCL." t)
 (autoload 'gcl-mode "gcl" "GCL mode." t)

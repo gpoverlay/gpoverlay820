@@ -24,7 +24,9 @@ ELISP_PATCHES="${PN}-info.patch"
 SITEFILE="65${PN}-gentoo.el"
 
 src_compile() {
-	emake
+	emake PREFIX="${ED}"/usr \
+		LISPDIR="${ED}/${SITELISP}" \
+		VERSION_SPECIFIC_LISPDIR="${ED}/${SITELISP}"
 
 	${EMACS} ${EMACSFLAGS} --visit mime-ui-en.texi -f texi2info || die
 	if use l10n_ja; then

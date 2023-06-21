@@ -1,11 +1,11 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="8"
+EAPI="7"
 
 PHP_EXT_NAME="libvirt-php"
 PHP_EXT_SKIP_PHPIZE="yes"
-USE_PHP="php7-4 php8-0 php8-1"
+USE_PHP="php7-3 php7-4"
 PHP_EXT_ECONF_ARGS=()
 
 inherit php-ext-source-r3 git-r3 autotools
@@ -27,6 +27,9 @@ DEPEND="${RDEPEND}
 	doc? ( app-text/xhtml1 )"
 
 DOCS=( ChangeLog NEWS README )
+# Remove the insane check for pecl-imagick which is only used in examples
+# and is not called upon in any build
+PATCHES=( "${FILESDIR}/remove-imagick-check.patch" )
 
 src_unpack() {
 	git-r3_src_unpack
@@ -38,7 +41,6 @@ src_unpack() {
 
 src_prepare() {
 	php-ext-source-r3_src_prepare
-
 	local slot
 	for slot in $(php_get_slots); do
 		php_init_slot_env "${slot}"
@@ -53,12 +55,10 @@ src_install() {
 		insinto "${EXT_DIR}"
 		doins "src/.libs/${PHP_EXT_NAME}.so"
 	done
-
 	php-ext-source-r3_createinifiles
 	einstalldocs
-
 	if use doc ; then
-		docinto html
+		docinto /usr/share/doc/${PF}/html
 		dodoc -r docs/*
 	fi
 }

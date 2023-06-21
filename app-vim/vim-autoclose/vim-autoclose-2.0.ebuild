@@ -11,8 +11,6 @@ SRC_URI="https://dev.gentoo.org/~monsieurp/packages/${P}.tar.gz"
 LICENSE="vim"
 KEYWORDS="amd64 x86"
 
-DOCS=( README.txt AUTHORS.txt )
-
 src_unpack() {
 	default
 	mv * "${P}" || die

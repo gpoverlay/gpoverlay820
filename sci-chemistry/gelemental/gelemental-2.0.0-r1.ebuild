@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit autotools flag-o-matic xdg
+inherit autotools eutils flag-o-matic xdg-utils
 
 DESCRIPTION="Periodic table viewer with detailed information on the chemical elements"
 HOMEPAGE="https://github.com/ginggs/gelemental/"
@@ -17,13 +17,11 @@ IUSE="doc"
 RDEPEND="
 	dev-cpp/gtkmm:2.4
 	dev-cpp/glibmm:2"
-DEPEND="${RDEPEND}"
-BDEPEND="
-	dev-util/intltool
-	sys-devel/gettext
+DEPEND="${RDEPEND}
 	virtual/pkgconfig
-	doc? ( app-doc/doxygen )
-"
+	sys-devel/gettext
+	dev-util/intltool
+	doc? ( app-doc/doxygen )"
 
 src_prepare() {
 	default
@@ -32,13 +30,19 @@ src_prepare() {
 
 src_configure() {
 	append-cxxflags -std=c++11 #566450
+	local myeconfargs=( $(use_enable doc api-docs) )
 
-	econf \
-		--disable-static \
-		$(use_enable doc api-docs)
+	default
 }
 
-src_install() {
-	default
-	find "${ED}" -name '*.la' -delete || die
+pkg_postinst() {
+	xdg_icon_cache_update
+	xdg_desktop_database_update
+	xdg_mimeinfo_database_update
+}
+
+pkg_postrm() {
+	xdg_icon_cache_update
+	xdg_desktop_database_update
+	xdg_mimeinfo_database_update
 }

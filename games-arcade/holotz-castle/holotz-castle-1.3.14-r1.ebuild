@@ -1,12 +1,12 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=6
 inherit desktop toolchain-funcs
 
 DESCRIPTION="2D platform game"
-HOMEPAGE="https://wiki.gentoo.org/wiki/No_homepage"
-SRC_URI="https://dev.gentoo.org/~chewi/distfiles/${P}-src.tar.gz"
+HOMEPAGE="http://www.mainreactor.net/holotzcastle/en/index_en.html"
+SRC_URI="http://www.mainreactor.net/holotzcastle/download/${P}-src.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -17,7 +17,7 @@ RDEPEND="
 	virtual/opengl
 	virtual/glu
 	media-libs/sdl-mixer
-	media-libs/libsdl[joystick]
+	media-libs/libsdl
 	media-libs/sdl-ttf
 	media-libs/sdl-image
 "
@@ -29,11 +29,10 @@ PATCHES=(
 	"${FILESDIR}"/${P}-build.patch
 	"${FILESDIR}"/${P}-gcc44.patch
 	"${FILESDIR}"/${P}-underlink.patch
-	"${FILESDIR}"/${P}-gcc-11.patch
 )
 
 src_compile() {
-	tc-export AR CXX
+	tc-export AR
 	emake -C JLib
 	emake -C src HC_BASE=/usr/share/${PN}/
 }

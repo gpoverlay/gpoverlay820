@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=5
 
-inherit elisp readme.gentoo-r1
+inherit readme.gentoo elisp
 
 DESCRIPTION="A full-featured scriptable IRC client for the Emacs text editor"
 HOMEPAGE="http://www.zenirc.org/"
@@ -31,12 +31,12 @@ src_install() {
 	doinfo doc/zenirc.info
 	dodoc BUGS INSTALL NEWS README TODO
 
-	local DOC_CONTENTS="Refer to the Info documentation and
-		${SITELISP}/${PN}/zenirc-example.el for customization hints."
-	readme.gentoo_create_doc
-
-	cd doc || die
+	cd doc
 	docinto doc
 	dodoc 666.conspiracy FAQ README-OLD ctcp.doc irc-operators \
 		server-list tao-of-irc tour.of.irc undernet
+
+	DOC_CONTENTS="Refer to the Info documentation and
+		${SITELISP}/${PN}/zenirc-example.el for customization hints."
+	readme.gentoo_create_doc
 }

@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -15,7 +15,8 @@ IUSE=""
 RDEPEND="dev-lang/php[gd,truetype]
 	virtual/httpd-php"
 
-src_install() {
+src_install()
+{
 	# Grab all PHP files except the examples.
 	set *.php
 	local php_files=${@/*example*/}

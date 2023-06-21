@@ -1,52 +1,52 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=6
 
-inherit cmake udev
+inherit cmake-utils udev
 
 if [[ ${PV} != 9999 ]]; then
-	SRC_URI="https://git.sr.ht/~grimler/Heimdall/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="amd64 ~arm64"
+	SRC_URI="https://gitlab.com/BenjaminDobell/Heimdall/-/archive/v${PV}/Heimdall-v${PV}.tar.bz2 -> ${P}.tar.bz2"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/Heimdall-v${PV}"
 else
 	inherit git-r3
-	EGIT_REPO_URI="https://git.sr.ht/~grimler/Heimdall"
+	EGIT_REPO_URI="https://gitlab.com/BenjaminDobell/Heimdall.git"
 fi
 
-DESCRIPTION="Tool suite used to flash firmware onto Samsung devices"
-HOMEPAGE="https://git.sr.ht/~grimler/Heimdall https://glassechidna.com.au/heimdall/ https://github.com/Benjamin-Dobell/Heimdall"
+DESCRIPTION="Tool suite used to flash firmware onto Samsung Galaxy S devices"
+HOMEPAGE="https://glassechidna.com.au/heimdall/"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="gui"
+IUSE="qt5"
 
+# virtual/libusb is not precise enough
 RDEPEND="
-	sys-libs/zlib
-	virtual/libusb:1=
-	gui? (
+	>=dev-libs/libusb-1.0.18:1=
+	qt5? (
 		dev-qt/qtcore:5
 		dev-qt/qtgui:5
 		dev-qt/qtwidgets:5
-	)"
-
-DEPEND="${RDEPEND}"
-BDEPEND="virtual/pkgconfig"
+	)
+	sys-libs/zlib
+"
+DEPEND="${RDEPEND}
+	virtual/pkgconfig"
 
 src_configure() {
 	local mycmakeargs=(
-		-DDISABLE_FRONTEND=$(usex !gui)
+		-DDISABLE_FRONTEND="$(usex !qt5)"
 	)
-	cmake_src_configure
+	cmake-utils_src_configure
 }
 
 src_install() {
 	dobin "${BUILD_DIR}"/bin/heimdall
-	use gui && dobin "${BUILD_DIR}"/bin/heimdall-frontend
-	udev_dorules heimdall/60-heimdall.rules
-	dodoc README.md Linux/README
-}
+	use qt5 && dobin "${BUILD_DIR}"/bin/heimdall-frontend
 
-pkg_postinst() {
-	udev_reload
+	insinto "$(get_udevdir)/rules.d"
+	doins heimdall/60-heimdall.rules
+
+	dodoc README.md Linux/README
 }

@@ -1,13 +1,13 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit cmake
+inherit cmake-utils
 
 DESCRIPTION="Streaming RNA-Seq Analysis"
-HOMEPAGE="https://pachterlab.github.io/eXpress/"
-SRC_URI="https://pachterlab.github.io/eXpress/downloads/${P}/${P}-src.tgz"
+HOMEPAGE="http://bio.math.berkeley.edu/eXpress/"
+SRC_URI="http://bio.math.berkeley.edu/eXpress/downloads/${P}/${P}-src.tgz"
 
 LICENSE="Artistic"
 SLOT="0"
@@ -15,7 +15,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="
-	dev-libs/boost:=
+	>=dev-libs/boost-1.52.0:=
 	dev-libs/protobuf
 	dev-util/google-perftools
 	sci-biology/bamtools
@@ -34,5 +34,5 @@ src_configure() {
 	local mycmakeargs=(
 		-DBAMTOOLS_INCLUDE="${EPREFIX}/usr/include/bamtools"
 	)
-	cmake_src_configure
+	cmake-utils_src_configure
 }

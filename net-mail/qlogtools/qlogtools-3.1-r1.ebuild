@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit toolchain-funcs
+inherit eutils toolchain-funcs
 
 DESCRIPTION="Qmail Log processing tools"
 HOMEPAGE="http://untroubled.org/qlogtools/"
@@ -19,8 +19,6 @@ RDEPEND="!app-text/multitail"
 
 PATCHES=(
 	"${FILESDIR}"/qlogtools-3.1-errno.patch
-	"${FILESDIR}"/qlogtools-3.1-fix-implicit-decl.patch
-	"${FILESDIR}"/qlogtools-3.1-fix-glibc-2-33.patch
 )
 
 src_configure() {

@@ -1,23 +1,22 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
-inherit autotools multiprocessing toolchain-funcs
+inherit autotools libtool multiprocessing toolchain-funcs
 
 DESCRIPTION="City simulation game"
 HOMEPAGE="https://github.com/lincity-ng/lincity-ng"
 SRC_URI="https://github.com/lincity-ng/lincity-ng/archive/lincity-ng-${PV/_/-}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${P/_/-}"
 
-LICENSE="GPL-2+ BitstreamVera CC-BY-SA-2.0"
+LICENSE="GPL-2 BitstreamVera CC-BY-SA-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+IUSE=""
 
-RDEPEND="
-	dev-games/physfs
+RDEPEND="dev-games/physfs
 	dev-libs/libxml2:2
-	media-libs/libsdl[joystick,opengl,sound,video]
+	media-libs/libsdl[sound,joystick,opengl,video]
 	media-libs/sdl-gfx
 	media-libs/sdl-image[png]
 	media-libs/sdl-mixer[vorbis]
@@ -25,38 +24,35 @@ RDEPEND="
 	sys-libs/zlib
 	virtual/opengl"
 DEPEND="${RDEPEND}"
-BDEPEND="
-	dev-libs/libxslt
-	dev-util/ftjam
-	sys-devel/gettext
+BDEPEND="dev-util/ftjam
 	virtual/pkgconfig"
 
-PATCHES=(
-	"${FILESDIR}"/${P}-flags.patch
-)
+S="${WORKDIR}/${PN}-${P/_/-}"
 
 src_prepare() {
 	default
 
-	AT_M4DIR=mk/autoconf eautoreconf
+	# Missing CREDITS files actually breaks the install.
+	sed -i -r "s/\b(COPYING[^ ]*|CREDITS)\b//g" Jamfile || die
 
-	# strip down autogen.sh / makerelease.sh for needed additional actions
-	sed -i -e '1a\set -e' -e '1n;/# generate Jam/,$!d;/^$/,$d' autogen.sh || die
-	sed -i -e '1a\set -e' -e '/^$/,$d' makerelease.sh || die
-
-	./autogen.sh || die "Failed to generate Jamconfig.in"
-	./makerelease.sh || die "Failed to generate CREDITS"
+	# Can't use eautoreconf as it does weird jam stuff.
+	autotools_run_tool ./autogen.sh
+	elibtoolize
 }
 
 src_compile() {
-	tc-export CC RANLIB
-	export AR="$(tc-getAR) cru" #739376
-
-	jam -q -dx -j$(makeopts_jobs) || die
+	jam -q -dx \
+		-j$(makeopts_jobs) \
+		-sAR="$(tc-getAR) ru" \
+		-sRANLIB="$(tc-getRANLIB)" \
+		|| die "jam failed"
 }
 
 src_install() {
-	jam -q -dx -sDESTDIR="${D}" -sPACKAGE_VERSION=${PVR} install || die
-
-	rm "${ED}"/usr/share/doc/${PF}/COPYING* || die
+	jam -sDESTDIR="${D}" \
+		-sappdocdir="${EPREFIX}/usr/share/doc/${PF}" \
+		-sapplicationsdir="${EPREFIX}/usr/share/applications" \
+		-spixmapsdir="${EPREFIX}/usr/share/pixmaps" \
+		install \
+		|| die "jam install failed"
 }
