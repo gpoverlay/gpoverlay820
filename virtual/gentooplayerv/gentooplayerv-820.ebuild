@@ -6,11 +6,6 @@ EAPI=8
 DESCRIPTION="Virtual for LibreOffice"
 
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~arch64"
 
-RDEPEND="
-	|| (
-		app-office/libreoffice
-		app-office/libreoffice-bin
-	)
-"
+RDEPEND=""
